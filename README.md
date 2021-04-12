@@ -22,28 +22,59 @@ Recent versions of Git install a credential manager to store your credentials so
 It is highly recommended you check that you have a [credential manager installed and configured](https://github.com/microsoft/Git-Credential-Manager-Core)
 
 
+
 ### Clone the repository 
 
+There are two options when installing a project
+
+#### Option #1 (Recommended) - Clone into a folder outside the engine
+
+This option lets you keep engine and project files in separate locations.
+
 ```shell
+# clone the project into a folder outside your engine repository folder
 > git clone https://github.com/aws/o3de-atomtest.git
 Cloning into 'o3de-atomtest'...
 
-# initial prompt for credentials to download the repository code
-# enter your Github username and personal access token
+# register the engine
+> c:/path/to/o3de/scripts/o3de register --this-engine
 
-remote: Counting objects: 29619, done.
-Receiving objects: 100% (29619/29619), 40.50 MiB | 881.00 KiB/s, done.
-Resolving deltas: 100% (8829/8829), done.
-Updating files: 100% (27037/27037), done.
+# register the o3de-atomtest project 
+> c:/path/to/o3de/scripts/o3de register -p c:/path/to/o3de-atomtest
 
-# second prompt for credentials when downloading LFS files
-# enter your Github username and personal access token
+# use the full path to your project for LY_PROJECTS in the configure step
 
-Filtering content: 100% (3853/3853), 621.43 MiB | 881.00 KiB/s, done.
+# example configure command
+> cmake c:/path/to/o3de -b c:/path/to/o3de-atomtest/build -G "Studio 16 2019" -A x64 -T host=x64 -DLY_3RDPARTY_PATH="c:/3rdparty" -DLY_PROJECTS="c:/path/to/o3de-atomtest" 
+
+# example build command
+> cmake --build c:/path/to/o3de-atomtest/build --target Editor;AtomTest.GameLauncher --configure profile -- /m /nologo 
+```
+
+#### Option #2 - Clone into a folder in the engine folder 
+
+This option models the legacy folder layout where all projects were in the same folder as the engine.
+If you use this approach you must also modify your engine's local git exclude file to ignore the project folder.
+
+```shell
+# clone the project in a folder named 'AtomTest' in your existing engine repository folder
+> git clone https://github.com/aws/o3de-atomtest.git c:/path/to/engine/AtomTest
+Cloning into 'AtomTest'...
+
+# modify the local engine git exclude file to ignore the project folder
+> echo AtomTest > c:/path/to/engine/.git/info/exclude
+
+# the project now exists inside the engine folder but your engine repository will ignore all files in the project folder
+
+# example configure command
+> cmake c:/path/to/o3de -b c:/path/to/o3de/build -G "Studio 16 2019" -A x64 -T host=x64 -DLY_3RDPARTY_PATH="c:/3rdparty" -DLY_PROJECTS=AtomTest 
+
+# example build command
+> cmake --build c:/path/to/o3de/build --target Editor;AtomTest.GameLauncher --configure profile -- /m /nologo 
 
 ```
 
-If you have the Git credential manager core installed, you should not be prompted for your credentials anymore.
+If you have a Git credential helper configured, you should not be prompted for your credentials anymore.
 
 
 ## License
