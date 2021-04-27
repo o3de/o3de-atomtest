@@ -23,58 +23,68 @@ It is highly recommended you check that you have a [credential manager installed
 
 
 
-### Clone the repository 
+### Step 1. Clone the repository 
 
-There are two options when installing a project
+You can clone the project to any folder locally, including inside the engine folder. If you clone the project inside an existing Git repository (e.g. o3de) you should add the project folder to the Git exclude file for the existing repository.
 
-#### Option #1 (Recommended) - Clone into a folder outside the engine
-
-This option lets you keep engine and project files in separate locations.
+#### Option #1 (Recommended) - cloning into a folder outside the engine repository folder
 
 ```shell
 # clone the project into a folder outside your engine repository folder
 > git clone https://github.com/aws/o3de-atomtest.git
 Cloning into 'o3de-atomtest'...
-
-# register the engine
-> c:/path/to/o3de/scripts/o3de register --this-engine
-
-# register the o3de-atomtest project 
-> c:/path/to/o3de/scripts/o3de register -p c:/path/to/o3de-atomtest
-
-# use the full path to your project for LY_PROJECTS in the configure step
-
-# example configure command
-> cmake c:/path/to/o3de -b c:/path/to/o3de-atomtest/build -G "Studio 16 2019" -A x64 -T host=x64 -DLY_3RDPARTY_PATH="c:/3rdparty" -DLY_PROJECTS="c:/path/to/o3de-atomtest" 
-
-# example build command
-> cmake --build c:/path/to/o3de-atomtest/build --target Editor;AtomTest.GameLauncher --configure profile -- /m /nologo 
 ```
 
-#### Option #2 - Clone into a folder in the engine folder 
-
-This option models the legacy folder layout where all projects were in the same folder as the engine.
-If you use this approach you must also modify your engine's local git exclude file to ignore the project folder.
+#### Option #2 - cloning into the engine repository folder
 
 ```shell
-# clone the project in a folder named 'AtomTest' in your existing engine repository folder
-> git clone https://github.com/aws/o3de-atomtest.git c:/path/to/engine/AtomTest
-Cloning into 'AtomTest'...
+# clone the project into a folder named 'o3de-atomtest' in your existing engine repository folder
+> git clone https://github.com/aws/o3de-atomtest.git c:/path/to/o3de/o3de-atomtest
+Cloning into 'o3de-atomtest'...
 
 # modify the local engine git exclude file to ignore the project folder
-> echo AtomTest > c:/path/to/engine/.git/info/exclude
-
-# the project now exists inside the engine folder but your engine repository will ignore all files in the project folder
-
-# example configure command
-> cmake c:/path/to/o3de -b c:/path/to/o3de/build -G "Studio 16 2019" -A x64 -T host=x64 -DLY_3RDPARTY_PATH="c:/3rdparty" -DLY_PROJECTS=AtomTest 
-
-# example build command
-> cmake --build c:/path/to/o3de/build --target Editor;AtomTest.GameLauncher --configure profile -- /m /nologo 
-
+> echo o3de-atomtest > c:/path/to/o3de/.git/info/exclude
 ```
 
 If you have a Git credential helper configured, you should not be prompted for your credentials anymore.
+
+### Step 2. Register the engine and project 
+
+```shell
+# register the engine (only need to do this once)
+> c:/path/to/o3de/scripts/o3de register --this-engine
+
+# register the project 
+> c:/path/to/o3de/scripts/o3de register -p c:/path/to/o3de-atomtest
+```
+
+### Step 3. Configure and build 
+
+#### Option #1 (Recommended) -  Project-centric approach 
+
+This option will output all the project binaries in the project's build folder e.g. c:/path/to/o3de-atomtest/build
+
+```shell
+# example configure command
+> cmake c:/path/to/o3de -b c:/path/to/o3de-atomtest/build -G "Studio 16 2019" -DLY_3RDPARTY_PATH="c:/3rdparty" -DLY_PROJECTS="c:/path/to/o3de-atomtest" 
+
+# example build command
+> cmake --build c:/path/to/o3de-atomtest/build --target Editor AtomTest.GameLauncher --configure profile -- /m /nologo 
+```
+
+#### Option #2 - Engine-centric approach to building a project 
+
+This option will output all the project and engine binaries in the engine's build folder e.g. c:/path/to/o3de/build
+
+```shell
+# example configure command
+> cmake c:/path/to/o3de -b c:/path/to/o3de/build -G "Studio 16 2019" -DLY_3RDPARTY_PATH="c:/3rdparty" -DLY_PROJECTS="c:/path/to/o3de-atomtest"
+
+# example build command
+> cmake --build c:/path/to/o3de/build --target Editor AtomTest.GameLauncher --configure profile -- /m /nologo 
+
+```
+
 
 
 ## License
