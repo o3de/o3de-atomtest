@@ -66,10 +66,10 @@ This option will output all the project binaries in the project's build folder e
 
 ```shell
 # example configure command
-> cmake c:/path/to/o3de -b c:/path/to/o3de-atomtest/build -G "Studio 16 2019" -DLY_3RDPARTY_PATH="c:/3rdparty" -DLY_PROJECTS="c:/path/to/o3de-atomtest" 
+> cmake c:/path/to/o3de -B c:/path/to/o3de-atomtest/build -G "Visual Studio 16" -DLY_3RDPARTY_PATH="c:/3rdparty" -DLY_PROJECTS="c:/path/to/o3de-atomtest" 
 
 # example build command
-> cmake --build c:/path/to/o3de-atomtest/build --target Editor AtomTest.GameLauncher --configure profile -- /m /nologo 
+> cmake --build c:/path/to/o3de-atomtest/build --target Editor AtomTest.GameLauncher --config profile -- /m /nologo 
 ```
 
 #### Option #2 - Engine-centric approach to building a project 
@@ -78,10 +78,10 @@ This option will output all the project and engine binaries in the engine's buil
 
 ```shell
 # example configure command
-> cmake c:/path/to/o3de -b c:/path/to/o3de/build -G "Studio 16 2019" -DLY_3RDPARTY_PATH="c:/3rdparty" -DLY_PROJECTS="c:/path/to/o3de-atomtest"
+> cmake c:/path/to/o3de -B c:/path/to/o3de/build -G "Visual Studio 16" -DLY_3RDPARTY_PATH="c:/3rdparty" -DLY_PROJECTS="c:/path/to/o3de-atomtest"
 
 # example build command
-> cmake --build c:/path/to/o3de/build --target Editor AtomTest.GameLauncher --configure profile -- /m /nologo 
+> cmake --build c:/path/to/o3de/build --target Editor AtomTest.GameLauncher --config profile -- /m /nologo 
 
 ```
 
