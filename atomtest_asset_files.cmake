@@ -13,9 +13,6 @@ set(FILES
     Levels/NormalMapping/TestNormalMapping.azsl
     Levels/NormalMapping/TestNormalMapping.materialtype
     Levels/NormalMapping/TestNormalMapping.shader
-    Levels/TangentSpace/TestTangentSpace.azsl
-    Levels/TangentSpace/TestTangentSpace.materialtype
-    Levels/TangentSpace/TestTangentSpace.shader
     Materials/UVs.azsl
     Materials/UVs.materialtype
     Materials/UVs.shader
