@@ -136,11 +136,11 @@
 													<Class name="AZ::u64" field="lodIndex" value="18446744073709551615" type="{D6597933-47CD-4FC8-B911-63F3E2B0993A}"/>
 													<Class name="AssetId" field="materialAssetId" version="1" type="{652ED536-3402-439B-AEBE-4A5DBC554085}">
 														<Class name="AZ::Uuid" field="guid" value="{F5EB44A9-7274-5B89-84A9-AB898912C3BB}" type="{E152C105-A133-4D03-BBF8-3D4B2FBA3E2A}"/>
-														<Class name="unsigned int" field="subId" value="2689451379" type="{43DA906B-7DEF-4CA8-9790-854106D3F983}"/>
+														<Class name="unsigned int" field="subId" value="413937012" type="{43DA906B-7DEF-4CA8-9790-854106D3F983}"/>
 													</Class>
 												</Class>
 												<Class name="AZ::Render::MaterialAssignment" field="value2" version="1" type="{C66E5214-A24B-4722-B7F0-5991E6F8F163}">
-													<Class name="Asset" field="MaterialAsset" value="id={54C632DA-5B65-59DC-9B24-B7B2E2D87469}:0,type={522C7BE0-501D-463E-92C6-15184A2B7AD8},hint={objects/sponza_mat_details.azmaterial},loadBehavior=1" version="2" type="{77A19D40-8731-4D3C-9041-1B43047366A4}"/>
+													<Class name="Asset" field="MaterialAsset" value="id={08C9CAFD-0B68-5FE6-AFCC-32107B080FB2}:0,type={522C7BE0-501D-463E-92C6-15184A2B7AD8},hint={objects/sponza_mat_columnb.azmaterial},loadBehavior=1" version="2" type="{77A19D40-8731-4D3C-9041-1B43047366A4}"/>
 													<Class name="AZStd::unordered_map" field="PropertyOverrides" type="{6E6962E1-04C9-56F9-89C4-361031CC1384}"/>
 												</Class>
 											</Class>
@@ -149,193 +149,11 @@
 													<Class name="AZ::u64" field="lodIndex" value="18446744073709551615" type="{D6597933-47CD-4FC8-B911-63F3E2B0993A}"/>
 													<Class name="AssetId" field="materialAssetId" version="1" type="{652ED536-3402-439B-AEBE-4A5DBC554085}">
 														<Class name="AZ::Uuid" field="guid" value="{F5EB44A9-7274-5B89-84A9-AB898912C3BB}" type="{E152C105-A133-4D03-BBF8-3D4B2FBA3E2A}"/>
-														<Class name="unsigned int" field="subId" value="3157644117" type="{43DA906B-7DEF-4CA8-9790-854106D3F983}"/>
+														<Class name="unsigned int" field="subId" value="3087770717" type="{43DA906B-7DEF-4CA8-9790-854106D3F983}"/>
 													</Class>
 												</Class>
 												<Class name="AZ::Render::MaterialAssignment" field="value2" version="1" type="{C66E5214-A24B-4722-B7F0-5991E6F8F163}">
-													<Class name="Asset" field="MaterialAsset" value="id={2221CBDA-B2E3-5133-88DD-6D995582D2B2}:0,type={522C7BE0-501D-463E-92C6-15184A2B7AD8},hint={objects/sponza_mat_arch.azmaterial},loadBehavior=1" version="2" type="{77A19D40-8731-4D3C-9041-1B43047366A4}"/>
-													<Class name="AZStd::unordered_map" field="PropertyOverrides" type="{6E6962E1-04C9-56F9-89C4-361031CC1384}"/>
-												</Class>
-											</Class>
-											<Class name="AZStd::pair" field="element" type="{F652A87A-0FDF-527C-B0ED-340C074A4874}">
-												<Class name="AZ::Render::MaterialAssignmentId" field="value1" version="1" type="{EB603581-4654-4C17-B6DE-AE61E79EDA97}">
-													<Class name="AZ::u64" field="lodIndex" value="18446744073709551615" type="{D6597933-47CD-4FC8-B911-63F3E2B0993A}"/>
-													<Class name="AssetId" field="materialAssetId" version="1" type="{652ED536-3402-439B-AEBE-4A5DBC554085}">
-														<Class name="AZ::Uuid" field="guid" value="{F5EB44A9-7274-5B89-84A9-AB898912C3BB}" type="{E152C105-A133-4D03-BBF8-3D4B2FBA3E2A}"/>
-														<Class name="unsigned int" field="subId" value="3888291602" type="{43DA906B-7DEF-4CA8-9790-854106D3F983}"/>
-													</Class>
-												</Class>
-												<Class name="AZ::Render::MaterialAssignment" field="value2" version="1" type="{C66E5214-A24B-4722-B7F0-5991E6F8F163}">
-													<Class name="Asset" field="MaterialAsset" value="id={6316DEA5-03F7-5327-B44C-6617D1025026}:0,type={522C7BE0-501D-463E-92C6-15184A2B7AD8},hint={objects/sponza_mat_roof.azmaterial},loadBehavior=1" version="2" type="{77A19D40-8731-4D3C-9041-1B43047366A4}"/>
-													<Class name="AZStd::unordered_map" field="PropertyOverrides" type="{6E6962E1-04C9-56F9-89C4-361031CC1384}"/>
-												</Class>
-											</Class>
-											<Class name="AZStd::pair" field="element" type="{F652A87A-0FDF-527C-B0ED-340C074A4874}">
-												<Class name="AZ::Render::MaterialAssignmentId" field="value1" version="1" type="{EB603581-4654-4C17-B6DE-AE61E79EDA97}">
-													<Class name="AZ::u64" field="lodIndex" value="18446744073709551615" type="{D6597933-47CD-4FC8-B911-63F3E2B0993A}"/>
-													<Class name="AssetId" field="materialAssetId" version="1" type="{652ED536-3402-439B-AEBE-4A5DBC554085}">
-														<Class name="AZ::Uuid" field="guid" value="{F5EB44A9-7274-5B89-84A9-AB898912C3BB}" type="{E152C105-A133-4D03-BBF8-3D4B2FBA3E2A}"/>
-														<Class name="unsigned int" field="subId" value="3611616689" type="{43DA906B-7DEF-4CA8-9790-854106D3F983}"/>
-													</Class>
-												</Class>
-												<Class name="AZ::Render::MaterialAssignment" field="value2" version="1" type="{C66E5214-A24B-4722-B7F0-5991E6F8F163}">
-													<Class name="Asset" field="MaterialAsset" value="id={7892F07D-161B-5B3D-8399-F0211FB4E67E}:0,type={522C7BE0-501D-463E-92C6-15184A2B7AD8},hint={objects/sponza_mat_columnc.azmaterial},loadBehavior=1" version="2" type="{77A19D40-8731-4D3C-9041-1B43047366A4}"/>
-													<Class name="AZStd::unordered_map" field="PropertyOverrides" type="{6E6962E1-04C9-56F9-89C4-361031CC1384}"/>
-												</Class>
-											</Class>
-											<Class name="AZStd::pair" field="element" type="{F652A87A-0FDF-527C-B0ED-340C074A4874}">
-												<Class name="AZ::Render::MaterialAssignmentId" field="value1" version="1" type="{EB603581-4654-4C17-B6DE-AE61E79EDA97}">
-													<Class name="AZ::u64" field="lodIndex" value="18446744073709551615" type="{D6597933-47CD-4FC8-B911-63F3E2B0993A}"/>
-													<Class name="AssetId" field="materialAssetId" version="1" type="{652ED536-3402-439B-AEBE-4A5DBC554085}">
-														<Class name="AZ::Uuid" field="guid" value="{F5EB44A9-7274-5B89-84A9-AB898912C3BB}" type="{E152C105-A133-4D03-BBF8-3D4B2FBA3E2A}"/>
-														<Class name="unsigned int" field="subId" value="1813805191" type="{43DA906B-7DEF-4CA8-9790-854106D3F983}"/>
-													</Class>
-												</Class>
-												<Class name="AZ::Render::MaterialAssignment" field="value2" version="1" type="{C66E5214-A24B-4722-B7F0-5991E6F8F163}">
-													<Class name="Asset" field="MaterialAsset" value="id={A5BE69FA-9621-5006-8220-942DDE4B30A4}:0,type={522C7BE0-501D-463E-92C6-15184A2B7AD8},hint={objects/sponza_mat_lion.azmaterial},loadBehavior=1" version="2" type="{77A19D40-8731-4D3C-9041-1B43047366A4}"/>
-													<Class name="AZStd::unordered_map" field="PropertyOverrides" type="{6E6962E1-04C9-56F9-89C4-361031CC1384}"/>
-												</Class>
-											</Class>
-											<Class name="AZStd::pair" field="element" type="{F652A87A-0FDF-527C-B0ED-340C074A4874}">
-												<Class name="AZ::Render::MaterialAssignmentId" field="value1" version="1" type="{EB603581-4654-4C17-B6DE-AE61E79EDA97}">
-													<Class name="AZ::u64" field="lodIndex" value="18446744073709551615" type="{D6597933-47CD-4FC8-B911-63F3E2B0993A}"/>
-													<Class name="AssetId" field="materialAssetId" version="1" type="{652ED536-3402-439B-AEBE-4A5DBC554085}">
-														<Class name="AZ::Uuid" field="guid" value="{F5EB44A9-7274-5B89-84A9-AB898912C3BB}" type="{E152C105-A133-4D03-BBF8-3D4B2FBA3E2A}"/>
-														<Class name="unsigned int" field="subId" value="438015525" type="{43DA906B-7DEF-4CA8-9790-854106D3F983}"/>
-													</Class>
-												</Class>
-												<Class name="AZ::Render::MaterialAssignment" field="value2" version="1" type="{C66E5214-A24B-4722-B7F0-5991E6F8F163}">
-													<Class name="Asset" field="MaterialAsset" value="id={178D434B-F10D-511A-A513-5C69DAF8DD1F}:0,type={522C7BE0-501D-463E-92C6-15184A2B7AD8},hint={objects/sponza_mat_fabricred.azmaterial},loadBehavior=1" version="2" type="{77A19D40-8731-4D3C-9041-1B43047366A4}"/>
-													<Class name="AZStd::unordered_map" field="PropertyOverrides" type="{6E6962E1-04C9-56F9-89C4-361031CC1384}"/>
-												</Class>
-											</Class>
-											<Class name="AZStd::pair" field="element" type="{F652A87A-0FDF-527C-B0ED-340C074A4874}">
-												<Class name="AZ::Render::MaterialAssignmentId" field="value1" version="1" type="{EB603581-4654-4C17-B6DE-AE61E79EDA97}">
-													<Class name="AZ::u64" field="lodIndex" value="18446744073709551615" type="{D6597933-47CD-4FC8-B911-63F3E2B0993A}"/>
-													<Class name="AssetId" field="materialAssetId" version="1" type="{652ED536-3402-439B-AEBE-4A5DBC554085}">
-														<Class name="AZ::Uuid" field="guid" value="{F5EB44A9-7274-5B89-84A9-AB898912C3BB}" type="{E152C105-A133-4D03-BBF8-3D4B2FBA3E2A}"/>
-														<Class name="unsigned int" field="subId" value="1907085840" type="{43DA906B-7DEF-4CA8-9790-854106D3F983}"/>
-													</Class>
-												</Class>
-												<Class name="AZ::Render::MaterialAssignment" field="value2" version="1" type="{C66E5214-A24B-4722-B7F0-5991E6F8F163}">
-													<Class name="Asset" field="MaterialAsset" value="id={758D8231-C36B-5E69-83AB-13263004012E}:0,type={522C7BE0-501D-463E-92C6-15184A2B7AD8},hint={objects/sponza_mat_curtaingreen.azmaterial},loadBehavior=1" version="2" type="{77A19D40-8731-4D3C-9041-1B43047366A4}"/>
-													<Class name="AZStd::unordered_map" field="PropertyOverrides" type="{6E6962E1-04C9-56F9-89C4-361031CC1384}"/>
-												</Class>
-											</Class>
-											<Class name="AZStd::pair" field="element" type="{F652A87A-0FDF-527C-B0ED-340C074A4874}">
-												<Class name="AZ::Render::MaterialAssignmentId" field="value1" version="1" type="{EB603581-4654-4C17-B6DE-AE61E79EDA97}">
-													<Class name="AZ::u64" field="lodIndex" value="18446744073709551615" type="{D6597933-47CD-4FC8-B911-63F3E2B0993A}"/>
-													<Class name="AssetId" field="materialAssetId" version="1" type="{652ED536-3402-439B-AEBE-4A5DBC554085}">
-														<Class name="AZ::Uuid" field="guid" value="{F5EB44A9-7274-5B89-84A9-AB898912C3BB}" type="{E152C105-A133-4D03-BBF8-3D4B2FBA3E2A}"/>
-														<Class name="unsigned int" field="subId" value="3299681432" type="{43DA906B-7DEF-4CA8-9790-854106D3F983}"/>
-													</Class>
-												</Class>
-												<Class name="AZ::Render::MaterialAssignment" field="value2" version="1" type="{C66E5214-A24B-4722-B7F0-5991E6F8F163}">
-													<Class name="Asset" field="MaterialAsset" value="id={B727DDD0-0200-5304-BC3C-C9FE7DAFE52C}:0,type={522C7BE0-501D-463E-92C6-15184A2B7AD8},hint={objects/sponza_mat_background.azmaterial},loadBehavior=1" version="2" type="{77A19D40-8731-4D3C-9041-1B43047366A4}"/>
-													<Class name="AZStd::unordered_map" field="PropertyOverrides" type="{6E6962E1-04C9-56F9-89C4-361031CC1384}"/>
-												</Class>
-											</Class>
-											<Class name="AZStd::pair" field="element" type="{F652A87A-0FDF-527C-B0ED-340C074A4874}">
-												<Class name="AZ::Render::MaterialAssignmentId" field="value1" version="1" type="{EB603581-4654-4C17-B6DE-AE61E79EDA97}">
-													<Class name="AZ::u64" field="lodIndex" value="18446744073709551615" type="{D6597933-47CD-4FC8-B911-63F3E2B0993A}"/>
-													<Class name="AssetId" field="materialAssetId" version="1" type="{652ED536-3402-439B-AEBE-4A5DBC554085}">
-														<Class name="AZ::Uuid" field="guid" value="{F5EB44A9-7274-5B89-84A9-AB898912C3BB}" type="{E152C105-A133-4D03-BBF8-3D4B2FBA3E2A}"/>
-														<Class name="unsigned int" field="subId" value="3175210978" type="{43DA906B-7DEF-4CA8-9790-854106D3F983}"/>
-													</Class>
-												</Class>
-												<Class name="AZ::Render::MaterialAssignment" field="value2" version="1" type="{C66E5214-A24B-4722-B7F0-5991E6F8F163}">
-													<Class name="Asset" field="MaterialAsset" value="id={A11172CC-AC65-5630-B3EF-0DEF017CB747}:0,type={522C7BE0-501D-463E-92C6-15184A2B7AD8},hint={objects/sponza_mat_vasehanging.azmaterial},loadBehavior=1" version="2" type="{77A19D40-8731-4D3C-9041-1B43047366A4}"/>
-													<Class name="AZStd::unordered_map" field="PropertyOverrides" type="{6E6962E1-04C9-56F9-89C4-361031CC1384}"/>
-												</Class>
-											</Class>
-											<Class name="AZStd::pair" field="element" type="{F652A87A-0FDF-527C-B0ED-340C074A4874}">
-												<Class name="AZ::Render::MaterialAssignmentId" field="value1" version="1" type="{EB603581-4654-4C17-B6DE-AE61E79EDA97}">
-													<Class name="AZ::u64" field="lodIndex" value="18446744073709551615" type="{D6597933-47CD-4FC8-B911-63F3E2B0993A}"/>
-													<Class name="AssetId" field="materialAssetId" version="1" type="{652ED536-3402-439B-AEBE-4A5DBC554085}">
-														<Class name="AZ::Uuid" field="guid" value="{F5EB44A9-7274-5B89-84A9-AB898912C3BB}" type="{E152C105-A133-4D03-BBF8-3D4B2FBA3E2A}"/>
-														<Class name="unsigned int" field="subId" value="186539809" type="{43DA906B-7DEF-4CA8-9790-854106D3F983}"/>
-													</Class>
-												</Class>
-												<Class name="AZ::Render::MaterialAssignment" field="value2" version="1" type="{C66E5214-A24B-4722-B7F0-5991E6F8F163}">
-													<Class name="Asset" field="MaterialAsset" value="id={FB2B2000-42CC-5B3E-B823-C6624297D097}:0,type={522C7BE0-501D-463E-92C6-15184A2B7AD8},hint={objects/sponza_mat_curtainred.azmaterial},loadBehavior=1" version="2" type="{77A19D40-8731-4D3C-9041-1B43047366A4}"/>
-													<Class name="AZStd::unordered_map" field="PropertyOverrides" type="{6E6962E1-04C9-56F9-89C4-361031CC1384}"/>
-												</Class>
-											</Class>
-											<Class name="AZStd::pair" field="element" type="{F652A87A-0FDF-527C-B0ED-340C074A4874}">
-												<Class name="AZ::Render::MaterialAssignmentId" field="value1" version="1" type="{EB603581-4654-4C17-B6DE-AE61E79EDA97}">
-													<Class name="AZ::u64" field="lodIndex" value="18446744073709551615" type="{D6597933-47CD-4FC8-B911-63F3E2B0993A}"/>
-													<Class name="AssetId" field="materialAssetId" version="1" type="{652ED536-3402-439B-AEBE-4A5DBC554085}">
-														<Class name="AZ::Uuid" field="guid" value="{F5EB44A9-7274-5B89-84A9-AB898912C3BB}" type="{E152C105-A133-4D03-BBF8-3D4B2FBA3E2A}"/>
-														<Class name="unsigned int" field="subId" value="2093550608" type="{43DA906B-7DEF-4CA8-9790-854106D3F983}"/>
-													</Class>
-												</Class>
-												<Class name="AZ::Render::MaterialAssignment" field="value2" version="1" type="{C66E5214-A24B-4722-B7F0-5991E6F8F163}">
-													<Class name="Asset" field="MaterialAsset" value="id={CFCA20D2-CE89-5319-AAD2-9AEA441A02A3}:0,type={522C7BE0-501D-463E-92C6-15184A2B7AD8},hint={objects/sponza_mat_leaf.azmaterial},loadBehavior=1" version="2" type="{77A19D40-8731-4D3C-9041-1B43047366A4}"/>
-													<Class name="AZStd::unordered_map" field="PropertyOverrides" type="{6E6962E1-04C9-56F9-89C4-361031CC1384}"/>
-												</Class>
-											</Class>
-											<Class name="AZStd::pair" field="element" type="{F652A87A-0FDF-527C-B0ED-340C074A4874}">
-												<Class name="AZ::Render::MaterialAssignmentId" field="value1" version="1" type="{EB603581-4654-4C17-B6DE-AE61E79EDA97}">
-													<Class name="AZ::u64" field="lodIndex" value="18446744073709551615" type="{D6597933-47CD-4FC8-B911-63F3E2B0993A}"/>
-													<Class name="AssetId" field="materialAssetId" version="1" type="{652ED536-3402-439B-AEBE-4A5DBC554085}">
-														<Class name="AZ::Uuid" field="guid" value="{F5EB44A9-7274-5B89-84A9-AB898912C3BB}" type="{E152C105-A133-4D03-BBF8-3D4B2FBA3E2A}"/>
-														<Class name="unsigned int" field="subId" value="3173952891" type="{43DA906B-7DEF-4CA8-9790-854106D3F983}"/>
-													</Class>
-												</Class>
-												<Class name="AZ::Render::MaterialAssignment" field="value2" version="1" type="{C66E5214-A24B-4722-B7F0-5991E6F8F163}">
-													<Class name="Asset" field="MaterialAsset" value="id={F2626035-48B4-53AF-A4FB-827A07675D4A}:0,type={522C7BE0-501D-463E-92C6-15184A2B7AD8},hint={objects/sponza_mat_vaseround.azmaterial},loadBehavior=1" version="2" type="{77A19D40-8731-4D3C-9041-1B43047366A4}"/>
-													<Class name="AZStd::unordered_map" field="PropertyOverrides" type="{6E6962E1-04C9-56F9-89C4-361031CC1384}"/>
-												</Class>
-											</Class>
-											<Class name="AZStd::pair" field="element" type="{F652A87A-0FDF-527C-B0ED-340C074A4874}">
-												<Class name="AZ::Render::MaterialAssignmentId" field="value1" version="1" type="{EB603581-4654-4C17-B6DE-AE61E79EDA97}">
-													<Class name="AZ::u64" field="lodIndex" value="18446744073709551615" type="{D6597933-47CD-4FC8-B911-63F3E2B0993A}"/>
-													<Class name="AssetId" field="materialAssetId" version="1" type="{652ED536-3402-439B-AEBE-4A5DBC554085}">
-														<Class name="AZ::Uuid" field="guid" value="{F5EB44A9-7274-5B89-84A9-AB898912C3BB}" type="{E152C105-A133-4D03-BBF8-3D4B2FBA3E2A}"/>
-														<Class name="unsigned int" field="subId" value="3959929301" type="{43DA906B-7DEF-4CA8-9790-854106D3F983}"/>
-													</Class>
-												</Class>
-												<Class name="AZ::Render::MaterialAssignment" field="value2" version="1" type="{C66E5214-A24B-4722-B7F0-5991E6F8F163}">
-													<Class name="Asset" field="MaterialAsset" value="id={4E9E721B-3F7A-550E-841F-290CA0B6AA26}:0,type={522C7BE0-501D-463E-92C6-15184A2B7AD8},hint={objects/sponza_mat_vaseplant.azmaterial},loadBehavior=1" version="2" type="{77A19D40-8731-4D3C-9041-1B43047366A4}"/>
-													<Class name="AZStd::unordered_map" field="PropertyOverrides" type="{6E6962E1-04C9-56F9-89C4-361031CC1384}"/>
-												</Class>
-											</Class>
-											<Class name="AZStd::pair" field="element" type="{F652A87A-0FDF-527C-B0ED-340C074A4874}">
-												<Class name="AZ::Render::MaterialAssignmentId" field="value1" version="1" type="{EB603581-4654-4C17-B6DE-AE61E79EDA97}">
-													<Class name="AZ::u64" field="lodIndex" value="18446744073709551615" type="{D6597933-47CD-4FC8-B911-63F3E2B0993A}"/>
-													<Class name="AssetId" field="materialAssetId" version="1" type="{652ED536-3402-439B-AEBE-4A5DBC554085}">
-														<Class name="AZ::Uuid" field="guid" value="{F5EB44A9-7274-5B89-84A9-AB898912C3BB}" type="{E152C105-A133-4D03-BBF8-3D4B2FBA3E2A}"/>
-														<Class name="unsigned int" field="subId" value="1780169261" type="{43DA906B-7DEF-4CA8-9790-854106D3F983}"/>
-													</Class>
-												</Class>
-												<Class name="AZ::Render::MaterialAssignment" field="value2" version="1" type="{C66E5214-A24B-4722-B7F0-5991E6F8F163}">
-													<Class name="Asset" field="MaterialAsset" value="id={28D414BD-DDB2-530B-9098-4F5F43015A8A}:0,type={522C7BE0-501D-463E-92C6-15184A2B7AD8},hint={objects/sponza_mat_vase.azmaterial},loadBehavior=1" version="2" type="{77A19D40-8731-4D3C-9041-1B43047366A4}"/>
-													<Class name="AZStd::unordered_map" field="PropertyOverrides" type="{6E6962E1-04C9-56F9-89C4-361031CC1384}"/>
-												</Class>
-											</Class>
-											<Class name="AZStd::pair" field="element" type="{F652A87A-0FDF-527C-B0ED-340C074A4874}">
-												<Class name="AZ::Render::MaterialAssignmentId" field="value1" version="1" type="{EB603581-4654-4C17-B6DE-AE61E79EDA97}">
-													<Class name="AZ::u64" field="lodIndex" value="18446744073709551615" type="{D6597933-47CD-4FC8-B911-63F3E2B0993A}"/>
-													<Class name="AssetId" field="materialAssetId" version="1" type="{652ED536-3402-439B-AEBE-4A5DBC554085}">
-														<Class name="AZ::Uuid" field="guid" value="{F5EB44A9-7274-5B89-84A9-AB898912C3BB}" type="{E152C105-A133-4D03-BBF8-3D4B2FBA3E2A}"/>
-														<Class name="unsigned int" field="subId" value="40852248" type="{43DA906B-7DEF-4CA8-9790-854106D3F983}"/>
-													</Class>
-												</Class>
-												<Class name="AZ::Render::MaterialAssignment" field="value2" version="1" type="{C66E5214-A24B-4722-B7F0-5991E6F8F163}">
-													<Class name="Asset" field="MaterialAsset" value="id={F8DF4D4F-CDA5-5634-A81F-6501A12FF16F}:0,type={522C7BE0-501D-463E-92C6-15184A2B7AD8},hint={objects/sponza_mat_floor.azmaterial},loadBehavior=1" version="2" type="{77A19D40-8731-4D3C-9041-1B43047366A4}"/>
-													<Class name="AZStd::unordered_map" field="PropertyOverrides" type="{6E6962E1-04C9-56F9-89C4-361031CC1384}"/>
-												</Class>
-											</Class>
-											<Class name="AZStd::pair" field="element" type="{F652A87A-0FDF-527C-B0ED-340C074A4874}">
-												<Class name="AZ::Render::MaterialAssignmentId" field="value1" version="1" type="{EB603581-4654-4C17-B6DE-AE61E79EDA97}">
-													<Class name="AZ::u64" field="lodIndex" value="18446744073709551615" type="{D6597933-47CD-4FC8-B911-63F3E2B0993A}"/>
-													<Class name="AssetId" field="materialAssetId" version="1" type="{652ED536-3402-439B-AEBE-4A5DBC554085}">
-														<Class name="AZ::Uuid" field="guid" value="{F5EB44A9-7274-5B89-84A9-AB898912C3BB}" type="{E152C105-A133-4D03-BBF8-3D4B2FBA3E2A}"/>
-														<Class name="unsigned int" field="subId" value="3166310922" type="{43DA906B-7DEF-4CA8-9790-854106D3F983}"/>
-													</Class>
-												</Class>
-												<Class name="AZ::Render::MaterialAssignment" field="value2" version="1" type="{C66E5214-A24B-4722-B7F0-5991E6F8F163}">
-													<Class name="Asset" field="MaterialAsset" value="id={CF2D3B6E-B1EF-50A9-B323-C4A63B7C493F}:0,type={522C7BE0-501D-463E-92C6-15184A2B7AD8},hint={objects/sponza_mat_fabricblue.azmaterial},loadBehavior=1" version="2" type="{77A19D40-8731-4D3C-9041-1B43047366A4}"/>
+													<Class name="Asset" field="MaterialAsset" value="id={836BBCB3-1BE2-5D92-9C42-558ED77BC59A}:0,type={522C7BE0-501D-463E-92C6-15184A2B7AD8},hint={objects/sponza_mat_fabricgreen.azmaterial},loadBehavior=1" version="2" type="{77A19D40-8731-4D3C-9041-1B43047366A4}"/>
 													<Class name="AZStd::unordered_map" field="PropertyOverrides" type="{6E6962E1-04C9-56F9-89C4-361031CC1384}"/>
 												</Class>
 											</Class>
@@ -422,11 +240,11 @@
 													<Class name="AZ::u64" field="lodIndex" value="18446744073709551615" type="{D6597933-47CD-4FC8-B911-63F3E2B0993A}"/>
 													<Class name="AssetId" field="materialAssetId" version="1" type="{652ED536-3402-439B-AEBE-4A5DBC554085}">
 														<Class name="AZ::Uuid" field="guid" value="{F5EB44A9-7274-5B89-84A9-AB898912C3BB}" type="{E152C105-A133-4D03-BBF8-3D4B2FBA3E2A}"/>
-														<Class name="unsigned int" field="subId" value="413937012" type="{43DA906B-7DEF-4CA8-9790-854106D3F983}"/>
+														<Class name="unsigned int" field="subId" value="3173952891" type="{43DA906B-7DEF-4CA8-9790-854106D3F983}"/>
 													</Class>
 												</Class>
 												<Class name="AZ::Render::MaterialAssignment" field="value2" version="1" type="{C66E5214-A24B-4722-B7F0-5991E6F8F163}">
-													<Class name="Asset" field="MaterialAsset" value="id={08C9CAFD-0B68-5FE6-AFCC-32107B080FB2}:0,type={522C7BE0-501D-463E-92C6-15184A2B7AD8},hint={objects/sponza_mat_columnb.azmaterial},loadBehavior=1" version="2" type="{77A19D40-8731-4D3C-9041-1B43047366A4}"/>
+													<Class name="Asset" field="MaterialAsset" value="id={F2626035-48B4-53AF-A4FB-827A07675D4A}:0,type={522C7BE0-501D-463E-92C6-15184A2B7AD8},hint={objects/sponza_mat_vaseround.azmaterial},loadBehavior=1" version="2" type="{77A19D40-8731-4D3C-9041-1B43047366A4}"/>
 													<Class name="AZStd::unordered_map" field="PropertyOverrides" type="{6E6962E1-04C9-56F9-89C4-361031CC1384}"/>
 												</Class>
 											</Class>
@@ -435,11 +253,193 @@
 													<Class name="AZ::u64" field="lodIndex" value="18446744073709551615" type="{D6597933-47CD-4FC8-B911-63F3E2B0993A}"/>
 													<Class name="AssetId" field="materialAssetId" version="1" type="{652ED536-3402-439B-AEBE-4A5DBC554085}">
 														<Class name="AZ::Uuid" field="guid" value="{F5EB44A9-7274-5B89-84A9-AB898912C3BB}" type="{E152C105-A133-4D03-BBF8-3D4B2FBA3E2A}"/>
-														<Class name="unsigned int" field="subId" value="3087770717" type="{43DA906B-7DEF-4CA8-9790-854106D3F983}"/>
+														<Class name="unsigned int" field="subId" value="3959929301" type="{43DA906B-7DEF-4CA8-9790-854106D3F983}"/>
 													</Class>
 												</Class>
 												<Class name="AZ::Render::MaterialAssignment" field="value2" version="1" type="{C66E5214-A24B-4722-B7F0-5991E6F8F163}">
-													<Class name="Asset" field="MaterialAsset" value="id={836BBCB3-1BE2-5D92-9C42-558ED77BC59A}:0,type={522C7BE0-501D-463E-92C6-15184A2B7AD8},hint={objects/sponza_mat_fabricgreen.azmaterial},loadBehavior=1" version="2" type="{77A19D40-8731-4D3C-9041-1B43047366A4}"/>
+													<Class name="Asset" field="MaterialAsset" value="id={4E9E721B-3F7A-550E-841F-290CA0B6AA26}:0,type={522C7BE0-501D-463E-92C6-15184A2B7AD8},hint={objects/sponza_mat_vaseplant.azmaterial},loadBehavior=1" version="2" type="{77A19D40-8731-4D3C-9041-1B43047366A4}"/>
+													<Class name="AZStd::unordered_map" field="PropertyOverrides" type="{6E6962E1-04C9-56F9-89C4-361031CC1384}"/>
+												</Class>
+											</Class>
+											<Class name="AZStd::pair" field="element" type="{F652A87A-0FDF-527C-B0ED-340C074A4874}">
+												<Class name="AZ::Render::MaterialAssignmentId" field="value1" version="1" type="{EB603581-4654-4C17-B6DE-AE61E79EDA97}">
+													<Class name="AZ::u64" field="lodIndex" value="18446744073709551615" type="{D6597933-47CD-4FC8-B911-63F3E2B0993A}"/>
+													<Class name="AssetId" field="materialAssetId" version="1" type="{652ED536-3402-439B-AEBE-4A5DBC554085}">
+														<Class name="AZ::Uuid" field="guid" value="{F5EB44A9-7274-5B89-84A9-AB898912C3BB}" type="{E152C105-A133-4D03-BBF8-3D4B2FBA3E2A}"/>
+														<Class name="unsigned int" field="subId" value="1780169261" type="{43DA906B-7DEF-4CA8-9790-854106D3F983}"/>
+													</Class>
+												</Class>
+												<Class name="AZ::Render::MaterialAssignment" field="value2" version="1" type="{C66E5214-A24B-4722-B7F0-5991E6F8F163}">
+													<Class name="Asset" field="MaterialAsset" value="id={28D414BD-DDB2-530B-9098-4F5F43015A8A}:0,type={522C7BE0-501D-463E-92C6-15184A2B7AD8},hint={objects/sponza_mat_vase.azmaterial},loadBehavior=1" version="2" type="{77A19D40-8731-4D3C-9041-1B43047366A4}"/>
+													<Class name="AZStd::unordered_map" field="PropertyOverrides" type="{6E6962E1-04C9-56F9-89C4-361031CC1384}"/>
+												</Class>
+											</Class>
+											<Class name="AZStd::pair" field="element" type="{F652A87A-0FDF-527C-B0ED-340C074A4874}">
+												<Class name="AZ::Render::MaterialAssignmentId" field="value1" version="1" type="{EB603581-4654-4C17-B6DE-AE61E79EDA97}">
+													<Class name="AZ::u64" field="lodIndex" value="18446744073709551615" type="{D6597933-47CD-4FC8-B911-63F3E2B0993A}"/>
+													<Class name="AssetId" field="materialAssetId" version="1" type="{652ED536-3402-439B-AEBE-4A5DBC554085}">
+														<Class name="AZ::Uuid" field="guid" value="{F5EB44A9-7274-5B89-84A9-AB898912C3BB}" type="{E152C105-A133-4D03-BBF8-3D4B2FBA3E2A}"/>
+														<Class name="unsigned int" field="subId" value="40852248" type="{43DA906B-7DEF-4CA8-9790-854106D3F983}"/>
+													</Class>
+												</Class>
+												<Class name="AZ::Render::MaterialAssignment" field="value2" version="1" type="{C66E5214-A24B-4722-B7F0-5991E6F8F163}">
+													<Class name="Asset" field="MaterialAsset" value="id={F8DF4D4F-CDA5-5634-A81F-6501A12FF16F}:0,type={522C7BE0-501D-463E-92C6-15184A2B7AD8},hint={objects/sponza_mat_floor.azmaterial},loadBehavior=1" version="2" type="{77A19D40-8731-4D3C-9041-1B43047366A4}"/>
+													<Class name="AZStd::unordered_map" field="PropertyOverrides" type="{6E6962E1-04C9-56F9-89C4-361031CC1384}"/>
+												</Class>
+											</Class>
+											<Class name="AZStd::pair" field="element" type="{F652A87A-0FDF-527C-B0ED-340C074A4874}">
+												<Class name="AZ::Render::MaterialAssignmentId" field="value1" version="1" type="{EB603581-4654-4C17-B6DE-AE61E79EDA97}">
+													<Class name="AZ::u64" field="lodIndex" value="18446744073709551615" type="{D6597933-47CD-4FC8-B911-63F3E2B0993A}"/>
+													<Class name="AssetId" field="materialAssetId" version="1" type="{652ED536-3402-439B-AEBE-4A5DBC554085}">
+														<Class name="AZ::Uuid" field="guid" value="{F5EB44A9-7274-5B89-84A9-AB898912C3BB}" type="{E152C105-A133-4D03-BBF8-3D4B2FBA3E2A}"/>
+														<Class name="unsigned int" field="subId" value="3166310922" type="{43DA906B-7DEF-4CA8-9790-854106D3F983}"/>
+													</Class>
+												</Class>
+												<Class name="AZ::Render::MaterialAssignment" field="value2" version="1" type="{C66E5214-A24B-4722-B7F0-5991E6F8F163}">
+													<Class name="Asset" field="MaterialAsset" value="id={CF2D3B6E-B1EF-50A9-B323-C4A63B7C493F}:0,type={522C7BE0-501D-463E-92C6-15184A2B7AD8},hint={objects/sponza_mat_fabricblue.azmaterial},loadBehavior=1" version="2" type="{77A19D40-8731-4D3C-9041-1B43047366A4}"/>
+													<Class name="AZStd::unordered_map" field="PropertyOverrides" type="{6E6962E1-04C9-56F9-89C4-361031CC1384}"/>
+												</Class>
+											</Class>
+											<Class name="AZStd::pair" field="element" type="{F652A87A-0FDF-527C-B0ED-340C074A4874}">
+												<Class name="AZ::Render::MaterialAssignmentId" field="value1" version="1" type="{EB603581-4654-4C17-B6DE-AE61E79EDA97}">
+													<Class name="AZ::u64" field="lodIndex" value="18446744073709551615" type="{D6597933-47CD-4FC8-B911-63F3E2B0993A}"/>
+													<Class name="AssetId" field="materialAssetId" version="1" type="{652ED536-3402-439B-AEBE-4A5DBC554085}">
+														<Class name="AZ::Uuid" field="guid" value="{F5EB44A9-7274-5B89-84A9-AB898912C3BB}" type="{E152C105-A133-4D03-BBF8-3D4B2FBA3E2A}"/>
+														<Class name="unsigned int" field="subId" value="3175210978" type="{43DA906B-7DEF-4CA8-9790-854106D3F983}"/>
+													</Class>
+												</Class>
+												<Class name="AZ::Render::MaterialAssignment" field="value2" version="1" type="{C66E5214-A24B-4722-B7F0-5991E6F8F163}">
+													<Class name="Asset" field="MaterialAsset" value="id={A11172CC-AC65-5630-B3EF-0DEF017CB747}:0,type={522C7BE0-501D-463E-92C6-15184A2B7AD8},hint={objects/sponza_mat_vasehanging.azmaterial},loadBehavior=1" version="2" type="{77A19D40-8731-4D3C-9041-1B43047366A4}"/>
+													<Class name="AZStd::unordered_map" field="PropertyOverrides" type="{6E6962E1-04C9-56F9-89C4-361031CC1384}"/>
+												</Class>
+											</Class>
+											<Class name="AZStd::pair" field="element" type="{F652A87A-0FDF-527C-B0ED-340C074A4874}">
+												<Class name="AZ::Render::MaterialAssignmentId" field="value1" version="1" type="{EB603581-4654-4C17-B6DE-AE61E79EDA97}">
+													<Class name="AZ::u64" field="lodIndex" value="18446744073709551615" type="{D6597933-47CD-4FC8-B911-63F3E2B0993A}"/>
+													<Class name="AssetId" field="materialAssetId" version="1" type="{652ED536-3402-439B-AEBE-4A5DBC554085}">
+														<Class name="AZ::Uuid" field="guid" value="{F5EB44A9-7274-5B89-84A9-AB898912C3BB}" type="{E152C105-A133-4D03-BBF8-3D4B2FBA3E2A}"/>
+														<Class name="unsigned int" field="subId" value="186539809" type="{43DA906B-7DEF-4CA8-9790-854106D3F983}"/>
+													</Class>
+												</Class>
+												<Class name="AZ::Render::MaterialAssignment" field="value2" version="1" type="{C66E5214-A24B-4722-B7F0-5991E6F8F163}">
+													<Class name="Asset" field="MaterialAsset" value="id={FB2B2000-42CC-5B3E-B823-C6624297D097}:0,type={522C7BE0-501D-463E-92C6-15184A2B7AD8},hint={objects/sponza_mat_curtainred.azmaterial},loadBehavior=1" version="2" type="{77A19D40-8731-4D3C-9041-1B43047366A4}"/>
+													<Class name="AZStd::unordered_map" field="PropertyOverrides" type="{6E6962E1-04C9-56F9-89C4-361031CC1384}"/>
+												</Class>
+											</Class>
+											<Class name="AZStd::pair" field="element" type="{F652A87A-0FDF-527C-B0ED-340C074A4874}">
+												<Class name="AZ::Render::MaterialAssignmentId" field="value1" version="1" type="{EB603581-4654-4C17-B6DE-AE61E79EDA97}">
+													<Class name="AZ::u64" field="lodIndex" value="18446744073709551615" type="{D6597933-47CD-4FC8-B911-63F3E2B0993A}"/>
+													<Class name="AssetId" field="materialAssetId" version="1" type="{652ED536-3402-439B-AEBE-4A5DBC554085}">
+														<Class name="AZ::Uuid" field="guid" value="{F5EB44A9-7274-5B89-84A9-AB898912C3BB}" type="{E152C105-A133-4D03-BBF8-3D4B2FBA3E2A}"/>
+														<Class name="unsigned int" field="subId" value="2093550608" type="{43DA906B-7DEF-4CA8-9790-854106D3F983}"/>
+													</Class>
+												</Class>
+												<Class name="AZ::Render::MaterialAssignment" field="value2" version="1" type="{C66E5214-A24B-4722-B7F0-5991E6F8F163}">
+													<Class name="Asset" field="MaterialAsset" value="id={CFCA20D2-CE89-5319-AAD2-9AEA441A02A3}:0,type={522C7BE0-501D-463E-92C6-15184A2B7AD8},hint={objects/sponza_mat_leaf.azmaterial},loadBehavior=1" version="2" type="{77A19D40-8731-4D3C-9041-1B43047366A4}"/>
+													<Class name="AZStd::unordered_map" field="PropertyOverrides" type="{6E6962E1-04C9-56F9-89C4-361031CC1384}"/>
+												</Class>
+											</Class>
+											<Class name="AZStd::pair" field="element" type="{F652A87A-0FDF-527C-B0ED-340C074A4874}">
+												<Class name="AZ::Render::MaterialAssignmentId" field="value1" version="1" type="{EB603581-4654-4C17-B6DE-AE61E79EDA97}">
+													<Class name="AZ::u64" field="lodIndex" value="18446744073709551615" type="{D6597933-47CD-4FC8-B911-63F3E2B0993A}"/>
+													<Class name="AssetId" field="materialAssetId" version="1" type="{652ED536-3402-439B-AEBE-4A5DBC554085}">
+														<Class name="AZ::Uuid" field="guid" value="{F5EB44A9-7274-5B89-84A9-AB898912C3BB}" type="{E152C105-A133-4D03-BBF8-3D4B2FBA3E2A}"/>
+														<Class name="unsigned int" field="subId" value="3299681432" type="{43DA906B-7DEF-4CA8-9790-854106D3F983}"/>
+													</Class>
+												</Class>
+												<Class name="AZ::Render::MaterialAssignment" field="value2" version="1" type="{C66E5214-A24B-4722-B7F0-5991E6F8F163}">
+													<Class name="Asset" field="MaterialAsset" value="id={B727DDD0-0200-5304-BC3C-C9FE7DAFE52C}:0,type={522C7BE0-501D-463E-92C6-15184A2B7AD8},hint={objects/sponza_mat_background.azmaterial},loadBehavior=1" version="2" type="{77A19D40-8731-4D3C-9041-1B43047366A4}"/>
+													<Class name="AZStd::unordered_map" field="PropertyOverrides" type="{6E6962E1-04C9-56F9-89C4-361031CC1384}"/>
+												</Class>
+											</Class>
+											<Class name="AZStd::pair" field="element" type="{F652A87A-0FDF-527C-B0ED-340C074A4874}">
+												<Class name="AZ::Render::MaterialAssignmentId" field="value1" version="1" type="{EB603581-4654-4C17-B6DE-AE61E79EDA97}">
+													<Class name="AZ::u64" field="lodIndex" value="18446744073709551615" type="{D6597933-47CD-4FC8-B911-63F3E2B0993A}"/>
+													<Class name="AssetId" field="materialAssetId" version="1" type="{652ED536-3402-439B-AEBE-4A5DBC554085}">
+														<Class name="AZ::Uuid" field="guid" value="{F5EB44A9-7274-5B89-84A9-AB898912C3BB}" type="{E152C105-A133-4D03-BBF8-3D4B2FBA3E2A}"/>
+														<Class name="unsigned int" field="subId" value="1813805191" type="{43DA906B-7DEF-4CA8-9790-854106D3F983}"/>
+													</Class>
+												</Class>
+												<Class name="AZ::Render::MaterialAssignment" field="value2" version="1" type="{C66E5214-A24B-4722-B7F0-5991E6F8F163}">
+													<Class name="Asset" field="MaterialAsset" value="id={A5BE69FA-9621-5006-8220-942DDE4B30A4}:0,type={522C7BE0-501D-463E-92C6-15184A2B7AD8},hint={objects/sponza_mat_lion.azmaterial},loadBehavior=1" version="2" type="{77A19D40-8731-4D3C-9041-1B43047366A4}"/>
+													<Class name="AZStd::unordered_map" field="PropertyOverrides" type="{6E6962E1-04C9-56F9-89C4-361031CC1384}"/>
+												</Class>
+											</Class>
+											<Class name="AZStd::pair" field="element" type="{F652A87A-0FDF-527C-B0ED-340C074A4874}">
+												<Class name="AZ::Render::MaterialAssignmentId" field="value1" version="1" type="{EB603581-4654-4C17-B6DE-AE61E79EDA97}">
+													<Class name="AZ::u64" field="lodIndex" value="18446744073709551615" type="{D6597933-47CD-4FC8-B911-63F3E2B0993A}"/>
+													<Class name="AssetId" field="materialAssetId" version="1" type="{652ED536-3402-439B-AEBE-4A5DBC554085}">
+														<Class name="AZ::Uuid" field="guid" value="{F5EB44A9-7274-5B89-84A9-AB898912C3BB}" type="{E152C105-A133-4D03-BBF8-3D4B2FBA3E2A}"/>
+														<Class name="unsigned int" field="subId" value="438015525" type="{43DA906B-7DEF-4CA8-9790-854106D3F983}"/>
+													</Class>
+												</Class>
+												<Class name="AZ::Render::MaterialAssignment" field="value2" version="1" type="{C66E5214-A24B-4722-B7F0-5991E6F8F163}">
+													<Class name="Asset" field="MaterialAsset" value="id={178D434B-F10D-511A-A513-5C69DAF8DD1F}:0,type={522C7BE0-501D-463E-92C6-15184A2B7AD8},hint={objects/sponza_mat_fabricred.azmaterial},loadBehavior=1" version="2" type="{77A19D40-8731-4D3C-9041-1B43047366A4}"/>
+													<Class name="AZStd::unordered_map" field="PropertyOverrides" type="{6E6962E1-04C9-56F9-89C4-361031CC1384}"/>
+												</Class>
+											</Class>
+											<Class name="AZStd::pair" field="element" type="{F652A87A-0FDF-527C-B0ED-340C074A4874}">
+												<Class name="AZ::Render::MaterialAssignmentId" field="value1" version="1" type="{EB603581-4654-4C17-B6DE-AE61E79EDA97}">
+													<Class name="AZ::u64" field="lodIndex" value="18446744073709551615" type="{D6597933-47CD-4FC8-B911-63F3E2B0993A}"/>
+													<Class name="AssetId" field="materialAssetId" version="1" type="{652ED536-3402-439B-AEBE-4A5DBC554085}">
+														<Class name="AZ::Uuid" field="guid" value="{F5EB44A9-7274-5B89-84A9-AB898912C3BB}" type="{E152C105-A133-4D03-BBF8-3D4B2FBA3E2A}"/>
+														<Class name="unsigned int" field="subId" value="1907085840" type="{43DA906B-7DEF-4CA8-9790-854106D3F983}"/>
+													</Class>
+												</Class>
+												<Class name="AZ::Render::MaterialAssignment" field="value2" version="1" type="{C66E5214-A24B-4722-B7F0-5991E6F8F163}">
+													<Class name="Asset" field="MaterialAsset" value="id={758D8231-C36B-5E69-83AB-13263004012E}:0,type={522C7BE0-501D-463E-92C6-15184A2B7AD8},hint={objects/sponza_mat_curtaingreen.azmaterial},loadBehavior=1" version="2" type="{77A19D40-8731-4D3C-9041-1B43047366A4}"/>
+													<Class name="AZStd::unordered_map" field="PropertyOverrides" type="{6E6962E1-04C9-56F9-89C4-361031CC1384}"/>
+												</Class>
+											</Class>
+											<Class name="AZStd::pair" field="element" type="{F652A87A-0FDF-527C-B0ED-340C074A4874}">
+												<Class name="AZ::Render::MaterialAssignmentId" field="value1" version="1" type="{EB603581-4654-4C17-B6DE-AE61E79EDA97}">
+													<Class name="AZ::u64" field="lodIndex" value="18446744073709551615" type="{D6597933-47CD-4FC8-B911-63F3E2B0993A}"/>
+													<Class name="AssetId" field="materialAssetId" version="1" type="{652ED536-3402-439B-AEBE-4A5DBC554085}">
+														<Class name="AZ::Uuid" field="guid" value="{F5EB44A9-7274-5B89-84A9-AB898912C3BB}" type="{E152C105-A133-4D03-BBF8-3D4B2FBA3E2A}"/>
+														<Class name="unsigned int" field="subId" value="2689451379" type="{43DA906B-7DEF-4CA8-9790-854106D3F983}"/>
+													</Class>
+												</Class>
+												<Class name="AZ::Render::MaterialAssignment" field="value2" version="1" type="{C66E5214-A24B-4722-B7F0-5991E6F8F163}">
+													<Class name="Asset" field="MaterialAsset" value="id={54C632DA-5B65-59DC-9B24-B7B2E2D87469}:0,type={522C7BE0-501D-463E-92C6-15184A2B7AD8},hint={objects/sponza_mat_details.azmaterial},loadBehavior=1" version="2" type="{77A19D40-8731-4D3C-9041-1B43047366A4}"/>
+													<Class name="AZStd::unordered_map" field="PropertyOverrides" type="{6E6962E1-04C9-56F9-89C4-361031CC1384}"/>
+												</Class>
+											</Class>
+											<Class name="AZStd::pair" field="element" type="{F652A87A-0FDF-527C-B0ED-340C074A4874}">
+												<Class name="AZ::Render::MaterialAssignmentId" field="value1" version="1" type="{EB603581-4654-4C17-B6DE-AE61E79EDA97}">
+													<Class name="AZ::u64" field="lodIndex" value="18446744073709551615" type="{D6597933-47CD-4FC8-B911-63F3E2B0993A}"/>
+													<Class name="AssetId" field="materialAssetId" version="1" type="{652ED536-3402-439B-AEBE-4A5DBC554085}">
+														<Class name="AZ::Uuid" field="guid" value="{F5EB44A9-7274-5B89-84A9-AB898912C3BB}" type="{E152C105-A133-4D03-BBF8-3D4B2FBA3E2A}"/>
+														<Class name="unsigned int" field="subId" value="3157644117" type="{43DA906B-7DEF-4CA8-9790-854106D3F983}"/>
+													</Class>
+												</Class>
+												<Class name="AZ::Render::MaterialAssignment" field="value2" version="1" type="{C66E5214-A24B-4722-B7F0-5991E6F8F163}">
+													<Class name="Asset" field="MaterialAsset" value="id={2221CBDA-B2E3-5133-88DD-6D995582D2B2}:0,type={522C7BE0-501D-463E-92C6-15184A2B7AD8},hint={objects/sponza_mat_arch.azmaterial},loadBehavior=1" version="2" type="{77A19D40-8731-4D3C-9041-1B43047366A4}"/>
+													<Class name="AZStd::unordered_map" field="PropertyOverrides" type="{6E6962E1-04C9-56F9-89C4-361031CC1384}"/>
+												</Class>
+											</Class>
+											<Class name="AZStd::pair" field="element" type="{F652A87A-0FDF-527C-B0ED-340C074A4874}">
+												<Class name="AZ::Render::MaterialAssignmentId" field="value1" version="1" type="{EB603581-4654-4C17-B6DE-AE61E79EDA97}">
+													<Class name="AZ::u64" field="lodIndex" value="18446744073709551615" type="{D6597933-47CD-4FC8-B911-63F3E2B0993A}"/>
+													<Class name="AssetId" field="materialAssetId" version="1" type="{652ED536-3402-439B-AEBE-4A5DBC554085}">
+														<Class name="AZ::Uuid" field="guid" value="{F5EB44A9-7274-5B89-84A9-AB898912C3BB}" type="{E152C105-A133-4D03-BBF8-3D4B2FBA3E2A}"/>
+														<Class name="unsigned int" field="subId" value="3888291602" type="{43DA906B-7DEF-4CA8-9790-854106D3F983}"/>
+													</Class>
+												</Class>
+												<Class name="AZ::Render::MaterialAssignment" field="value2" version="1" type="{C66E5214-A24B-4722-B7F0-5991E6F8F163}">
+													<Class name="Asset" field="MaterialAsset" value="id={6316DEA5-03F7-5327-B44C-6617D1025026}:0,type={522C7BE0-501D-463E-92C6-15184A2B7AD8},hint={objects/sponza_mat_roof.azmaterial},loadBehavior=1" version="2" type="{77A19D40-8731-4D3C-9041-1B43047366A4}"/>
+													<Class name="AZStd::unordered_map" field="PropertyOverrides" type="{6E6962E1-04C9-56F9-89C4-361031CC1384}"/>
+												</Class>
+											</Class>
+											<Class name="AZStd::pair" field="element" type="{F652A87A-0FDF-527C-B0ED-340C074A4874}">
+												<Class name="AZ::Render::MaterialAssignmentId" field="value1" version="1" type="{EB603581-4654-4C17-B6DE-AE61E79EDA97}">
+													<Class name="AZ::u64" field="lodIndex" value="18446744073709551615" type="{D6597933-47CD-4FC8-B911-63F3E2B0993A}"/>
+													<Class name="AssetId" field="materialAssetId" version="1" type="{652ED536-3402-439B-AEBE-4A5DBC554085}">
+														<Class name="AZ::Uuid" field="guid" value="{F5EB44A9-7274-5B89-84A9-AB898912C3BB}" type="{E152C105-A133-4D03-BBF8-3D4B2FBA3E2A}"/>
+														<Class name="unsigned int" field="subId" value="3611616689" type="{43DA906B-7DEF-4CA8-9790-854106D3F983}"/>
+													</Class>
+												</Class>
+												<Class name="AZ::Render::MaterialAssignment" field="value2" version="1" type="{C66E5214-A24B-4722-B7F0-5991E6F8F163}">
+													<Class name="Asset" field="MaterialAsset" value="id={7892F07D-161B-5B3D-8399-F0211FB4E67E}:0,type={522C7BE0-501D-463E-92C6-15184A2B7AD8},hint={objects/sponza_mat_columnc.azmaterial},loadBehavior=1" version="2" type="{77A19D40-8731-4D3C-9041-1B43047366A4}"/>
 													<Class name="AZStd::unordered_map" field="PropertyOverrides" type="{6E6962E1-04C9-56F9-89C4-361031CC1384}"/>
 												</Class>
 											</Class>

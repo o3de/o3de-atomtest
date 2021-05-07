@@ -2,7 +2,7 @@
  <Variable Name="Sun color" Color="1,0.97254896,0.97254896">
   <Spline Keys="0:(1:0.972549:0.972549):0"/>
  </Variable>
- <Variable Name="Sun intensity" Value="74914.453">
+ <Variable Name="Sun intensity" Value="74914.438">
   <Spline Keys="0:119000:0"/>
  </Variable>
  <Variable Name="Sun specular multiplier" Value="1">
@@ -158,13 +158,13 @@
  <Variable Name="Sky light: Wavelength (B)" Value="488">
   <Spline Keys="0:488:0"/>
  </Variable>
- <Variable Name="Night sky: Horizon color" Color="0.87058794,0.580392,0.18431398">
+ <Variable Name="Night sky: Horizon color" Color="0.87058818,0.58039212,0.18431373">
   <Spline Keys="0:(0.870588:0.580392:0.184314):0"/>
  </Variable>
  <Variable Name="Night sky: Horizon color multiplier" Value="9.999999e-05">
   <Spline Keys="0:0.0001:0"/>
  </Variable>
- <Variable Name="Night sky: Zenith color" Color="0.0666667,0.14901999,0.30588201">
+ <Variable Name="Night sky: Zenith color" Color="0.06666667,0.14901961,0.30588236">
   <Spline Keys="0:(0.0666667:0.14902:0.305882):0"/>
  </Variable>
  <Variable Name="Night sky: Zenith color multiplier" Value="1.9999999e-05">
@@ -182,7 +182,7 @@
  <Variable Name="Night sky: Moon color multiplier" Value="0.0099999998">
   <Spline Keys="0:0.01:0"/>
  </Variable>
- <Variable Name="Night sky: Moon inner corona color" Color="0.90196103,1,1">
+ <Variable Name="Night sky: Moon inner corona color" Color="0.90196079,1,1">
   <Spline Keys="0:(0.901961:1:1):0"/>
  </Variable>
  <Variable Name="Night sky: Moon inner corona color multiplier" Value="9.999999e-05">
@@ -191,7 +191,7 @@
  <Variable Name="Night sky: Moon inner corona scale" Value="0.49900001">
   <Spline Keys="0:0.499:0"/>
  </Variable>
- <Variable Name="Night sky: Moon outer corona color" Color="0.50196099,0.78431392,1">
+ <Variable Name="Night sky: Moon outer corona color" Color="0.50196075,0.78431368,1">
   <Spline Keys="0:(0.501961:0.784314:1):0"/>
  </Variable>
  <Variable Name="Night sky: Moon outer corona color multiplier" Value="4.9999995e-05">
@@ -203,7 +203,7 @@
  <Variable Name="Cloud shading: Sun light multiplier" Value="1.96">
   <Spline Keys="0:1.96:0"/>
  </Variable>
- <Variable Name="Cloud shading: Sun custom color" Color="0.84313703,0.78431392,0.66666698">
+ <Variable Name="Cloud shading: Sun custom color" Color="0.84313726,0.78431368,0.66666669">
   <Spline Keys="0:(0.843137:0.784314:0.666667):0"/>
  </Variable>
  <Variable Name="Cloud shading: Sun custom color multiplier" Value="1">
@@ -227,7 +227,7 @@
  <Variable Name="Sun rays custom color" Color="1,1,1">
   <Spline Keys="0:(1:1:1):0"/>
  </Variable>
- <Variable Name="Ocean fog color" Color="0.11372499,0.39999998,0.55294102">
+ <Variable Name="Ocean fog color" Color="0.11372549,0.39999998,0.5529412">
   <Spline Keys="0:(0.113725:0.4:0.552941):0"/>
  </Variable>
  <Variable Name="Ocean fog color multiplier" Value="1">

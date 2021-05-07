@@ -1,0 +1,6 @@
+<download name="NormalMapping" type="Map">
+ <index src="filelist.xml" dest="filelist.xml"/>
+ <files>
+  <file src="level.pak" dest="level.pak" size="A11D" md5="a5c9114d15b21233a398354513484a3e"/>
+ </files>
+</download>
