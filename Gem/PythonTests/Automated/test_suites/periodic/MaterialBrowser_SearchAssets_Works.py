@@ -43,7 +43,7 @@ class TestMaterialBrowserSearchAssetsWorks(MaterialEditorHelper):
         basic_m00_r01.material
         basic_m00_r02.material
 
-        Seaching with 'basic_grey.material' results basic_grey.material only in Material Browser
+        Seaching with 'basic_grey.material' results basic_grey.material in Material Browser
 
         :return: None
         """
