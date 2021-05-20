@@ -55,7 +55,7 @@ class TestMaterialBrowserSearchAssetsWorks(MaterialEditorHelper):
             material_editor.set_pane_visibility(pane_name, True)
         result = material_editor.is_pane_visible(pane_name)
         print(f"{pane_name} opened: {result}")
-        general.idle_wait_frames(15)
+        general.idle_wait_frames(3)
 
         # Search assets with "basic" in Material Browser
         editor_window = pyside_utils.get_editor_main_window()
