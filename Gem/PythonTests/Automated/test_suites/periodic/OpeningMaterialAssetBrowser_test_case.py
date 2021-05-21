@@ -30,7 +30,7 @@ screenshotsFolder = os.path.join(azlmbr.paths.devroot, "AtomTest", "Cache", "pc"
 
 class TestOpeningMaterialAssetBrowser(MaterialEditorHelper):
     def __init__(self):
-        MaterialEditorHelper.__init__(self, log_prefix="MaterialBrowser_SearchAssets_Works")
+        MaterialEditorHelper.__init__(self, log_prefix="OpeningMaterialAssetBrowser")
 
     def run_test(self):
         """
