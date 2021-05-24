@@ -1,6 +1,6 @@
 <download name="SponzaDiffuseGI" type="Map">
  <index src="filelist.xml" dest="filelist.xml"/>
  <files>
-  <file src="level.pak" dest="level.pak" size="2424" md5="65fa244f3b1a2a683363fb68862ddf0e"/>
+  <file src="level.pak" dest="level.pak" size="23A7" md5="78fd43ba5970073b2bc34a63c7f90839"/>
  </files>
 </download>
