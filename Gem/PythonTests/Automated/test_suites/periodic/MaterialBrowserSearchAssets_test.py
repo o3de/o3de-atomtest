@@ -22,26 +22,32 @@ log_monitor_timeout = 60
 @pytest.mark.parametrize("project", ["AtomTest"])
 @pytest.mark.parametrize("launcher_platform", ["windows_generic"])
 @pytest.mark.system
-class TestMaterialBrowser_SearchAssets_Works(TestAutomationBase):
+class TestMaterialBrowserSearchAssets(TestAutomationBase):
     @pytest.mark.test_case_id("C34448135")
     @pytest.mark.parametrize("exe_file_name", ["MaterialEditor"])
-    def test_MaterialBrowser_SearchAssets_Works(
+    def test_MaterialBrowserSearchAssets(
         self, request, launcher_platform, generic_launcher, exe_file_name,
     ):
 
         expected_lines = [
             "Asset Browser opened: True",
-            "All materials with the word 'basic' in their names are filtered in Asset Browser",
+            "All materials with the word 'basic' in their names are filtered in Asset Browser: True",
             "basic_grey.material asset is filtered in Asset Browser",
+        ]
+
+        unexpected_lines = [
+            "Asset Browser opened: False",
+            "All materials with the word 'basic' in their names are filtered in Asset Browser: False",
         ]
 
         hydra.launch_and_validate_results(
             request,
             test_directory,
             generic_launcher,
-            "MaterialBrowser_SearchAssets_Works.py",
+            "MaterialBrowserSearchAssets_test_case.py",
             timeout=log_monitor_timeout,
             expected_lines=expected_lines,
+            unexpected_lines=unexpected_lines,
             halt_on_unexpected=True,
             log_file_name="MaterialEditor.log",
         )

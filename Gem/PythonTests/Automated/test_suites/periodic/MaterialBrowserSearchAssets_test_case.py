@@ -19,6 +19,7 @@ import azlmbr.paths
 from editor_python_test_tools import pyside_utils
 from PySide2 import QtWidgets, QtCore
 import azlmbr.materialeditor.general as general
+from PySide2.QtCore import Qt
 
 sys.path.append(os.path.join(azlmbr.paths.devroot, "AtomTest", "Gem", "PythonTests"))
 
@@ -26,9 +27,9 @@ import Automated.atom_utils.material_editor_utils as material_editor
 from Automated.atom_utils.material_editor_utils import MaterialEditorHelper
 
 
-class TestMaterialBrowserSearchAssetsWorks(MaterialEditorHelper):
+class TestMaterialBrowserSearchAssets(MaterialEditorHelper):
     def __init__(self):
-        MaterialEditorHelper.__init__(self, log_prefix="MaterialBrowser_SearchAssets_Works")
+        MaterialEditorHelper.__init__(self, log_prefix="MaterialBrowserSearchAssets")
 
     def run_test(self):
         """
@@ -59,25 +60,46 @@ class TestMaterialBrowserSearchAssetsWorks(MaterialEditorHelper):
 
         # Search assets with "basic" in Material Browser
         editor_window = pyside_utils.get_editor_main_window()
-        asset_browser = editor_window.findChildren(QtWidgets.QDockWidget, "Asset Browser")[0]
+        asset_browser = editor_window.findChildren(QtWidgets.QWidget, "Asset Browser")[0]
         search_bar = asset_browser.findChildren(QtWidgets.QLineEdit, "textSearch")[0]
         search_bar.setText("basic")
         general.idle_wait_frames(1)
         asset_browser_tree = asset_browser.findChild(QtWidgets.QTreeView, "m_assetBrowserTreeViewWidget")
+        asset_browser_tree.expandAll()
 
         # Make sure all materials with the word 'basic' in their names are filtered
-        if (asset_browser_tree.indexBelow(asset_browser_tree.currentIndex())) != (QtCore.QModelIndex()):
-            print("All materials with the word 'basic' in their names are filtered in Asset Browser")
+        self.incorrect_file_found = False
+        model = asset_browser_tree.model()
+        indexes = [QtCore.QModelIndex()]
+        while len(indexes) > 0:
+            parent_index = indexes.pop()
+            for row in range(model.rowCount(parent_index)):
+                cur_index = model.index(row, 0, parent_index)
+                cur_data = cur_index.data(Qt.DisplayRole)
+                if "." in cur_data and (cur_data.lower().split(".")[-1]) in ["material"]:
+                    if "basic" not in (cur_data.lower().split(".")[0]):
+                        print(f"Incorrect file found: {cur_data}")
+                        self.incorrect_file_found = True
+                        indexes = list()
+                        break
+                indexes.append(cur_index)
+
+        print(
+            f"All materials with the word 'basic' in their names are filtered in Asset Browser: {not self.incorrect_file_found}"
+        )
 
         # Search assets with "basic_grey" in Material Browser
         search_bar.setText("basic_grey.material")
         general.idle_wait_frames(1)
         asset_browser_tree = asset_browser.findChild(QtWidgets.QTreeView, "m_assetBrowserTreeViewWidget")
+        model_index = pyside_utils.find_child_by_pattern(asset_browser_tree, "basic_grey.material")
 
         # Make sure basic_grey.material asset is filtered only
-        if (asset_browser_tree.indexBelow(asset_browser_tree.currentIndex())) == (QtCore.QModelIndex()):
+        if (asset_browser_tree.indexBelow(asset_browser_tree.currentIndex())) == (
+            QtCore.QModelIndex()
+        ) and model_index != None:
             print("basic_grey.material asset is filtered in Asset Browser")
 
 
-test = TestMaterialBrowserSearchAssetsWorks()
+test = TestMaterialBrowserSearchAssets()
 test.run()
