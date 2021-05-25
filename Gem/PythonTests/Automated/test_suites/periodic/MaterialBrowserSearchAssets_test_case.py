@@ -97,7 +97,7 @@ class TestMaterialBrowserSearchAssets(MaterialEditorHelper):
         # Make sure basic_grey.material asset is filtered only
         if (asset_browser_tree.indexBelow(asset_browser_tree.currentIndex())) == (
             QtCore.QModelIndex()
-        ) and model_index != None:
+        ) and model_index is not None:
             print("basic_grey.material asset is filtered in Asset Browser")
 
 
