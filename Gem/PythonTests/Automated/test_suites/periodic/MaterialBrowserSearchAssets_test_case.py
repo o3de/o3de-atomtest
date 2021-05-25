@@ -76,12 +76,11 @@ class TestMaterialBrowserSearchAssets(MaterialEditorHelper):
             for row in range(model.rowCount(parent_index)):
                 cur_index = model.index(row, 0, parent_index)
                 cur_data = cur_index.data(Qt.DisplayRole)
-                if "." in cur_data and (cur_data.lower().split(".")[-1]) in ["material"]:
-                    if "basic" not in (cur_data.lower().split(".")[0]):
-                        print(f"Incorrect file found: {cur_data}")
-                        self.incorrect_file_found = True
-                        indexes = list()
-                        break
+                if cur_data.endswith(".material") and ("basic" not in cur_data):
+                    print(f"Incorrect file found: {cur_data}")
+                    self.incorrect_file_found = True
+                    indexes = list()
+                    break
                 indexes.append(cur_index)
 
         print(
@@ -95,9 +94,7 @@ class TestMaterialBrowserSearchAssets(MaterialEditorHelper):
         model_index = pyside_utils.find_child_by_pattern(asset_browser_tree, "basic_grey.material")
 
         # Make sure basic_grey.material asset is filtered only
-        if (asset_browser_tree.indexBelow(asset_browser_tree.currentIndex())) == (
-            QtCore.QModelIndex()
-        ) and model_index is not None:
+        if (asset_browser_tree.indexBelow(model_index)) == (QtCore.QModelIndex()) and model_index is not None:
             print("basic_grey.material asset is filtered in Asset Browser")
 
 
