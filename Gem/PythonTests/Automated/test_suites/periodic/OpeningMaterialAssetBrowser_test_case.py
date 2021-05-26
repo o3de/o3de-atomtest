@@ -62,7 +62,7 @@ class TestOpeningMaterialAssetBrowser(MaterialEditorHelper):
         model_index = pyside_utils.find_child_by_pattern(asset_browser_tree, "basic_grey.material")    
 
         # Make sure basic_grey.material asset is filtered in asset browser
-        if (asset_browser_tree.indexBelow(asset_browser_tree.currentIndex())) == (QtCore.QModelIndex()) and model_index is not None:
+        if (asset_browser_tree.indexBelow(model_index)) == (QtCore.QModelIndex()) and model_index is not None:
             print("basic_grey.material asset is filtered in Asset Browser")
         
         # Click on basic_grey.material in asset browser
@@ -75,7 +75,6 @@ class TestOpeningMaterialAssetBrowser(MaterialEditorHelper):
         # Capture Screenshot
         capture_screenshot(os.path.join(screenshotsFolder, "screenshot_basic_grey.ppm"))
         
-
 
 test = TestOpeningMaterialAssetBrowser()
 test.run()
