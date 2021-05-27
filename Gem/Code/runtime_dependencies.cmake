@@ -24,4 +24,5 @@ set(GEM_DEPENDENCIES
     Gem::AtomTest
     Gem::GradientSignal
     Gem::WhiteBox
+    Gem::DebugDraw
 )

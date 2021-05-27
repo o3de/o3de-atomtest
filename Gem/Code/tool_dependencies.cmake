@@ -26,4 +26,5 @@ set(GEM_DEPENDENCIES
     Gem::AtomTest
     Gem::GradientSignal.Editor
     Gem::WhiteBox.Editor
+    Gem::DebugDraw.Editor
 )
