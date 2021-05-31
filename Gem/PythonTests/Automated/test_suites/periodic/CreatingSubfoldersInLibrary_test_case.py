@@ -11,7 +11,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
 Creating Subfolders within Library
 
-NOTE: import azlmbr.materialeditor will fail with a ModuleNotFound error when using this script with Editor.exe
+import azlmbr.materialeditor will fail with a ModuleNotFound error when using this script with Editor.exe
 This is because azlmbr.materialeditor only binds to MaterialEditor.exe and not Editor.exe
 You need to launch this script with MaterialEditor.exe in order for azlmbr.materialeditor to appear.
 """
