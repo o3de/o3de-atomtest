@@ -26,8 +26,7 @@ import azlmbr.materialeditor.general as general
 
 sys.path.append(os.path.join(azlmbr.paths.devroot, "AtomTest", "Gem", "PythonTests"))
 
-import Automated.atom_utils.material_editor_utils as material_editor
-from Automated.atom_utils.material_editor_utils import MaterialEditorHelper
+from Automated.atom_utils.material_editor_utils import MaterialEditorHelper, is_pane_visible, set_pane_visibility
 
 
 class TestOpeningMaterialAssetBrowser(MaterialEditorHelper):
@@ -55,10 +54,10 @@ class TestOpeningMaterialAssetBrowser(MaterialEditorHelper):
 
         # 1) Open Asset Browser
         pane_name = "Asset Browser"
-        result = material_editor.is_pane_visible(pane_name)
+        result = is_pane_visible(pane_name)
         if not result:
-            material_editor.set_pane_visibility(pane_name, True)
-        result = material_editor.is_pane_visible(pane_name)
+            set_pane_visibility(pane_name, True)
+        result = is_pane_visible(pane_name)
         print(f"{pane_name} opened: {result}")
         general.idle_wait_frames(3)
 
