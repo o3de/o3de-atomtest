@@ -22,7 +22,6 @@ LOG_MONITOR_TIMEOUT = 30
 
 @pytest.mark.parametrize("project", ["AtomTest"])
 @pytest.mark.parametrize("launcher_platform", ["windows_generic"])
-@pytest.mark.system
 class TestSelectingOpenMaterials(object):
     @pytest.mark.parametrize("exe_file_name", ["MaterialEditor"])
     def test_SelectingOpenMaterials(
@@ -30,9 +29,9 @@ class TestSelectingOpenMaterials(object):
     ):
 
         expected_lines = [
-            "Material 1 opened: True",
-            "Material 2 opened: True",
-            "New instance did not open: True",
+            "Instance count after opening first material: 1",
+            "Instance count after opening second material: 2",
+            "Instance count after re-open: 2",
             "Initial tab is focused: True",
         ]
         unexpected_lines = [

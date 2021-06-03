@@ -93,17 +93,17 @@ class TestSelectingOpenMaterials(MaterialEditorHelper):
         # 3) Open Material 1 and verify if opened
         open_material_from_asset_browser(ASSET_1)
         self.wait_for_condition(lambda: tab_bar.count() == 1)
-        print(f"Material 1 opened: {tab_bar.count()==1}")
+        print(f"Instance count after opening first material: {tab_bar.count()}")
 
         # 4) Open Material 2 and verify if opened
         open_material_from_asset_browser(ASSET_2)
         self.wait_for_condition(lambda: tab_bar.count() == 2)
-        print(f"Material 2 opened: {tab_bar.count()==2}")
+        print(f"Instance count after opening second material: {tab_bar.count()}")
 
         # 5) Open Material 1 again and verify if new instance is not opened and initial tab is selected
         open_material_from_asset_browser(ASSET_1)
         self.wait_for_condition(lambda: tab_bar.count() == 2)
-        print(f"New instance did not open: {tab_bar.count()==2}")
+        print(f"Instance count after re-open: {tab_bar.count()}")
         print(f"Initial tab is focused: {tab_widget.tabText(tab_widget.currentIndex())==ASSET_1}")
 
 

@@ -25,7 +25,6 @@ LOG_MONITOR_TIMEOUT = 30
 
 @pytest.mark.parametrize("project", ["AtomTest"])
 @pytest.mark.parametrize("launcher_platform", ["windows_generic"])
-@pytest.mark.system
 class TestCreatingSubfoldersInLibrary(object):
     @pytest.fixture(autouse=True)
     def setup_teardown(self, request, workspace, project):
@@ -36,11 +35,11 @@ class TestCreatingSubfoldersInLibrary(object):
                 True,
             )
 
-        # Cleanup our newly created materials
+        # Cleanup test folders created
         delete_files()
 
         def teardown():
-            # Cleanup our newly created materials
+            # Cleanup test folders created
             delete_files()
 
         request.addfinalizer(teardown)
