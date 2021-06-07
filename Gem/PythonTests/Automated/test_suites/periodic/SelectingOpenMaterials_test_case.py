@@ -57,29 +57,33 @@ class TestSelectingOpenMaterials(MaterialEditorHelper):
         ASSET_1 = "basic_grey.material"
         ASSET_2 = "DefaultPBR.material"
 
-        def open_material_from_asset_browser(material_name):
+        def get_asset_browser(editor_window):
+            asset_browser = get_asset_browser_qt_object()
+            if asset_browser is None or not asset_browser.isVisible():
+                action = pyside_utils.find_child_by_pattern(editor_window, {"iconText": "Asset Browser"})
+                action.trigger()
+            self.wait_for_condition(lambda: get_asset_browser_qt_object() is not None)
+            asset_browser = get_asset_browser_qt_object()
+            return asset_browser
+
+        def get_asset_browser_qt_object():
+            return editor_window.findChild(QtWidgets.QDockWidget, "Asset Browser_DockWidget")
+
+        def open_material_from_asset_browser(tree, search_bar, material_name):
             tree.expandAll()
             search_bar.setText(material_name)
             self.wait_for_condition(lambda: pyside_utils.find_child_by_pattern(tree, material_name) is not None, 2.0)
-            mi = pyside_utils.find_child_by_pattern(tree, material_name)
-            tree.scrollTo(mi)
-            pyside_utils.item_view_index_mouse_click(tree, mi)
+            model_index = pyside_utils.find_child_by_pattern(tree, material_name)
+            tree.scrollTo(model_index)
+            pyside_utils.item_view_index_mouse_click(tree, model_index)
             QtTest.QTest.mouseDClick(
-                tree.viewport(), QtCore.Qt.LeftButton, QtCore.Qt.NoModifier, tree.visualRect(mi).center()
+                tree.viewport(), QtCore.Qt.LeftButton, QtCore.Qt.NoModifier, tree.visualRect(model_index).center()
             )
             tree.collapseAll()
 
-        def get_asset_browser():
-            return editor_window.findChild(QtWidgets.QDockWidget, "Asset Browser_DockWidget")
-
         # 1) Initialize QT objects
         editor_window = pyside_utils.get_editor_main_window()
-        asset_browser = get_asset_browser()
-        if asset_browser is None or not asset_browser.isVisible():
-            action = pyside_utils.find_child_by_pattern(editor_window, {"iconText": "Asset Browser"})
-            action.trigger()
-        self.wait_for_condition(lambda: get_asset_browser() is not None)
-        asset_browser = get_asset_browser()
+        asset_browser = get_asset_browser(editor_window)
         search_frame = asset_browser.findChild(QtWidgets.QFrame, "m_searchWidget")
         search_bar = search_frame.findChild(QtWidgets.QWidget, "textSearch")
         tab_widget = editor_window.findChild(QtWidgets.QTabWidget, "TabWidget")
@@ -91,17 +95,17 @@ class TestSelectingOpenMaterials(MaterialEditorHelper):
         close_all.trigger()
 
         # 3) Open Material 1 and verify if opened
-        open_material_from_asset_browser(ASSET_1)
+        open_material_from_asset_browser(tree, search_bar, ASSET_1)
         self.wait_for_condition(lambda: tab_bar.count() == 1)
         print(f"Instance count after opening first material: {tab_bar.count()}")
 
         # 4) Open Material 2 and verify if opened
-        open_material_from_asset_browser(ASSET_2)
+        open_material_from_asset_browser(tree, search_bar, ASSET_2)
         self.wait_for_condition(lambda: tab_bar.count() == 2)
         print(f"Instance count after opening second material: {tab_bar.count()}")
 
         # 5) Open Material 1 again and verify if new instance is not opened and initial tab is selected
-        open_material_from_asset_browser(ASSET_1)
+        open_material_from_asset_browser(tree, search_bar, ASSET_1)
         self.wait_for_condition(lambda: tab_bar.count() == 2)
         print(f"Instance count after re-open: {tab_bar.count()}")
         print(f"Initial tab is focused: {tab_widget.tabText(tab_widget.currentIndex())==ASSET_1}")

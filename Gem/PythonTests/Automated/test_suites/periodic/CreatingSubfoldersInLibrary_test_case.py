@@ -57,7 +57,16 @@ class TestCreatingSubfoldersInLibrary(MaterialEditorHelper):
         SUB_FOLDER_PATH = os.path.join(azlmbr.paths.devroot, "Gems", "Atom", "TestData", NEW_SUB_FOLDER)
         self.focus_changed = False
 
-        def get_asset_browser():
+        def get_asset_browser(editor_window):
+            asset_browser = get_asset_browser_qt_object()
+            if asset_browser is None or not asset_browser.isVisible():
+                action = pyside_utils.find_child_by_pattern(editor_window, {"iconText": "Asset Browser"})
+                action.trigger()
+            self.wait_for_condition(lambda: get_asset_browser_qt_object() is not None)
+            asset_browser = get_asset_browser_qt_object()
+            return asset_browser
+
+        def get_asset_browser_qt_object():
             return editor_window.findChild(QtWidgets.QDockWidget, "Asset Browser_DockWidget")
 
         def find_folder_in_browser():
@@ -65,6 +74,10 @@ class TestCreatingSubfoldersInLibrary(MaterialEditorHelper):
             return pyside_utils.find_child_by_pattern(tree, FOLDER_NAME) is not None
 
         def on_focus_changed(old, new):
+            """
+            This method deals with the Modal Widget which opens after doing Right Click-> Create Sub Folder.
+            Sets the folder name and click OK button.
+            """
             modal_widget = QtWidgets.QApplication.activeModalWidget()
             if modal_widget and not self.focus_changed:
                 self.focus_changed = True
@@ -75,12 +88,7 @@ class TestCreatingSubfoldersInLibrary(MaterialEditorHelper):
 
         # 1) Initialize QT objects
         editor_window = pyside_utils.get_editor_main_window()
-        asset_browser = get_asset_browser()
-        if asset_browser is None or not asset_browser.isVisible():
-            action = pyside_utils.find_child_by_pattern(editor_window, {"iconText": "Asset Browser"})
-            action.trigger()
-        self.wait_for_condition(lambda: get_asset_browser() is not None)
-        asset_browser = get_asset_browser()
+        asset_browser = get_asset_browser(editor_window)
         search_frame = asset_browser.findChild(QtWidgets.QFrame, "m_searchWidget")
         search_bar = search_frame.findChild(QtWidgets.QWidget, "textSearch")
         tree = asset_browser.findChild(QtWidgets.QTreeView, "m_assetBrowserTreeViewWidget")
