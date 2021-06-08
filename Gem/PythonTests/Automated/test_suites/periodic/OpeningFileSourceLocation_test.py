@@ -59,3 +59,4 @@ class TestOpeningMaterialAssetBrowser(TestAutomationBase):
             halt_on_unexpected=True,
             log_file_name="MaterialEditor.log",
         )
+        

@@ -111,3 +111,4 @@ class TestOpeningFileSourceLocation(MaterialEditorHelper):
 
 test = TestOpeningFileSourceLocation()
 test.run()
+
