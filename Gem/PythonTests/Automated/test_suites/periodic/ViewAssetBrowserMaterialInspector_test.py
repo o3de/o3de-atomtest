@@ -17,27 +17,23 @@ from Automated.atom_utils import hydra_test_utils as hydra
 test_directory = os.path.dirname(__file__)
 log_monitor_timeout = 80
 
+
 @pytest.mark.parametrize("project", ["AtomTest"])
 @pytest.mark.parametrize("launcher_platform", ['windows_generic'])
 @pytest.mark.system
 class TestViewAssetBrowserMaterialInspector(object):
-    @pytest.mark.test_case_id(
-        "C34448126",
-        "C34448127",
-    )
     @pytest.mark.parametrize("exe_file_name", ["MaterialEditor"])
     def test_ViewAssetBrowserMaterialInspector(
-        self, request, workspace, project, launcher_platform, generic_launcher, exe_file_name
-    ):
-
+            self, request, workspace, project, launcher_platform, generic_launcher, exe_file_name):
         expected_lines = [
             "Asset Browser visibility working as expected: True",
             "Inspector visibility working as expected: True",
         ]
-
         unexpected_lines = [
             "Asset Browser visibility working as expected: False",
             "Inspector visibility working as expected: False",
+            "Trace::Assert",
+            "Trace::Error",
             "Traceback (most recent call last):",
         ]
 

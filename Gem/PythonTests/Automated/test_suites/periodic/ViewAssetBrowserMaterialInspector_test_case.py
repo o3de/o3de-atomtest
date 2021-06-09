@@ -7,6 +7,10 @@ distribution (the "License"). All use of this software is governed by the Licens
 or, if provided, by the license below or the license accompanying this file. Do not
 remove or modify any license notices. This file is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+
+import azlmbr.materialeditor will fail with a ModuleNotFound error when using this script with Editor.exe
+This is because azlmbr.materialeditor only binds to MaterialEditor.exe and not Editor.exe
+You need to launch this script with MaterialEditor.exe in order for azlmbr.materialeditor to appear.
 """
 
 import os

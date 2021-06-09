@@ -7,20 +7,15 @@ distribution (the "License"). All use of this software is governed by the Licens
 or, if provided, by the license below or the license accompanying this file. Do not
 remove or modify any license notices. This file is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+
+WARNING: This script must be run after the "BasicLevelSetup_test_case.py" script in this same directory.
+
+Hydra script that uses the level created by the BasicLevelSetup_test_case.py script to verify rendering.
+After loading the level, it manipulates Area Lights & Spot Lights against a sphere object, and takes screenshots.
+Screenshots are diffed against golden images are used to verify pass/fail results of the test.
+
+See the run() function for more in-depth test info.
 """
-# This module tests 3 different test cases.
-
-# Test case ID #1: C35035568
-# Test Case Title : Level Load & Save
-# URL of the test case : https://testrail.agscollab.com/index.php?/cases/view/35035568
-
-# Test case ID #1: C34525095
-# Test Case Title : Area Light
-# URL of the test case : https://testrail.agscollab.com/index.php?/cases/view/34525095
-
-# Test case ID #1: C34525110
-# Test Case Title : Spot Light
-# URL of the test case : https://testrail.agscollab.com/index.php?/cases/view/34525110
 
 import os
 import sys
@@ -38,10 +33,90 @@ import Automated.atom_utils.hydra_editor_utils as hydra
 from Automated.atom_utils.automated_test_utils import TestHelper as helper
 from Automated.atom_utils.screenshot_utils import ScreenshotHelper
 
-BASIC_LEVEL_NAME = "all_components_indepth_level"  # Specified in class TestAllComponentsIndepthTests()
+BASIC_LEVEL_NAME = "all_components_indepth_level"  # Created by BasicLevelSetup_test_case.py
 DEGREE_RADIAN_FACTOR = 0.0174533
 SCREEN_WIDTH = 1280
 SCREEN_HEIGHT = 720
+
+
+def run():
+    """
+    Sets up the tests by making sure the required level is created & setup correctly.
+    It then executes 2 test cases:
+
+    Test Case - Area Light:
+    1. Creates "area_light" entity w/ an Area Light component that has a Capsule Shape w/ the color set to 255, 0, 0
+    2. Enters game mode to take a screenshot for comparison, then exits game mode.
+    3. Sets the Area Light component Intensity Mode to Lumens (default).
+    4. Ensures the Area Light component Mode is Automatic (default).
+    5. Sets the Intensity value of the Area Light component to 0.0
+    6. Enters game mode again, takes another  screenshot for comparison, then exits game mode.
+    7. Updates the Intensity value of the Area Light component to 1000.0
+    8. Enters game mode again, takes another  screenshot for comparison, then exits game mode.
+    9. Deletes the Capsule Shape from "area_light" entity and adds a Disk Shape component to "area_light" entity.
+    10. Updates "area_light" Transform rotate value to x: 90.0, y:0.0, z:0.0
+    11. Enters game mode again, takes another  screenshot for comparison, then exits game mode.
+    12. Enables the "Both Directions" field in the Area Light component.
+    13. Enters game mode again, takes another  screenshot for comparison, then exits game mode.
+    14. Disables the "Both Directions" field in the Area Light component.
+    15. Enters game mode again, takes another  screenshot for comparison, then exits game mode.
+    16. Deletes Disk Shape component from "area_light" entity & adds a Sphere Shape component to "area_light" entity.
+    17. Enters game mode again, takes another  screenshot for comparison, then exits game mode.
+    18. Deletes the Area Light component from the "area_light" entity and verifies its successful.
+
+    Test Case - Spot Light:
+    1. Creates "spot_light" entity w/ a Spot Light component attached to it.
+    2. Selects the "directional_light" entity already present in the level and disables it.
+    3. Selects the "global_skylight" entity already present in the level and disables the HDRi Skybox component,
+        as well as the Global Skylight (IBL) component.
+    4. Enters game mode to take a screenshot for comparison, then exits game mode.
+    5. Selects the "ground_plane" entity and changes updates the material to a new material.
+    6. Enters game mode to take a screenshot for comparison, then exits game mode.
+    7. Selects the "spot_light" entity and increases the Spot Light component Intensity to 800 lm
+    8. Enters game mode to take a screenshot for comparison, then exits game mode.
+    9. Selects the "spot_light" entity and sets the Spot Light component Color to 47, 75, 37
+    10. Enters game mode to take a screenshot for comparison, then exits game mode.
+    11. Selects the "spot_light" entity and modifies the Cone Configuration controls to the following values:
+        - Outer Cone Angle: 130
+        - Inner Cone Angle: 80
+        - Penumbra Bias: 0.9
+    12. Enters game mode to take a screenshot for comparison, then exits game mode.
+    13. Selects the "spot_light" entity and modifies the Attenuation Radius controls to the following values:
+        - Mode: Explicit
+        - Radius: 8
+    14. Enters game mode to take a screenshot for comparison, then exits game mode.
+    15. Selects the "spot_light" entity and modifies the Shadow controls to the following values:
+        - Enable Shadow: On
+        - ShadowmapSize: 256
+    16. Enters game mode to take a screenshot for comparison, then exits game mode.
+    17. Deletes the "spotlight_entity" and selects the "ground_plane" entity, updating the Material component to a new
+        material.
+    18. Selects the "directional_light" entity and enables the Directional Light component.
+    19. Selects the "global_skylight" entity and enables the HDRi Skybox component & Global Skylight (IBL) component.
+    20. Prints general.log("Component tests completed") when completely finished with the test.
+
+    Tests will fail immediately if any of these log lines are found:
+    1. Trace::Assert
+    2. Trace::Error
+    3. Traceback (most recent call last):
+
+    :return: None
+    """
+    test_class = TestAllComponentsIndepthTests()
+    test_class.level_load_save(level_name=BASIC_LEVEL_NAME)
+    test_class.initial_viewport_setup(screen_width=SCREEN_WIDTH, screen_height=SCREEN_HEIGHT)
+
+    # Run tests.
+    test_class.area_light_component_test()
+    test_class.spot_light_component_test()
+    general.log("Component tests completed")
+
+
+class AllComponentsIndepthLevelMissing(Exception):
+    """
+    Raised when the BASIC_LEVEL_NAME level is missing.
+    """
+    pass
 
 
 class TestAllComponentsIndepthTests(object):
@@ -50,83 +125,11 @@ class TestAllComponentsIndepthTests(object):
     """
 
     def atom_component_basic_setup(self):
-        hydra.delete_all_existing_entities()
-
-        # Create default_level entity
-        self.default_level = hydra.Entity("default_level")
-        position = math.Vector3(0.0, 0.0, 0.0)
-        self.default_level.create_entity(position, ["Grid"])
-        self.default_level.get_set_test(0, "Controller|Configuration|Secondary Grid Spacing", 1.0)
-
-        # Create global_skylight entity and set the properties
-        self.global_skylight = hydra.Entity("global_skylight")
-        self.global_skylight.create_entity(
-            components=["HDRi Skybox", "Global Skylight (IBL)"], parent_id=self.default_level.id
-        )
-        asset_value = hydra.get_asset_by_path(
-            os.path.join("LightingPresets", "greenwich_park_02_4k_iblskyboxcm_iblspecular.exr.streamingimage")
-        )
-        self.global_skylight.get_set_test(0, "Controller|Configuration|Cubemap Texture", asset_value)
-        self.global_skylight.get_set_test(1, "Controller|Configuration|Diffuse Image", asset_value)
-        self.global_skylight.get_set_test(1, "Controller|Configuration|Specular Image", asset_value)
-
-        # Create ground_plane entity and set the properties
-        self.ground_plane = hydra.Entity("ground_plane")
-        scale = math.Vector3(32.0, 32.0, 1.0)
-        self.ground_plane.create_entity(components=["Material"], parent_id=self.default_level.id)
-        azlmbr.components.TransformBus(azlmbr.bus.Event, "SetLocalScale", self.ground_plane.id, scale)
-        asset_value = hydra.get_asset_by_path(os.path.join("Materials", "Presets", "PBR", "metal_chrome.azmaterial"))
-        self.ground_plane.get_set_test(0, "Default Material|Material Asset", asset_value)
-        # Work around to add the correct Atom Mesh component
-        mesh_type_id = azlmbr.globals.property.EditorMeshComponentTypeId
-        self.ground_plane.components.append(
-            editor.EditorComponentAPIBus(
-                bus.Broadcast, "AddComponentsOfType", self.ground_plane.id, [mesh_type_id]
-            ).GetValue()[0]
-        )
-        asset_value = hydra.get_asset_by_path(os.path.join("Objects", "plane.azmodel"))
-        self.ground_plane.get_set_test(1, "Controller|Configuration|Mesh asset", asset_value)
-
-        # Create directional_light entity and set the properties
-        self.directional_light = hydra.Entity("directional_light")
-        position = math.Vector3(0.0, 0.0, 10.0)
-        self.directional_light.create_entity(
-            components=["Directional Light"], entity_position=position, parent_id=self.default_level.id
-        )
-        rotation = math.Vector3(DEGREE_RADIAN_FACTOR * -90.0, 0.0, 0.0)
-        azlmbr.components.TransformBus(azlmbr.bus.Event, "SetLocalRotation", self.directional_light.id, rotation)
-
-        # Create sphere entity and set the properties
-        self.sphere = hydra.Entity("sphere")
-        position = math.Vector3(0.0, 0.0, 1.0)
-        self.sphere.create_entity(
-            components=["Material"], entity_position=position, parent_id=self.default_level.id
-        )
-        asset_value = hydra.get_asset_by_path(
-            os.path.join("Materials", "Presets", "PBR", "metal_brass_polished.azmaterial")
-        )
-        self.sphere.get_set_test(0, "Default Material|Material Asset", asset_value)
-        # Work around to add the correct Atom Mesh component
-        self.sphere.components.append(
-            editor.EditorComponentAPIBus(
-                bus.Broadcast, "AddComponentsOfType", self.sphere.id, [mesh_type_id]
-            ).GetValue()[0]
-        )
-        asset_value = hydra.get_asset_by_path(os.path.join("Objects", "sphere.azmodel"))
-        self.sphere.get_set_test(1, "Controller|Configuration|Mesh asset", asset_value)
-
-        # Create camera component and set the properties
-        camera = hydra.Entity("camera")
-        position = math.Vector3(5.5, -12.0, 9.0)
-        camera.create_entity(components=["Camera"], entity_position=position, parent_id=self.default_level.id)
-        rotation = math.Vector3(
-            DEGREE_RADIAN_FACTOR * -27.0, DEGREE_RADIAN_FACTOR * -12.0, DEGREE_RADIAN_FACTOR * 25.0
-        )
-        azlmbr.components.TransformBus(azlmbr.bus.Event, "SetLocalRotation", camera.id, rotation)
-        camera.get_set_test(0, "Controller|Configuration|Field of view", 60.0)
-
-        # Be this camera
-        hydra.be_this_camera(camera.id)
+        if not os.path.exists(
+                os.path.join(azlmbr.paths.devroot, "AtomTest", "Levels", BASIC_LEVEL_NAME)):
+            raise AllComponentsIndepthLevelMissing(
+                f'Missing the level: "{BASIC_LEVEL_NAME}" - '
+                f'Please run the BasicLevelSetup_test_case.py script to create this level as the test requires it.')
 
     def level_load_save(self, level_name):
         general.open_level_no_prompt(level_name)
@@ -257,8 +260,7 @@ class TestAllComponentsIndepthTests(object):
         self.verify_hide_unhide_entity(entity_obj)
         self.verify_deletion_undo_redo(component_name, entity_obj)
 
-        # NOTE: This step is repeated to ensure we have clean setup while running the test for each component
-        # Create initial atom basic setup
+        # NOTE: This step is repeated to ensure we have the expected setup while running the test for each component
         self.atom_component_basic_setup()
 
         # Create entity with Area Light component
@@ -315,8 +317,7 @@ class TestAllComponentsIndepthTests(object):
         self.verify_hide_unhide_entity(entity_obj)
         self.verify_deletion_undo_redo(entity_obj)
 
-        # NOTE: This step is repeated to ensure we have clean setup while running the test for each component
-        # Create initial atom basic setup
+        # NOTE: This step is repeated to ensure we have the expected setup while running the test for each component
         self.atom_component_basic_setup()
 
         # Create entity with Spot Light component
@@ -364,19 +365,6 @@ class TestAllComponentsIndepthTests(object):
         self.spot_light.get_set_test(0, "Controller|Configuration|Shadow|ShadowmapSize", 256.0)
         self.spot_light.get_set_test(0, "Controller|Configuration|Shadow|Enable Shadow", True)
         self.take_screenshot_game_mode("SpotLight_7")
-
-
-def run():
-    # Setup tests.
-    test_class = TestAllComponentsIndepthTests()
-    test_class.level_load_save(level_name=BASIC_LEVEL_NAME)
-    test_class.initial_viewport_setup(screen_width=SCREEN_WIDTH, screen_height=SCREEN_HEIGHT)
-
-    # Run tests.
-    # C34525095: Area Light
-    test_class.area_light_component_test()
-    test_class.spot_light_component_test()
-    general.log("Component tests completed")
 
 
 if __name__ == "__main__":

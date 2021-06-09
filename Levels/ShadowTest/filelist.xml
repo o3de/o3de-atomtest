@@ -1,6 +1,6 @@
 <download name="ShadowTest" type="Map">
  <index src="filelist.xml" dest="filelist.xml"/>
  <files>
-  <file src="level.pak" dest="level.pak" size="6125" md5="5369ce18ad165a9e4175f1489a575951"/>
+  <file src="level.pak" dest="level.pak" size="9D2A" md5="bd58d94d3d3f3a8e425ddeb35542d3f1"/>
  </files>
 </download>

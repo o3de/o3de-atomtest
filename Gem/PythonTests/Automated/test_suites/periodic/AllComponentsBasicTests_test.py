@@ -7,82 +7,56 @@ distribution (the "License"). All use of this software is governed by the Licens
 or, if provided, by the license below or the license accompanying this file. Do not
 remove or modify any license notices. This file is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+
+Basic tests for the Atom components that can be added to an entity inside the Editor.
 """
-
 import os
-import pytest
 
-# Bail on the test if ly_test_tools doesn't exist.
-pytest.importorskip("ly_test_tools")
-import ly_test_tools.environment.file_system as file_system
+import pytest
 
 from Automated.atom_utils import hydra_test_utils as hydra
 
 TEST_DIRECTORY = os.path.dirname(__file__)
-EDITOR_TIMEOUT = 240
+EDITOR_TIMEOUT = 180
 
 
 @pytest.mark.parametrize("project", ["AtomTest"])
 @pytest.mark.parametrize("launcher_platform", ['windows_editor'])
 @pytest.mark.parametrize("level", ["tmp_level"])
 class TestAllComponentsBasicTests(object):
-    @pytest.fixture(autouse=True)
-    def setup_teardown(self, request, workspace, project, level):
-        # Cleanup our temp level
-        file_system.delete([os.path.join(workspace.paths.engine_root(), project, "Levels", level)], True, True)
 
-        def teardown():
-            # Cleanup our temp level
-            file_system.delete([os.path.join(workspace.paths.engine_root(), project, "Levels", level)], True, True)
-
-        request.addfinalizer(teardown)
-
-    @pytest.mark.test_case_id(
-        "C32078130",
-        "C32078129",
-        "C32078128",
-        "C32078131",
-        "C32078127",
-        "C32078126",
-        "C32078125",
-        "C32078115",
-        "C32078121",
-        "C32078120",
-        "C32078119",
-        "C32078118",
-        "C32078117",
-    )
-    def test_AllComponentsTest(self, request, editor, level, workspace, project, launcher_platform):
+    def test_AllAtomComponents_AddedToEntity(self, request, editor, level, workspace, project, launcher_platform):
+        """
+        Please review the hydra script run by this test for more specific test info.
+        Tests the following Atom components and verifies all "expected_lines" appear in Editor.log:
+        1. Display Mapper
+        2. Light
+        3. Radius Weight Modifier
+        4. PostFX Layer
+        5. Physical Sky
+        6. Global Skylight (IBL)
+        7. Exposure Control
+        8. Directional Light
+        9. DepthOfField
+        10. Decal (Atom)
+        11. Reflection Probe
+        """
         cfg_args = [level]
 
         expected_lines = [
-            # Area Light Component
-            "Area Light Entity successfully created",
-            "Area Light_test: Component added to the entity: True",
-            "Area Light_test: Component removed after UNDO: True",
-            "Area Light_test: Component added after REDO: True",
-            "Area Light_test: Entered game mode: True",
-            # Disabled, see ATOM-: "Area Light_test: Exit game mode: True",
-            "Area Light_test: Entity disabled initially: True",
-            "Area Light_test: Entity enabled after adding required components: True",
-            "Area Light_test: Entity is hidden: True",
-            "Area Light_test: Entity is shown: True",
-            "Area Light_test: Entity deleted: True",
-            "Area Light_test: UNDO entity deletion works: True",
-            "Area Light_test: REDO entity deletion works: True",
-            # Decal Component
-            "Decal Entity successfully created",
-            "Decal_test: Component added to the entity: True",
-            "Decal_test: Component removed after UNDO: True",
-            "Decal_test: Component added after REDO: True",
-            "Decal_test: Entered game mode: True",
-            "Decal_test: Exit game mode: True",
-            "Decal Settings|Decal Settings|Material: SUCCESS",
-            "Decal_test: Entity is hidden: True",
-            "Decal_test: Entity is shown: True",
-            "Decal_test: Entity deleted: True",
-            "Decal_test: UNDO entity deletion works: True",
-            "Decal_test: REDO entity deletion works: True",
+            # Decal (Atom) Component
+            "Decal (Atom) Entity successfully created",
+            "Decal (Atom)_test: Component added to the entity: True",
+            "Decal (Atom)_test: Component removed after UNDO: True",
+            "Decal (Atom)_test: Component added after REDO: True",
+            "Decal (Atom)_test: Entered game mode: True",
+            "Decal (Atom)_test: Exit game mode: True",
+            "Decal (Atom) Controller|Configuration|Material: SUCCESS",
+            "Decal (Atom)_test: Entity is hidden: True",
+            "Decal (Atom)_test: Entity is shown: True",
+            "Decal (Atom)_test: Entity deleted: True",
+            "Decal (Atom)_test: UNDO entity deletion works: True",
+            "Decal (Atom)_test: REDO entity deletion works: True",
             # DepthOfField Component
             "DepthOfField Entity successfully created",
             "DepthOfField_test: Component added to the entity: True",
@@ -98,19 +72,6 @@ class TestAllComponentsBasicTests(object):
             "DepthOfField_test: Entity deleted: True",
             "DepthOfField_test: UNDO entity deletion works: True",
             "DepthOfField_test: REDO entity deletion works: True",
-            # Directional Light Component
-            "Directional Light Entity successfully created",
-            "Directional Light_test: Component added to the entity: True",
-            "Directional Light_test: Component removed after UNDO: True",
-            "Directional Light_test: Component added after REDO: True",
-            "Directional Light_test: Entered game mode: True",
-            "Directional Light_test: Exit game mode: True",
-            "Directional Light Controller|Configuration|Shadow|Camera: SUCCESS",
-            "Directional Light_test: Entity is hidden: True",
-            "Directional Light_test: Entity is shown: True",
-            "Directional Light_test: Entity deleted: True",
-            "Directional Light_test: UNDO entity deletion works: True",
-            "Directional Light_test: REDO entity deletion works: True",
             # Exposure Control Component
             "Exposure Control Entity successfully created",
             "Exposure Control_test: Component added to the entity: True",
@@ -153,18 +114,6 @@ class TestAllComponentsBasicTests(object):
             "Physical Sky_test: Entity deleted: True",
             "Physical Sky_test: UNDO entity deletion works: True",
             "Physical Sky_test: REDO entity deletion works: True",
-            # Point Light Component
-            "Point Light Entity successfully created",
-            "Point Light_test: Component added to the entity: True",
-            "Point Light_test: Component removed after UNDO: True",
-            "Point Light_test: Component added after REDO: True",
-            "Point Light_test: Entered game mode: True",
-            "Point Light_test: Exit game mode: True",
-            "Point Light_test: Entity is hidden: True",
-            "Point Light_test: Entity is shown: True",
-            "Point Light_test: Entity deleted: True",
-            "Point Light_test: UNDO entity deletion works: True",
-            "Point Light_test: REDO entity deletion works: True",
             # PostFX Layer Component
             "PostFX Layer Entity successfully created",
             "PostFX Layer_test: Component added to the entity: True",
@@ -189,6 +138,30 @@ class TestAllComponentsBasicTests(object):
             "Radius Weight Modifier_test: Entity deleted: True",
             "Radius Weight Modifier_test: UNDO entity deletion works: True",
             "Radius Weight Modifier_test: REDO entity deletion works: True",
+            # Light Component
+            "Light Entity successfully created",
+            "Light_test: Component added to the entity: True",
+            "Light_test: Component removed after UNDO: True",
+            "Light_test: Component added after REDO: True",
+            "Light_test: Entered game mode: True",
+            "Light_test: Exit game mode: True",
+            "Light_test: Entity is hidden: True",
+            "Light_test: Entity is shown: True",
+            "Light_test: Entity deleted: True",
+            "Light_test: UNDO entity deletion works: True",
+            "Light_test: REDO entity deletion works: True",
+            # Display Mapper Component
+            "Display Mapper Entity successfully created",
+            "Display Mapper_test: Component added to the entity: True",
+            "Display Mapper_test: Component removed after UNDO: True",
+            "Display Mapper_test: Component added after REDO: True",
+            "Display Mapper_test: Entered game mode: True",
+            "Display Mapper_test: Exit game mode: True",
+            "Display Mapper_test: Entity is hidden: True",
+            "Display Mapper_test: Entity is shown: True",
+            "Display Mapper_test: Entity deleted: True",
+            "Display Mapper_test: UNDO entity deletion works: True",
+            "Display Mapper_test: REDO entity deletion works: True",
             # Reflection Probe Component
             "Reflection Probe Entity successfully created",
             "Reflection Probe_test: Component added to the entity: True",
@@ -204,22 +177,11 @@ class TestAllComponentsBasicTests(object):
             "Reflection Probe_test: UNDO entity deletion works: True",
             "Reflection Probe_test: REDO entity deletion works: True",
             "Reflection Probe_test: Cubemap is generated: True",
-            # Spot Light Component
-            "Spot Light Entity successfully created",
-            "Spot Light_test: Component added to the entity: True",
-            "Spot Light_test: Component removed after UNDO: True",
-            "Spot Light_test: Component added after REDO: True",
-            "Spot Light_test: Entered game mode: True",
-            "Spot Light_test: Exit game mode: True",
-            "Spot Light_test: Entity is hidden: True",
-            "Spot Light_test: Entity is shown: True",
-            "Spot Light_test: Entity deleted: True",
-            "Spot Light_test: UNDO entity deletion works: True",
-            "Spot Light_test: REDO entity deletion works: True",
         ]
 
         unexpected_lines = [
-            "Assert",
+            "Trace::Assert",
+            "Trace::Error",
             "Traceback (most recent call last):",
         ]
 

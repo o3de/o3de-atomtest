@@ -26,33 +26,39 @@ ly_add_target(
             Gem::Atom_AtomBridge.Static
 )
 
+# if enabled, AtomTest gem is used by the Client and Server Launchers as well as Tools
+# But it isn't needed in Builders
+ly_create_alias(NAME AtomTest.Clients NAMESPACE Gem TARGETS Gem::AtomTest)
+ly_create_alias(NAME AtomTest.Servers NAMESPACE Gem TARGETS Gem::AtomTest)
+ly_create_alias(NAME AtomTest.Tools   NAMESPACE Gem TARGETS Gem::AtomTest)
+
 ################################################################################
 # Gem dependencies
 ################################################################################
-ly_add_project_dependencies(
-    PROJECT_NAME
-        AtomTest
-    TARGETS 
-        AtomTest.GameLauncher
-    DEPENDENCIES_FILES 
-        runtime_dependencies.cmake
-        ${pal_dir}/runtime_dependencies.cmake
+# The GameLauncher uses "Clients" gem variants:
+ly_enable_gems(PROJECT_NAME AtomTest GEM_FILE enabled_gems.cmake
+    TARGETS AtomTest.GameLauncher
+    VARIANTS Clients)
 
-)
+# If we build a server, then apply the gems to the server
+if(PAL_TRAIT_BUILD_SERVER_SUPPORTED)
+    # if we're making a server, then add the "Server" gem variants to it:
+    ly_enable_gems(PROJECT_NAME AtomTest GEM_FILE enabled_gems.cmake
+        TARGETS AtomTest.ServerLauncher
+        VARIANTS Servers)
 
-if(PAL_TRAIT_BUILD_HOST_TOOLS)
-    ly_add_project_dependencies(
-        PROJECT_NAME
-            AtomTest
-        TARGETS
-            AssetBuilder
-            AssetProcessor
-            AssetProcessorBatch
-            Editor
-        DEPENDENCIES_FILES
-            tool_dependencies.cmake
-            tool_dependencies_${PAL_PLATFORM_NAME_LOWERCASE}.cmake
-            ${pal_dir}/tool_dependencies.cmake
-    )
+    set_property(GLOBAL APPEND PROPERTY LY_LAUNCHER_SERVER_PROJECTS AtomTest)
+endif()
 
+if (PAL_TRAIT_BUILD_HOST_TOOLS)
+    # The Editor uses "Tools" gem variants:
+    ly_enable_gems(PROJECT_NAME AtomTest GEM_FILE enabled_gems.cmake
+        TARGETS Editor
+        VARIANTS Tools)
+
+
+    # The pipeline tools use "Builders" gem variants:
+    ly_enable_gems(PROJECT_NAME AtomTest GEM_FILE enabled_gems.cmake
+        TARGETS AssetBuilder AssetProcessor AssetProcessorBatch
+        VARIANTS Builders)
 endif()

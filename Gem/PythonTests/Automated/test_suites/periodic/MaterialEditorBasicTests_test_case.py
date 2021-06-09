@@ -7,6 +7,10 @@ distribution (the "License"). All use of this software is governed by the Licens
 or, if provided, by the license below or the license accompanying this file. Do not
 remove or modify any license notices. This file is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+
+import azlmbr.materialeditor will fail with a ModuleNotFound error when using this script with Editor.exe
+This is because azlmbr.materialeditor only binds to MaterialEditor.exe and not Editor.exe
+You need to launch this script with MaterialEditor.exe in order for azlmbr.materialeditor to appear.
 """
 
 import os
@@ -32,15 +36,15 @@ class TestMaterialEditorBasicTests(MaterialEditorHelper):
         """
         Summary:
         Material Editor basic tests including the below
-        C34448113 -- Opening an Existing Asset
-        C34448114 -- Creating a New Asset
-        C34448115 -- Closing Selected Material
-        C34448116 -- Closing All Materials
-        C34448117 -- Closing all but Selected Material
-        C34448118 -- Saving Material
-        C34448120 -- Saving as a Child Material
-        C34448119 -- Saving as a New Material
-        C34448121 -- Saving all Open Materials
+        1. Opening an Existing Asset
+        1. Creating a New Asset
+        1. Closing Selected Material
+        1. Closing All Materials
+        1. Closing all but Selected Material
+        1. Saving Material
+        1. Saving as a Child Material
+        1. Saving as a New Material
+        1. Saving all Open Materials
 
         Expected Result:
         All the above functions work as expected in Material Editor.
@@ -78,7 +82,7 @@ class TestMaterialEditorBasicTests(MaterialEditorHelper):
             )
 
         #########################################
-        # C34448113 -- Opening an Existing Asset
+        # Test Case: Opening an Existing Asset
         #########################################
         # Open existing material
         document_id = material_editor.open_material(MATERIAL_TYPE_PATH)
@@ -89,7 +93,7 @@ class TestMaterialEditorBasicTests(MaterialEditorHelper):
         print(f"Test asset doesn't exist initially: {not os.path.exists(target_path)}")
 
         ###################################
-        # C34448114 -- Creating a New Asset
+        # Test Case: Creating a New Asset
         ###################################
         # Create a new material using existing one
         material_editor.save_document_as_child(document_id, target_path)
@@ -102,7 +106,7 @@ class TestMaterialEditorBasicTests(MaterialEditorHelper):
         print(f"New Material opened: {material_editor.is_open(new_document_id)}")
 
         ########################################
-        # C34448115 -- Closing Selected Material
+        # Test Case: Closing Selected Material
         ########################################
         # Close selected material
         print(f"Material closed: {material_editor.close_document(new_document_id)}")
@@ -114,13 +118,13 @@ class TestMaterialEditorBasicTests(MaterialEditorHelper):
         )
 
         ####################################
-        # C34448116 -- Closing All Materials
+        # Test Case: Closing All Materials
         ####################################
         # Close all documents and verify if closed
         print(f"All documents closed: {material_editor.close_all_documents()}")
 
         ################################################
-        # C34448117 -- Closing all but Selected Material
+        # Test Case: Closing all but Selected Material
         ################################################
         document1_id, document2_id, document3_id = (
             material_editor.open_material(os.path.join(TEST_DATA_PATH, material))
@@ -130,7 +134,9 @@ class TestMaterialEditorBasicTests(MaterialEditorHelper):
         print(f"Close All Except Selected worked as expected: {result and material_editor.is_open(document1_id)}")
 
         ##############################################################################################################
-        # C34448118 -- Saving Material; C34448120 -- Saving as a Child Material; C34448119 -- Saving as a New Material
+        # Test Case: Saving Material
+        # Test Case: Saving as a Child Material
+        # Test Case: Saving as a New Material
         ##############################################################################################################
         document_id = material_editor.open_material(os.path.join(TEST_DATA_PATH, TEST_MATERIAL_1))
         property_name = azlmbr.name.Name("baseColor.color")
@@ -178,7 +184,7 @@ class TestMaterialEditorBasicTests(MaterialEditorHelper):
         material_editor.close_all_documents()
 
         ########################################
-        # C34448121 -- Saving all Open Materials
+        # Test Case: Saving all Open Materials
         ########################################
         # Open first material and make change to the values
         document1_id = material_editor.open_material(os.path.join(TEST_DATA_PATH, TEST_MATERIAL_1))

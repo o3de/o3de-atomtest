@@ -1,6 +1,6 @@
-<download name="Lucy" type="Map">
+<download name="lucy_high" type="Map">
  <index src="filelist.xml" dest="filelist.xml"/>
  <files>
-  <file src="level.pak" dest="level.pak" size="7739" md5="b9253d18be8f9f519ce730566e7b6ae1"/>
+  <file src="level.pak" dest="level.pak" size="210A" md5="76d2178d9a0ee611e54cff6f031a59a3"/>
  </files>
 </download>

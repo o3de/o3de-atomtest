@@ -19,7 +19,6 @@ import pytest
 
 import ly_test_tools.log.log_monitor as log_monitor
 
-pytest.importorskip("ly_test_tools")
 SIMILARITY_THRESHOLD = 0.99
 DEFAULT_SUBFOLDER_PATH = 'user/PythonTests/Automated/Screenshots'
 logger = logging.getLogger(__name__)

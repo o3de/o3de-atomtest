@@ -11,7 +11,6 @@
 
 ################################################################################
 # Automated Tests
-# Tests are not in their final/desired suites yet - see ATOM-14520
 ################################################################################
 
 if(PAL_TRAIT_BUILD_HOST_TOOLS AND PAL_TRAIT_BUILD_TESTS_SUPPORTED AND AtomTest IN_LIST LY_PROJECTS)
@@ -21,7 +20,7 @@ if(PAL_TRAIT_BUILD_HOST_TOOLS AND PAL_TRAIT_BUILD_TESTS_SUPPORTED AND AtomTest I
         TEST_SUITE main
         PATH ${CMAKE_CURRENT_LIST_DIR}/Automated/test_suites/main/
         TEST_SERIAL
-        TIMEOUT 1200
+        TIMEOUT 300
         RUNTIME_DEPENDENCIES
             AssetProcessor
             AtomTest

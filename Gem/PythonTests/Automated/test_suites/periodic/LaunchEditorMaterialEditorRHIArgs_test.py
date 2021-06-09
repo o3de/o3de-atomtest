@@ -21,14 +21,13 @@ EDITOR_TIMEOUT = 30
 
 @pytest.mark.parametrize("project", ["AtomTest"])
 class TestLaunchEditorMaterialEditorRHIArgs(object):
-    @pytest.mark.test_case_id("C34117601", "C34117602")
     @pytest.mark.parametrize("launcher_platform", ['windows_editor'])
-    @pytest.mark.parametrize("cfg_args", ["--rhi=dx12", "--rhi=Vulkan"])
+    @pytest.mark.parametrize("cfg_args", ["-rhi=dx12", "-rhi=Vulkan", "-rhi=Null"])
     def test_EditorLaunch(self, request, editor, workspace, project, launcher_platform, cfg_args):
         expected_lines = []
         unexpected_lines = [
-            "Error",
-            "Assert",
+            "Trace::Assert",
+            "Trace::Error",
             "Traceback (most recent call last):",
         ]
 
@@ -40,12 +39,12 @@ class TestLaunchEditorMaterialEditorRHIArgs(object):
             timeout=EDITOR_TIMEOUT,
             expected_lines=expected_lines,
             unexpected_lines=unexpected_lines,
+            halt_on_unexpected=True,
             cfg_args=[cfg_args],
         )
 
-    @pytest.mark.test_case_id("C30973986", "C30973987")
     @pytest.mark.parametrize("launcher_platform", ['windows_generic'])
-    @pytest.mark.parametrize("cfg_args", ["--rhi=dx12", "--rhi=Vulkan"])
+    @pytest.mark.parametrize("cfg_args", ["-rhi=dx12", "-rhi=Vulkan", "-rhi=Null"])
     @pytest.mark.parametrize("exe_file_name", ["MaterialEditor"])
     def test_MaterialEditorLaunch(
         self, request, workspace, project, generic_launcher, exe_file_name, launcher_platform, cfg_args
@@ -53,8 +52,8 @@ class TestLaunchEditorMaterialEditorRHIArgs(object):
 
         expected_lines = []
         unexpected_lines = [
-            "Error",
-            "Assert",
+            "Trace::Assert",
+            "Trace::Error",
             "Traceback (most recent call last):",
         ]
 

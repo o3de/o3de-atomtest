@@ -7,25 +7,11 @@ distribution (the "License"). All use of this software is governed by the Licens
 or, if provided, by the license below or the license accompanying this file. Do not
 remove or modify any license notices. This file is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+
+Hydra script that creates an entity and attaches Atom components to it for test verification.
+
+See the run() function for more in-depth test info.
 """
-
-# This module does a bulk test and update of many components at once.
-# Each test case is listed below in the format:
-#     "Test Case ID: Test Case Title (URL)"
-
-# C32078130: Tone Mapper (https://testrail.agscollab.com/index.php?/cases/view/32078130)
-# C32078129: Spot Light (https://testrail.agscollab.com/index.php?/cases/view/32078129)
-# C32078128: Reflection Probe (https://testrail.agscollab.com/index.php?/cases/view/32078128)
-# C32078131: Radius Weight Modifier (https://testrail.agscollab.com/index.php?/cases/view/32078131)
-# C32078127: PostFX Layer (https://testrail.agscollab.com/index.php?/cases/view/32078127)
-# C32078126: Point Light (https://testrail.agscollab.com/index.php?/cases/view/32078126)
-# C32078125: Physical Sky (https://testrail.agscollab.com/index.php?/cases/view/32078125)
-# C32078115: Global Skylight (IBL) (https://testrail.agscollab.com/index.php?/cases/view/32078115)
-# C32078121: Exposure Control (https://testrail.agscollab.com/index.php?/cases/view/32078121)
-# C32078120: Directional Light (https://testrail.agscollab.com/index.php?/cases/view/32078120)
-# C32078119: DepthOfField (https://testrail.agscollab.com/index.php?/cases/view/32078119)
-# C32078118: Decal (https://testrail.agscollab.com/index.php?/cases/view/32078118)
-# C32078117: Area Light (https://testrail.agscollab.com/index.php?/cases/view/32078117)
 
 import os
 import sys
@@ -39,16 +25,10 @@ import azlmbr.legacy.general as general
 import azlmbr.editor as editor
 import azlmbr.render as render
 
-sys.path.append(os.path.join(azlmbr.paths.devroot, "AtomTest", "Gem", "PythonTests"))
+sys.path.append(os.path.join(azlmbr.paths.devroot, "AutomatedTesting", "Gem", "PythonTests"))
 
-import Automated.atom_utils.hydra_editor_utils as hydra
-from Automated.atom_utils.automated_test_utils import TestHelper as helper
-
-
-class TestAllComponentsBasicTests(object):
-    """
-    Holds shared hydra test functions for this set of tests.
-    """
+import editor_python_test_tools.hydra_editor_utils as hydra
+from editor_python_test_tools.utils import TestHelper
 
 
 def run():
@@ -78,92 +58,77 @@ def run():
     :return: None
     """
 
-    def after_level_load():
-        """Function to call after creating/opening a level to ensure it loads."""
-        # Give everything a second to initialize.
-        general.idle_enable(True)
-        general.idle_wait(1.0)
-        general.update_viewport()
-        general.idle_wait(0.5)  # half a second is more than enough for updating the viewport.
-
-        # Close out problematic windows, FPS meters, and anti-aliasing.
-        if general.is_helpers_shown():  # Turn off the helper gizmos if visible
-            general.toggle_helpers()
-            general.idle_wait(1.0)
-        if general.is_pane_visible("Error Report"):  # Close Error Report windows that block focus.
-            general.close_pane("Error Report")
-        if general.is_pane_visible("Error Log"):  # Close Error Log windows that block focus.
-            general.close_pane("Error Log")
-        general.idle_wait(1.0)
-        general.run_console("r_displayInfo=0")
-        general.run_console("r_antialiasingmode=0")
-        general.idle_wait(1.0)
-
-        return True
-
-    # Creates a new entity with the component matching component_name then does an undo/redo on the component.
     def create_entity_undo_redo_component_addition(component_name):
         new_entity = hydra.Entity(f"{component_name}")
         new_entity.create_entity(math.Vector3(512.0, 512.0, 34.0), [component_name])
-        general.log(f"{component_name}_test: Component added to the entity: {hydra.has_components(new_entity.id, [component_name])}")
+        general.log(f"{component_name}_test: Component added to the entity: "
+                    f"{hydra.has_components(new_entity.id, [component_name])}")
 
         # undo component addition
         general.undo()
-        helper.wait_for_condition(lambda: not hydra.has_components(new_entity.id, [component_name]), 2.0)
-        general.log(f"{component_name}_test: Component removed after UNDO: {not hydra.has_components(new_entity.id, [component_name])}")
+        TestHelper.wait_for_condition(lambda: not hydra.has_components(new_entity.id, [component_name]), 2.0)
+        general.log(f"{component_name}_test: Component removed after UNDO: "
+                    f"{not hydra.has_components(new_entity.id, [component_name])}")
 
         # redo component addition
         general.redo()
-        helper.wait_for_condition(lambda: hydra.has_components(new_entity.id, [component_name]), 2.0)
-        general.log(f"{component_name}_test: Component added after REDO: {hydra.has_components(new_entity.id, [component_name])}")
+        TestHelper.wait_for_condition(lambda: hydra.has_components(new_entity.id, [component_name]), 2.0)
+        general.log(f"{component_name}_test: Component added after REDO: "
+                    f"{hydra.has_components(new_entity.id, [component_name])}")
 
         return new_entity
 
-    # Verify enter/exit game mode
     def verify_enter_exit_game_mode(component_name):
         general.enter_game_mode()
-        helper.wait_for_condition(lambda: general.is_in_game_mode(), 1.0)
+        TestHelper.wait_for_condition(lambda: general.is_in_game_mode(), 1.0)
         general.log(f"{component_name}_test: Entered game mode: {general.is_in_game_mode()}")
         general.exit_game_mode()
-        helper.wait_for_condition(lambda: not general.is_in_game_mode(), 1.0)
+        TestHelper.wait_for_condition(lambda: not general.is_in_game_mode(), 1.0)
         general.log(f"{component_name}_test: Exit game mode: {not general.is_in_game_mode()}")
 
-    # Verify Hide/Unhide entity with component
     def verify_hide_unhide_entity(component_name, entity_obj):
-        hydra.set_visibility_state(entity_obj.id, False)
-        general.idle_wait_frames(1)
-        general.log(f"{component_name}_test: Entity is hidden: {hydra.is_entity_hidden(entity_obj.id)}")
-        hydra.set_visibility_state(entity_obj.id, True)
-        general.idle_wait_frames(1)
-        general.log(f"{component_name}_test: Entity is shown: {not hydra.is_entity_hidden(entity_obj.id)}")
 
-    # Verify delete/Undo/Redo deletion
+        def is_entity_hidden(entity_id):
+            return editor.EditorEntityInfoRequestBus(bus.Event, "IsHidden", entity_id)
+
+        editor.EditorEntityAPIBus(bus.Event, "SetVisibilityState", entity_obj.id, False)
+        general.idle_wait_frames(1)
+        general.log(f"{component_name}_test: Entity is hidden: {is_entity_hidden(entity_obj.id)}")
+        editor.EditorEntityAPIBus(bus.Event, "SetVisibilityState", entity_obj.id, True)
+        general.idle_wait_frames(1)
+        general.log(f"{component_name}_test: Entity is shown: {not is_entity_hidden(entity_obj.id)}")
+
     def verify_deletion_undo_redo(component_name, entity_obj):
-        hydra.delete_entity(entity_obj.id)
-        helper.wait_for_condition(lambda: not hydra.find_entity_by_name(entity_obj.name), 1.0)
+        editor.ToolsApplicationRequestBus(bus.Broadcast, "DeleteEntityById", entity_obj.id)
+        TestHelper.wait_for_condition(lambda: not hydra.find_entity_by_name(entity_obj.name), 1.0)
         general.log(f"{component_name}_test: Entity deleted: {not hydra.find_entity_by_name(entity_obj.name)}")
 
         general.undo()
-        helper.wait_for_condition(lambda: hydra.find_entity_by_name(entity_obj.name) is not None, 1.0)
-        general.log(f"{component_name}_test: UNDO entity deletion works: {hydra.find_entity_by_name(entity_obj.name) is not None}")
+        TestHelper.wait_for_condition(lambda: hydra.find_entity_by_name(entity_obj.name) is not None, 1.0)
+        general.log(f"{component_name}_test: UNDO entity deletion works: "
+                    f"{hydra.find_entity_by_name(entity_obj.name) is not None}")
 
         general.redo()
-        helper.wait_for_condition(lambda: not hydra.find_entity_by_name(entity_obj.name), 1.0)
-        general.log(f"{component_name}_test: REDO entity deletion works: {not hydra.find_entity_by_name(entity_obj.name)}")
+        TestHelper.wait_for_condition(lambda: not hydra.find_entity_by_name(entity_obj.name), 1.0)
+        general.log(f"{component_name}_test: REDO entity deletion works: "
+                    f"{not hydra.find_entity_by_name(entity_obj.name)}")
 
-    # Verify if addition of required components activates entity
     def verify_required_component_addition(entity_obj, components_to_add, component_name):
+
+        def is_component_enabled(entity_componentid_pair):
+            return editor.EditorComponentAPIBus(bus.Broadcast, "IsComponentEnabled", entity_componentid_pair)
+
         general.log(
-            f"{component_name}_test: Entity disabled initially: {not hydra.is_component_enabled(entity_obj.components[0])}")
+            f"{component_name}_test: Entity disabled initially: "
+            f"{not is_component_enabled(entity_obj.components[0])}")
         for component in components_to_add:
             entity_obj.add_component(component)
-        helper.wait_for_condition(lambda: hydra.is_component_enabled(entity_obj.components[0]), 1.0)
+        TestHelper.wait_for_condition(lambda: is_component_enabled(entity_obj.components[0]), 1.0)
         general.log(
             f"{component_name}_test: Entity enabled after adding "
-            f"required components: {hydra.is_component_enabled(entity_obj.components[0])}"
+            f"required components: {is_component_enabled(entity_obj.components[0])}"
         )
 
-    # Verify setting property of component
     def verify_set_property(entity_obj, path, value):
         entity_obj.get_set_test(0, path, value)
 
@@ -177,36 +142,16 @@ def run():
         def get_value():
             hydra.get_component_property_value(entity_obj.components[0], "Cubemap|Baked Cubemap Path")
 
-        helper.wait_for_condition(lambda: get_value() != "", 20.0)
+        TestHelper.wait_for_condition(lambda: get_value() != "", 20.0)
         general.log(f"{component_name}_test: Cubemap is generated: {get_value() != ''}")
 
     # Wait for Editor idle loop before executing Python hydra scripts.
-    helper.init_idle()
-
-    # Create a new level.
-    new_level_name = "tmp_level"  # Specified in TestAllComponentsBasicTests.py
-    heightmap_resolution = 512
-    heightmap_meters_per_pixel = 1
-    terrain_texture_resolution = 412
-    use_terrain = False
-
-    # Return codes are ECreateLevelResult defined in CryEdit.h
-    return_code = general.create_level_no_prompt(
-        new_level_name, heightmap_resolution, heightmap_meters_per_pixel, terrain_texture_resolution, use_terrain)
-    if return_code == 1:
-        general.log(f"{new_level_name} level already exists")
-    elif return_code == 2:
-        general.log("Failed to create directory")
-    elif return_code == 3:
-        general.log("Directory length is too long")
-    elif return_code != 0:
-        general.log("Unknown error, failed to create level")
-    else:
-        general.log(f"{new_level_name} level created successfully")
-    after_level_load()
+    TestHelper.init_idle()
 
     # Delete all existing entities initially
-    hydra.delete_all_existing_entities()
+    search_filter = azlmbr.entity.SearchFilter()
+    all_entities = entity.SearchBus(azlmbr.bus.Broadcast, "SearchEntities", search_filter)
+    editor.ToolsApplicationRequestBus(bus.Broadcast, "DeleteEntities", all_entities)
 
     class ComponentTests:
         """Test launcher for each component."""
@@ -232,16 +177,6 @@ def run():
             # Deletion/Undo/Redo test
             verify_deletion_undo_redo(self.component_name, entity_obj)
 
-    # Area Light Component
-    area_light = "Area Light"
-    ComponentTests(
-        area_light, lambda entity_obj: verify_required_component_addition(entity_obj, ["Capsule Shape"], area_light))
-
-    # Decal Component
-    material_asset = hydra.get_asset_by_path(os.path.join("Materials", "decal", "aiirship_nose_number_decal.material"))
-    ComponentTests(
-        "Decal", lambda entity_obj: verify_set_property(entity_obj, "Settings|Decal Settings|Material", material_asset))
-
     # DepthOfField Component
     camera_entity = hydra.Entity("camera_entity")
     camera_entity.create_entity(math.Vector3(512.0, 512.0, 34.0), ["Camera"])
@@ -249,12 +184,22 @@ def run():
     ComponentTests(
         depth_of_field,
         lambda entity_obj: verify_required_component_addition(entity_obj, ["PostFX Layer"], depth_of_field),
-        lambda entity_obj: verify_set_property(entity_obj, "Controller|Configuration|Camera Entity", camera_entity.id))
+        lambda entity_obj: verify_set_property(
+            entity_obj, "Controller|Configuration|Camera Entity", camera_entity.id))
+
+    # Decal Component
+    material_asset_path = os.path.join("AutomatedTesting", "Materials", "basic_grey.material")
+    material_asset = asset.AssetCatalogRequestBus(
+        bus.Broadcast, "GetAssetIdByPath", material_asset_path, math.Uuid(), False)
+    ComponentTests(
+        "Decal (Atom)", lambda entity_obj: verify_set_property(
+            entity_obj, "Controller|Configuration|Material", material_asset))
 
     # Directional Light Component
     ComponentTests(
         "Directional Light",
-        lambda entity_obj: verify_set_property(entity_obj, "Controller|Configuration|Shadow|Camera", camera_entity.id))
+        lambda entity_obj: verify_set_property(
+            entity_obj, "Controller|Configuration|Shadow|Camera", camera_entity.id))
 
     # Exposure Control Component
     ComponentTests(
@@ -262,10 +207,12 @@ def run():
             entity_obj, ["PostFX Layer"], "Exposure Control"))
 
     # Global Skylight (IBL) Component
-    diffuse_image_asset = hydra.get_asset_by_path(
-        os.path.join("LightingPresets", "greenwich_park_02_4k_iblskyboxcm.exr.streamingimage"))
-    specular_image_asset = hydra.get_asset_by_path(
-        os.path.join("LightingPresets", "greenwich_park_02_4k_iblskyboxcm.exr.streamingimage"))
+    diffuse_image_path = os.path.join("LightingPresets", "greenwich_park_02_4k_iblskyboxcm.exr.streamingimage")
+    diffuse_image_asset = asset.AssetCatalogRequestBus(
+        bus.Broadcast, "GetAssetIdByPath", diffuse_image_path, math.Uuid(), False)
+    specular_image_path = os.path.join("LightingPresets", "greenwich_park_02_4k_iblskyboxcm.exr.streamingimage")
+    specular_image_asset = asset.AssetCatalogRequestBus(
+        bus.Broadcast, "GetAssetIdByPath", specular_image_path, math.Uuid(), False)
     ComponentTests(
         "Global Skylight (IBL)",
         lambda entity_obj: verify_set_property(
@@ -276,17 +223,17 @@ def run():
     # Physical Sky Component
     ComponentTests("Physical Sky")
 
-    # Point Light Component
-    ComponentTests("Point Light")
-
     # PostFX Layer Component
     ComponentTests("PostFX Layer")
 
     # Radius Weight Modifier Component
     ComponentTests("Radius Weight Modifier")
 
-    # Spot Light Component
-    ComponentTests("Spot Light")
+    # Light Component
+    ComponentTests("Light")
+
+    # Display Mapper Component
+    ComponentTests("Display Mapper")
 
     # Reflection Probe Component
     reflection_probe = "Reflection Probe"

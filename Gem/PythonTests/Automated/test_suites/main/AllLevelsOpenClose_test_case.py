@@ -7,56 +7,32 @@ distribution (the "License"). All use of this software is governed by the Licens
 or, if provided, by the license below or the license accompanying this file. Do not
 remove or modify any license notices. This file is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+
+Hydra script that is used to open all AtomTest levels inside its "Levels" directory, verifying they don't crash.
+
+See the run() function for more in-depth test info.
 """
-
-# This module does a bulk test and update of many components at once.
-# Each test case is listed below in the format:
-#     "Test Case ID: Test Case Title (URL)"
-
-# C34428159: Editor - ActorTest_100Actors (https://testrail.agscollab.com/index.php?/cases/view/34428159)
-# C34428160: Editor - ActorTest_MultipleActors (https://testrail.agscollab.com/index.php?/cases/view/34428160)
-# C34428161: Editor - ActorTest_SingleActor (https://testrail.agscollab.com/index.php?/cases/view/34428161)
-# C34428162: Editor - ColorSpaceTest (https://testrail.agscollab.com/index.php?/cases/view/34428162)
-# C34428163: Editor - DefaultLevel (https://testrail.agscollab.com/index.php?/cases/view/34428163)
-# C34428165: Editor - Lucy (https://testrail.agscollab.com/index.php?/cases/view/34428165)
-# C34428166: Editor - lucy_high (https://testrail.agscollab.com/index.php?/cases/view/34428166)
-# C34428167: Editor - macbeth_shaderballs (https://testrail.agscollab.com/index.php?/cases/view/34428167)
-# C34428158: Editor - MeshTest (https://testrail.agscollab.com/index.php?/cases/view/34428158)
-# C34428172: Editor - NormalMapping (https://testrail.agscollab.com/index.php?/cases/view/34428172)
-# C34428173: Editor - PbrMaterialChart (https://testrail.agscollab.com/index.php?/cases/view/34428173)
-# C34428174: Editor - ShadowTest (https://testrail.agscollab.com/index.php?/cases/view/34428174)
-# C34428175: Editor - TangentSpace (https://testrail.agscollab.com/index.php?/cases/view/34428175)
 
 import os
 import sys
 
 import azlmbr.legacy.general as general
-import azlmbr.legacy.settings as settings
 import azlmbr.paths
 
 sys.path.append(os.path.join(azlmbr.paths.devroot, "AtomTest", "Gem", "PythonTests"))
 
 from Automated.atom_utils.automated_test_utils import TestHelper as helper
 
-# Set up our valid test levels first that can be tested.
 LEVELS = os.listdir(os.path.join(azlmbr.paths.devroot, "AtomTest", "Levels"))
-INVALID_LEVELS = ["mult-mat-fbx-test", "bentley_test", "ColorSpaceTest", "DefaultLevel"]
-for invalid_level in INVALID_LEVELS:
-    try:
-        LEVELS.remove(invalid_level)
-    except ValueError:  # Level doesn't exist already
-        continue
-
-
-class TestAllLevelsOpenClose(object):
-    """Reserved for the test name."""
-    pass
 
 
 def run():
     """
-    1. Open & close all valid test levels in the Editor.
-    2. Every time a level is opened, verify it loads correctly and the Editor remains stable.
+    Scans the AtomTest "Levels" directory for any levels and for each level it:
+    1. Opens & closes the level in the Editor.
+    2. Utilizes Editor.log to find the general.log(f"Successfully opened {level}") call for the level to pass the test.
+    3. If general.log(f"Successfully opened {level}") is failed to be called for the level, the test will fail.
+    4. Any Trace::Assert, Trace::Error, or "Traceback (most recent call last):" indicate a crash & will fail the test.
     """
 
     def after_level_load():

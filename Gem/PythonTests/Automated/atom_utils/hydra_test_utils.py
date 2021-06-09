@@ -141,7 +141,7 @@ def launch_and_validate_results_launcher(
         )
         logger.debug("Done! log file <{}> exists.".format(gamelog_file))
         log_monitor = ly_test_tools.log.log_monitor.LogMonitor(launcher=launcher, log_file_path=gamelog_file)
-        # Workaround for LY-110925 - Wait for log file to be opened before checking for expected lines. This is done in
+        # Workaround fix: Wait for log file to be opened before checking for expected lines. This is done in
         # monitor_log_for_lines as well, but has a low timeout with no way to currently override
         logger.debug("Waiting for log file '{}' to be opened by another process.".format(gamelog_file))
         # Check for expected/unexpected lines
@@ -151,36 +151,3 @@ def launch_and_validate_results_launcher(
             halt_on_unexpected=halt_on_unexpected,
             timeout=log_monitor_timeout,
         )
-
-
-def remove_files(artifact_path, suffix):
-    """
-    Removes files with the specified suffix from the specified path
-    :param artifact_path: Path to search for files
-    :param suffix: File extension to remove
-    """
-    if not os.path.isdir(artifact_path):
-        return
-
-    for file_name in os.listdir(artifact_path):
-        if file_name.endswith(suffix):
-            os.remove(os.path.join(artifact_path, file_name))
-
-
-def get_valid_test_levels(level_directory):
-    # type: (str) -> list
-    """
-    Parses the AtomTest project for valid test levels and returns them as a list.
-    :param level_directory: Full path to the AtomTest project levels.
-    :return: list of valid test levels parsed from the AtomTest project levels.
-    """
-    levels = os.listdir(level_directory)
-    non_test_levels = ["mult-mat-fbx-test", "bentley_test", "ColorSpaceTest", "DefaultLevel"]
-
-    for non_test_level in non_test_levels:
-        try:
-            levels.remove(non_test_level)
-        except ValueError:
-            continue
-
-    return levels
