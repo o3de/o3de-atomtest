@@ -38,9 +38,6 @@ class TestSelectingOpenMaterials(object):
             "Trace::Assert",
             "Trace::Error",
             "Traceback (most recent call last):",
-            "Material 1 opened: False",
-            "Material 2 opened: False",
-            "New instance did not open: False",
             "Initial tab is focused: False",
         ]
 
