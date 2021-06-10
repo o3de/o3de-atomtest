@@ -33,7 +33,7 @@ ASSET_1 = "basic_grey.material"
 ASSET_2 = "DefaultPBR.material"
 FOLDER_PATH = os.path.join(azlmbr.paths.devroot, "AtomTest", "Materials")
 
-class TestSelectingInBrowserViaViewportTab(MaterialEditorHelper):
+class SelectingInBrowserViaViewportTabTest(MaterialEditorHelper):
     def __init__(self):
         MaterialEditorHelper.__init__(self, log_prefix="SelectingInBrowserViaViewportTab_test_case")
 
@@ -106,5 +106,5 @@ class TestSelectingInBrowserViaViewportTab(MaterialEditorHelper):
         return editor_window.findChild(QtWidgets.QDockWidget, "Asset Browser_DockWidget")
 
 
-test = TestSelectingInBrowserViaViewportTab()
+test = SelectingInBrowserViaViewportTabTest()
 test.run_test()
