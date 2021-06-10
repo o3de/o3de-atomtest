@@ -7,9 +7,6 @@ distribution (the "License"). All use of this software is governed by the Licens
 or, if provided, by the license below or the license accompanying this file. Do not
 remove or modify any license notices. This file is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-
-Please review the hydra script run by this test for more specific test info.
-Test for selecting open materials in browser.
 """
 
 import os
@@ -28,7 +25,10 @@ class TestSelectingOpenMaterials(object):
     def test_Selecting_OpenMaterials_NoNewInstanceOpens(
         self, request, workspace, project, launcher_platform, generic_launcher, exe_file_name
     ):
-
+        """
+        Please review the hydra script run by this test for more specific test info.
+        Test for selecting open materials in browser.
+        """
         expected_lines = [
             "Instance count after opening first material: 1",
             "Instance count after opening second material: 2",
