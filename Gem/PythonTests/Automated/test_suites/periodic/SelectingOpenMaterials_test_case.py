@@ -29,10 +29,61 @@ sys.path.append(os.path.join(azlmbr.paths.devroot, "AtomTest", "Gem", "PythonTes
 from editor_python_test_tools import pyside_utils
 from Automated.atom_utils.material_editor_utils import MaterialEditorHelper
 
+ASSET_1 = "basic_grey.material"
+ASSET_2 = "DefaultPBR.material"
 
-class TestSelectingOpenMaterials(MaterialEditorHelper):
+class SelectingOpenMaterialsTest(MaterialEditorHelper):
     def __init__(self):
         MaterialEditorHelper.__init__(self, log_prefix="SelectingOpenMaterials_test_case")
+
+    def run_test(self):
+        """
+        Summary:
+        Selecting Open Materials in Browser.
+
+        Test Steps:
+        1) Initialize QT objects
+        2) Initially close all the existing tabs
+        3) Open Material 1 and verify if opened
+        4) Open Material 2 and verify if opened
+        5) Open Material 1 again and verify if new instance is not opened and initial tab is selected
+
+        Expected Result:
+        The material opens with a tab at the top of the viewport. When the same material is opened,
+        Instead of opening another instance of Basic_grey.material, the initial tab and material are selected and
+        available for use.
+
+        :return: None
+        """
+
+        # 1) Initialize QT objects
+        editor_window = pyside_utils.get_editor_main_window()
+        asset_browser = self.get_asset_browser(editor_window)
+        search_frame = asset_browser.findChild(QtWidgets.QFrame, "m_searchWidget")
+        search_bar = search_frame.findChild(QtWidgets.QWidget, "textSearch")
+        tab_widget = editor_window.findChild(QtWidgets.QTabWidget, "TabWidget")
+        tab_bar = tab_widget.findChild(QtWidgets.QTabBar)
+        tree = asset_browser.findChild(QtWidgets.QTreeView, "m_assetBrowserTreeViewWidget")
+
+        # 2) Initially close all the existing tabs
+        close_all = pyside_utils.find_child_by_pattern(editor_window, {"iconText": "Close All"})
+        close_all.trigger()
+
+        # 3) Open Material 1 and verify if opened
+        self.open_material_from_asset_browser(tree, search_bar, ASSET_1)
+        self.wait_for_condition(lambda: tab_bar.count() == 1)
+        print(f"Instance count after opening first material: {tab_bar.count()}")
+
+        # 4) Open Material 2 and verify if opened
+        self.open_material_from_asset_browser(tree, search_bar, ASSET_2)
+        self.wait_for_condition(lambda: tab_bar.count() == 2)
+        print(f"Instance count after opening second material: {tab_bar.count()}")
+
+        # 5) Open Material 1 again and verify if new instance is not opened and initial tab is selected
+        self.open_material_from_asset_browser(tree, search_bar, ASSET_1)
+        self.wait_for_condition(lambda: tab_bar.count() == 2)
+        print(f"Instance count after re-open: {tab_bar.count()}")
+        print(f"Initial tab is focused: {tab_widget.tabText(tab_widget.currentIndex())==ASSET_1}")
 
     def get_asset_browser(self, editor_window):
         """
@@ -78,59 +129,5 @@ class TestSelectingOpenMaterials(MaterialEditorHelper):
         )
         tree.collapseAll()
 
-    def run_test(self):
-        """
-        Summary:
-        Selecting Open Materials in Browser.
-
-        Test Steps:
-        1) Initialize QT objects
-        2) Initially close all the existing tabs
-        3) Open Material 1 and verify if opened
-        4) Open Material 2 and verify if opened
-        5) Open Material 1 again and verify if new instance is not opened and initial tab is selected
-
-        Expected Result:
-        The material opens with a tab at the top of the viewport. When the same material is opened,
-        Instead of opening another instance of Basic_grey.material, the initial tab and material are selected and
-        available for use.
-
-        :return: None
-        """
-
-        self.ASSET_1 = "basic_grey.material"
-        self.ASSET_2 = "DefaultPBR.material"
-
-
-        # 1) Initialize QT objects
-        editor_window = pyside_utils.get_editor_main_window()
-        asset_browser = self.get_asset_browser(editor_window)
-        search_frame = asset_browser.findChild(QtWidgets.QFrame, "m_searchWidget")
-        search_bar = search_frame.findChild(QtWidgets.QWidget, "textSearch")
-        tab_widget = editor_window.findChild(QtWidgets.QTabWidget, "TabWidget")
-        tab_bar = tab_widget.findChild(QtWidgets.QTabBar)
-        tree = asset_browser.findChild(QtWidgets.QTreeView, "m_assetBrowserTreeViewWidget")
-
-        # 2) Initially close all the existing tabs
-        close_all = pyside_utils.find_child_by_pattern(editor_window, {"iconText": "Close All"})
-        close_all.trigger()
-
-        # 3) Open Material 1 and verify if opened
-        self.open_material_from_asset_browser(tree, search_bar, self.ASSET_1)
-        self.wait_for_condition(lambda: tab_bar.count() == 1)
-        print(f"Instance count after opening first material: {tab_bar.count()}")
-
-        # 4) Open Material 2 and verify if opened
-        self.open_material_from_asset_browser(tree, search_bar, self.ASSET_2)
-        self.wait_for_condition(lambda: tab_bar.count() == 2)
-        print(f"Instance count after opening second material: {tab_bar.count()}")
-
-        # 5) Open Material 1 again and verify if new instance is not opened and initial tab is selected
-        self.open_material_from_asset_browser(tree, search_bar, self.ASSET_1)
-        self.wait_for_condition(lambda: tab_bar.count() == 2)
-        print(f"Instance count after re-open: {tab_bar.count()}")
-        print(f"Initial tab is focused: {tab_widget.tabText(tab_widget.currentIndex())==self.ASSET_1}")
-
-
-test = TestSelectingOpenMaterials()
-test.run()
+test = SelectingOpenMaterialsTest()
+test.run_test()

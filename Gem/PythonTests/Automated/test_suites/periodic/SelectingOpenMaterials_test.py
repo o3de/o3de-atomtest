@@ -8,6 +8,7 @@ or, if provided, by the license below or the license accompanying this file. Do 
 remove or modify any license notices. This file is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
+Please review the hydra script run by this test for more specific test info.
 Test for selecting open materials in browser.
 """
 
@@ -24,7 +25,7 @@ LOG_MONITOR_TIMEOUT = 30
 @pytest.mark.parametrize("launcher_platform", ["windows_generic"])
 class TestSelectingOpenMaterials(object):
     @pytest.mark.parametrize("exe_file_name", ["MaterialEditor"])
-    def test_SelectingOpenMaterials(
+    def test_Selecting_OpenMaterials_NoNewInstanceOpens(
         self, request, workspace, project, launcher_platform, generic_launcher, exe_file_name
     ):
 

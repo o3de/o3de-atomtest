@@ -8,7 +8,7 @@ or, if provided, by the license below or the license accompanying this file. Do 
 remove or modify any license notices. This file is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
-
+Please review the hydra script run by this test for more specific test info.
 Creating Subfolders within Library
 """
 
@@ -30,7 +30,7 @@ class TestCreatingSubfoldersInLibrary(object):
     def setup_teardown(self, request, workspace, project):
         def delete_files():
             file_system.delete(
-                [os.path.join(workspace.paths.engine_root(), "Gems", "Atom", "TestData", "New Sub Folder"),],
+                [os.path.join(workspace.paths.engine_root(), "Gems", "Atom", "TestData", "New Sub Folder")],
                 True,
                 True,
             )
@@ -45,7 +45,7 @@ class TestCreatingSubfoldersInLibrary(object):
         request.addfinalizer(teardown)
 
     @pytest.mark.parametrize("exe_file_name", ["MaterialEditor"])
-    def test_CreatingSubfoldersInLibrary(
+    def test_SubFolderCreation_InLibrary_CreatedSuccessfully(
         self, request, workspace, project, launcher_platform, generic_launcher, exe_file_name
     ):
 

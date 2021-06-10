@@ -75,6 +75,15 @@ def launch_and_validate_results(
     editor.args.extend([" ".join(cfg_args)])
     with editor.start():
         editorlog_file = os.path.join(editor.workspace.paths.project_log(), log_file_name)
+        # Log monitor requires the file to exist.
+        logger.debug("Waiting until log file <{}> exists...".format(editorlog_file))
+        waiter.wait_for(
+            lambda: os.path.exists(editorlog_file),
+            timeout=60,
+            exc=("Log file '{}' was never created by another process.".format(editorlog_file)),
+            interval=1,
+        )
+        logger.debug("Done! log file <{}> exists.".format(editorlog_file))
         log_monitor = ly_test_tools.log.log_monitor.LogMonitor(launcher=editor, log_file_path=editorlog_file)
         log_monitor.monitor_log_for_lines(
             expected_lines=expected_lines,
