@@ -29,6 +29,9 @@ from editor_python_test_tools import pyside_utils
 from Automated.atom_utils.material_editor_utils import MaterialEditorHelper
 import Automated.atom_utils.material_editor_utils as material_editor
 
+ASSET_1 = "basic_grey.material"
+ASSET_2 = "DefaultPBR.material"
+FOLDER_PATH = os.path.join(azlmbr.paths.devroot, "AtomTest", "Materials")
 
 class TestSelectingInBrowserViaViewportTab(MaterialEditorHelper):
     def __init__(self):
@@ -55,22 +58,6 @@ class TestSelectingInBrowserViaViewportTab(MaterialEditorHelper):
         :return: None
         """
 
-        ASSET_1 = "basic_grey.material"
-        ASSET_2 = "DefaultPBR.material"
-        FOLDER_PATH = os.path.join(azlmbr.paths.devroot, "AtomTest", "Materials")
-
-        def get_asset_browser(editor_window):
-            asset_browser = get_asset_browser_qt_object()
-            if asset_browser is None or not asset_browser.isVisible():
-                action = pyside_utils.find_child_by_pattern(editor_window, {"iconText": "Asset Browser"})
-                action.trigger()
-            self.wait_for_condition(lambda: get_asset_browser_qt_object() is not None)
-            asset_browser = get_asset_browser_qt_object()
-            return asset_browser
-
-        def get_asset_browser_qt_object():
-            return editor_window.findChild(QtWidgets.QDockWidget, "Asset Browser_DockWidget")
-
         # 1) Open existing materials
         document_1_id = material_editor.open_material(os.path.join(FOLDER_PATH, ASSET_1))
         print(f"Material 1 opened: {material_editor.is_open(document_1_id)}")
@@ -79,13 +66,14 @@ class TestSelectingInBrowserViaViewportTab(MaterialEditorHelper):
 
         # 2) Initialize QT objects
         editor_window = pyside_utils.get_editor_main_window()
-        asset_browser = get_asset_browser(editor_window)
+        asset_browser = self.get_asset_browser(editor_window)
         tab_widget = editor_window.findChild(QtWidgets.QTabWidget, "TabWidget")
         tab_bar = tab_widget.findChild(QtWidgets.QTabBar)
         tree = asset_browser.findChild(QtWidgets.QTreeView, "m_assetBrowserTreeViewWidget")
 
         # 3) Verify currently selected material is the second asset opened
-        print(f"Second tab is selected: {tab_widget.tabText(tab_widget.currentIndex())==ASSET_2}")
+        currently_selected_material = tab_widget.tabText(tab_widget.currentIndex())
+        print(f"Second tab is selected: {currently_selected_material == ASSET_2}")
 
         # 4) Right Click on the first material and click "Select"
         pyside_utils.move_mouse(tab_bar, position=tab_bar.tabRect(0).center())
@@ -94,7 +82,29 @@ class TestSelectingInBrowserViaViewportTab(MaterialEditorHelper):
         # 5) Verify if the material is selected in the Asset Browser
         result = self.wait_for_condition(lambda: tree.selectedIndexes()[0].data() == ASSET_1, 2.0)
         print(f"First material is reselected in Browser: {result}")
+    
+    def get_asset_browser(self, editor_window):
+        """
+        Opens the Asset Browser if not opened already and returns the Qt object of Asset Browser
+        :param editor_window - editor_window Qt object
+        :return asset_browser - Qt object
+        """
+        asset_browser = self.get_asset_browser_dock_widget(editor_window)
+        if asset_browser is None or not asset_browser.isVisible():
+            action = pyside_utils.find_child_by_pattern(editor_window, {"iconText": "Asset Browser"})
+            action.trigger()
+        self.wait_for_condition(lambda: self.get_asset_browser_dock_widget(editor_window) is not None)
+        asset_browser = self.get_asset_browser_dock_widget(editor_window)
+        return asset_browser
+
+    def get_asset_browser_dock_widget(self, editor_window):
+        """
+        Returns the Qt object of Asset Browser
+        :param editor_window - editor_window Qt object
+        :return asset_browser - Qt object (QDockWidget)
+        """
+        return editor_window.findChild(QtWidgets.QDockWidget, "Asset Browser_DockWidget")
 
 
 test = TestSelectingInBrowserViaViewportTab()
-test.run()
+test.run_test()

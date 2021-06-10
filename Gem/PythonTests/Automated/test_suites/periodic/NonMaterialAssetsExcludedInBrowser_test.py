@@ -20,19 +20,22 @@ LOG_MONITOR_TIMEOUT = 40
 
 @pytest.mark.parametrize("project", ["AtomTest"])
 @pytest.mark.parametrize("launcher_platform", ["windows_generic"])
-@pytest.mark.system
 class TestNonMaterialAssetsExcludedInBrowser(object):
     @pytest.mark.parametrize("exe_file_name", ["MaterialEditor"])
-    def test_NonMaterialAssetsExcludedInBrowser(
+    def test_MaterialBrowser_NonMaterialAssets_ExcludedInBrowser(
         self, request, workspace, project, launcher_platform, generic_launcher, exe_file_name
     ):
+        """
+        Please review the hydra script run by this test for more specific test info.
+        Test to verify if Non-Material based assets excluded from Browser
+        """
         unexpected_lines = [
             "Trace::Assert",
             "Trace::Error",
             "Traceback (most recent call last):",
             "Expected item not found in folder",
             "Excluded item found in folder",
-            "Path not found in browser: ",
+            "Atom MaterialEditor asset path not found in browser: ",
         ]
 
         hydra.launch_and_validate_results(

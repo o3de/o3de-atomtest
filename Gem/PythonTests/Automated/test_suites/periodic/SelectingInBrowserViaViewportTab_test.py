@@ -20,13 +20,15 @@ LOG_MONITOR_TIMEOUT = 30
 
 @pytest.mark.parametrize("project", ["AtomTest"])
 @pytest.mark.parametrize("launcher_platform", ["windows_generic"])
-@pytest.mark.system
 class TestSelectingInBrowserViaViewportTab(object):
     @pytest.mark.parametrize("exe_file_name", ["MaterialEditor"])
-    def test_SelectingInBrowserViaViewportTab(
+    def test_SelectingMaterial_OnViewportTab_SelectsMaterialInBrowser(
         self, request, workspace, project, launcher_platform, generic_launcher, exe_file_name
     ):
-
+        """
+        Please review the hydra script run by this test for more specific test info.
+        Test for material selectiion in Browser via Viewport Tab
+        """
         expected_lines = [
             "Material 1 opened: True",
             "Material 2 opened: True",

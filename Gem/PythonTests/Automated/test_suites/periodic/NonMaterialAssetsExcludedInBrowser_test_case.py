@@ -28,7 +28,7 @@ from editor_python_test_tools import pyside_utils
 from Automated.atom_utils.material_editor_utils import MaterialEditorHelper
 
 
-class TestNonMaterialAssetsExcludedInBrowser(MaterialEditorHelper):
+class NonMaterialAssetsExcludedInBrowserTest(MaterialEditorHelper):
     def __init__(self):
         MaterialEditorHelper.__init__(self, log_prefix="NonMaterialAssetsExcludedInBrowser_test_case")
 
@@ -48,73 +48,84 @@ class TestNonMaterialAssetsExcludedInBrowser(MaterialEditorHelper):
         :return: None
         """
 
-        def get_asset_browser(editor_window):
-            asset_browser = get_asset_browser_qt_object()
-            if asset_browser is None or not asset_browser.isVisible():
-                action = pyside_utils.find_child_by_pattern(editor_window, {"iconText": "Asset Browser"})
-                action.trigger()
-            self.wait_for_condition(lambda: get_asset_browser_qt_object() is not None)
-            asset_browser = get_asset_browser_qt_object()
-            return asset_browser
-
-        def get_asset_browser_qt_object():
-            return editor_window.findChild(QtWidgets.QDockWidget, "Asset Browser_DockWidget")
-
-        def browse_validate_assets(tree, path_to_verify, allowed_item):
-            """
-            Iterates each item of a folder under a given path and verifies if an item is present.
-            Also verifies if any item ends with ".txt" or ".json". Log statements are printed accordingly.
-
-            :param path_to_verify: Path in which items need to be browsed.
-                                   Ex: ("Gems", "Atom", "AtomTestData", "TestData", "LightingPresets")
-            :param allowed_item: Specific item to verify inside folder. Ex: 001_DefaultWhite.material.
-            """
-            # Get the Model index for the path in which we need to verify assets
-            model_index = pyside_utils.find_child_by_hierarchy(tree, *path_to_verify)
-            # If path is invalid, print message accordingly
-            if model_index is None:
-                # NOTE: This does not necessarily mean that the functionality is not working as expected,
-                # this may happen when the actual paths are updated, but this script is not updated, added the below
-                # line to unexpected lines, so test would fail if that is the case, so that paths can be updated.
-                print(f"Path not found in browser: {path_to_verify}")
-                return
-            # else scroll in Asset Browser until we get to the folder
-            tree.scrollTo(model_index)
-            expected_item_found = False
-            excluded_item_found = False
-            # Iterate through each item under that folder and perfoem validations
-            for row in range(model.rowCount(model_index)):
-                item_data = model.index(row, 0, model_index).data()
-                if item_data == allowed_item:
-                    expected_item_found = True
-                if item_data.endswith(".txt") or item_data.endswith(".json"):
-                    excluded_item_found = True
-            # Print results accordingly
-            if not expected_item_found:
-                print(f"Expected item not found in folder {path_to_verify[-1]}")
-            if excluded_item_found:
-                print(f"Excluded item found in folder {path_to_verify[-1]}")
-
         # 1) Initialize QT objects
         editor_window = pyside_utils.get_editor_main_window()
-        asset_browser = get_asset_browser(editor_window)
+        asset_browser = self.get_asset_browser(editor_window)
         tree = asset_browser.findChild(QtWidgets.QTreeView, "m_assetBrowserTreeViewWidget")
 
         # 2) Browse through paths and validate if expected items are present and exluded extensions are not present
-        model = tree.model()
         tree.expandAll()
-        browse_validate_assets(
+        self.browse_validate_assets(
             tree, ("Gems", "Atom", "AtomTestData", "TestData", "LightingPresets"), "greenwich_park_03_2k_cm.exr",
         )
-        browse_validate_assets(
+        self.browse_validate_assets(
             tree,
             ("Gems", "Atom", "AtomTestData", "TestData", "Materials", "StandardPbrTestCases"),
             "001_DefaultWhite.material",
         )
-        browse_validate_assets(
+        self.browse_validate_assets(
             tree, ("Gems", "Atom", "AtomTestData", "TestData", "Multi-mat_fbx"), "multi-mat_1m_cube.fbx",
         )
 
+    def get_asset_browser(self, editor_window):
+        """
+        Opens the Asset Browser if not opened already and returns the Qt object of Asset Browser
+        :param editor_window - editor_window Qt object
+        :return asset_browser - Qt object
+        """
+        asset_browser = self.get_asset_browser_dock_widget(editor_window)
+        if asset_browser is None or not asset_browser.isVisible():
+            action = pyside_utils.find_child_by_pattern(editor_window, {"iconText": "Asset Browser"})
+            action.trigger()
+        self.wait_for_condition(lambda: self.get_asset_browser_dock_widget(editor_window) is not None)
+        asset_browser = self.get_asset_browser_dock_widget(editor_window)
+        return asset_browser
 
-test = TestNonMaterialAssetsExcludedInBrowser()
-test.run()
+    def get_asset_browser_dock_widget(self, editor_window):
+        """
+        Returns the Qt object of Asset Browser
+        :param editor_window - editor_window Qt object
+        :return asset_browser - Qt object (QDockWidget)
+        """
+        return editor_window.findChild(QtWidgets.QDockWidget, "Asset Browser_DockWidget")
+
+    def browse_validate_assets(self, tree, path_to_verify, allowed_item):
+        """
+        Iterates each item of a folder under a given path and verifies if an item is present.
+        Also verifies if any item ends with ".txt" or ".json". Log statements are printed accordingly.
+
+        :param path_to_verify: Path in which items need to be browsed.
+                                Ex: ("Gems", "Atom", "AtomTestData", "TestData", "LightingPresets")
+        :param allowed_item: Specific item to verify inside folder. Ex: 001_DefaultWhite.material.
+        :return: None
+        """
+        # Get the Model index for the path in which we need to verify assets
+        model_index = pyside_utils.find_child_by_hierarchy(tree, *path_to_verify)
+        # If path is invalid, print message accordingly
+        if model_index is None:
+            # NOTE: This does not necessarily mean that the functionality is not working as expected,
+            # this may happen when the actual paths are updated, but this script is not updated, added the below
+            # line to unexpected lines, so test would fail if that is the case, so that paths can be updated.
+            print(f"Atom MaterialEditor asset path not found in browser: {path_to_verify}")
+            return
+        # else scroll in Asset Browser until we get to the folder
+        tree.scrollTo(model_index)
+        expected_item_found = False
+        excluded_item_found = False
+        model = tree.model()
+        # Iterate through each item under that folder and perform validations
+        for row in range(model.rowCount(model_index)):
+            item_data = model.index(row, 0, model_index).data()
+            if item_data == allowed_item:
+                expected_item_found = True
+            if item_data.endswith(".txt") or item_data.endswith(".json"):
+                excluded_item_found = True
+        # Print results accordingly
+        if not expected_item_found:
+            print(f"Expected item not found in folder {path_to_verify[-1]}")
+        if excluded_item_found:
+            print(f"Excluded item found in folder {path_to_verify[-1]}")
+
+
+test = NonMaterialAssetsExcludedInBrowserTest()
+test.run_test()
