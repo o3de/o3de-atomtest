@@ -130,4 +130,4 @@ class SelectingOpenMaterialsTest(MaterialEditorHelper):
         tree.collapseAll()
 
 test = SelectingOpenMaterialsTest()
-test.run_test()
+test.run()

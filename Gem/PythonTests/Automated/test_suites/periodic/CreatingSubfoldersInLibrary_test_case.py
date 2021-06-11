@@ -136,4 +136,4 @@ class CreatingSubfoldersInLibraryTest(MaterialEditorHelper):
             button_box.button(QtWidgets.QDialogButtonBox.Ok).click()
 
 test = CreatingSubfoldersInLibraryTest()
-test.run_test()
+test.run()
