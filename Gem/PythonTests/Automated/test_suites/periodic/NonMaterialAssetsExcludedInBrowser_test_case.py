@@ -128,4 +128,4 @@ class NonMaterialAssetsExcludedInBrowserTest(MaterialEditorHelper):
 
 
 test = NonMaterialAssetsExcludedInBrowserTest()
-test.run_test()
+test.run()

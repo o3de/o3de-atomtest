@@ -107,4 +107,4 @@ class SelectingInBrowserViaViewportTabTest(MaterialEditorHelper):
 
 
 test = SelectingInBrowserViaViewportTabTest()
-test.run_test()
+test.run()
