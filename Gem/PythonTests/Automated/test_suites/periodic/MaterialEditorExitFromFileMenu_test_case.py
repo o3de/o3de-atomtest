@@ -14,7 +14,6 @@ Exiting Client Via File Menu
 import os
 import sys
 import azlmbr.paths
-import ly_test_tools.environment.process_utils as process_utils
 from editor_python_test_tools import pyside_utils
 from PySide2 import QtWidgets
 
@@ -30,7 +29,7 @@ class TestMaterialEditorBasicTests(MaterialEditorHelper):
         """
         Summary:
         Exiting the Material Editor using File Menu
-        1. Make sure Material Editor is open
+        1. Make sure Material Editor main window is visible
         2. Click on Exit option from File Menu
 
         Expected Result:
@@ -39,18 +38,17 @@ class TestMaterialEditorBasicTests(MaterialEditorHelper):
         :return: None
         """
 
-        # 1. Make sure Material Editor is open
-        if process_utils.process_exists('materialeditor.exe'):
-            print("Material Editor process is running")
+        # 1. Make sure Material Editor main window is visible
+        editor_window = pyside_utils.get_editor_main_window()
+        if editor_window.isVisible():
+            print("Material Editor main window is visible")
 
         # 2. Click on Exit option from File Menu
-        editor_window = pyside_utils.get_editor_main_window()
-        print(type(editor_window))
         exit_action = pyside_utils.find_child_by_pattern(editor_window, {"text": "E&xit", "type": QtWidgets.QAction})
         exit_action.trigger()
 
         if not editor_window.isVisible():
-            print("Material Editor closed upon clicking Exit button")
+            print("Material Editor exited from File menu")
 
 
 test = TestMaterialEditorBasicTests()

@@ -14,26 +14,29 @@ import pytest
 
 from Automated.atom_utils import hydra_test_utils as hydra
 
-test_directory = os.path.dirname(__file__)
+TEST_DIRECTORY = os.path.dirname(__file__)
 log_monitor_timeout = 60
 
 
 @pytest.mark.parametrize("project", ["AtomTest"])
 @pytest.mark.parametrize("launcher_platform", ["windows_generic"])
-@pytest.mark.system
 class TestMaterialEditorExitFromFileMenu(object):
     @pytest.mark.parametrize("exe_file_name", ["MaterialEditor"])
     def test_MaterialEditorExitFromFileMenu(
         self, request, workspace, project, launcher_platform, generic_launcher, exe_file_name
     ):
+        """
+        Please review the hydra script run by this test for more specific test info.
+        Test for Exiting Material Editor using File menu -> Exit.
+        """
         hydra.launch_and_validate_results(
             request,
-            test_directory,
+            TEST_DIRECTORY,
             generic_launcher,
             "MaterialEditorExitFromFileMenu_test_case.py",
             timeout=log_monitor_timeout,
-            expected_lines=["Material Editor process is running", "Material Editor closed upon clicking Exit button"],
-            unexpected_lines=[],
+            expected_lines=["Material Editor main window is visible", "Material Editor exited from File menu"],
+            unexpected_lines=["Trace::Assert", "Trace::Error", "Traceback (most recent call last):"],
             halt_on_unexpected=True,
             log_file_name="MaterialEditor.log",
         )
