@@ -17,6 +17,7 @@ from Automated.atom_utils.automated_test_base import TestAutomationBase
 TEST_DIRECTORY = os.path.dirname(__file__)
 LOG_MONITOR_TIMEOUT = 60
 
+
 @pytest.mark.parametrize("project", ["AtomTest"])
 @pytest.mark.parametrize("launcher_platform", ["windows_generic"])
 class TestOpeningFileSourceLocation(TestAutomationBase):
@@ -36,11 +37,9 @@ class TestOpeningFileSourceLocation(TestAutomationBase):
         Please review the hydra script run by this test for more specific test info.
         Tests for Opening File Source Location.
         """
-
         expected_lines = [
             "beach_parking_1k_iblglobalcm.exr opened with relative path: \dev\Gems\Atom\TestData\TestData\LightingPresets in WindowsExplorer",
         ]
-
         unexpected_lines = [
             "Trace::Assert",
             "Trace::Error",
