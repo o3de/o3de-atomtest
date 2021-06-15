@@ -134,6 +134,5 @@ class TestOpeningFileSourceLocation(MaterialEditorHelper):
         EnumWindows(EnumWindowsProc(foreach_window), 0)
         return len(status) > 0
 
-
 test = TestOpeningFileSourceLocation()
 test.run_test()

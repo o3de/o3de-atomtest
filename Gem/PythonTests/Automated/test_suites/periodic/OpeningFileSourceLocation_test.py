@@ -42,8 +42,8 @@ class TestOpeningFileSourceLocation(TestAutomationBase):
         ]
 
         unexpected_lines = [
-            # "Trace::Assert",
-            # "Trace::Error",
+            "Trace::Assert",
+            "Trace::Error",
             "Traceback (most recent call last):",
         ]
 
