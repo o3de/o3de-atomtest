@@ -18,7 +18,6 @@ from Automated.atom_utils.automated_test_base import TestAutomationBase
 TEST_DIRECTORY = os.path.dirname(__file__)
 LOG_MONITOR_TIMEOUT = 60
 
-
 @pytest.mark.parametrize("project", ["AtomTest"])
 @pytest.mark.parametrize("launcher_platform", ["windows_generic"])
 class TestMaterialBrowserSearchAssets(TestAutomationBase):

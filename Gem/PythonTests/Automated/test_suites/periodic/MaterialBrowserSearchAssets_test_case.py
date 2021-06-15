@@ -8,7 +8,6 @@ or, if provided, by the license below or the license accompanying this file. Do 
 remove or modify any license notices. This file is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
-
 Searching Assets in Material Browser
 
 import azlmbr.materialeditor will fail with a ModuleNotFound error when using this script with Editor.exe
