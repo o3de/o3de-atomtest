@@ -15,7 +15,7 @@ import pytest
 from Automated.atom_utils import hydra_test_utils as hydra
 
 TEST_DIRECTORY = os.path.dirname(__file__)
-log_monitor_timeout = 60
+LOG_MONITER_TIMEOUT = 60
 
 
 @pytest.mark.parametrize("project", ["AtomTest"])
@@ -34,7 +34,7 @@ class TestMaterialEditorExitFromFileMenu(object):
             TEST_DIRECTORY,
             generic_launcher,
             "MaterialEditorExitFromFileMenu_test_case.py",
-            timeout=log_monitor_timeout,
+            timeout=LOG_MONITER_TIMEOUT,
             expected_lines=["Material Editor main window is visible", "Material Editor exited from File menu"],
             unexpected_lines=["Trace::Assert", "Trace::Error", "Traceback (most recent call last):"],
             halt_on_unexpected=True,
