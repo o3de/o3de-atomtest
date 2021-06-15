@@ -7,9 +7,6 @@ distribution (the "License"). All use of this software is governed by the Licens
 or, if provided, by the license below or the license accompanying this file. Do not
 remove or modify any license notices. This file is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-
-
-Searching Assets in Material Browser
 """
 
 import os
@@ -24,24 +21,23 @@ LOG_MONITOR_TIMEOUT = 60
 
 @pytest.mark.parametrize("project", ["AtomTest"])
 @pytest.mark.parametrize("launcher_platform", ["windows_generic"])
-@pytest.mark.system
 class TestMaterialBrowserSearchAssets(TestAutomationBase):
     @pytest.mark.parametrize("exe_file_name", ["MaterialEditor"])
-    def test_MaterialBrowserSearchAssets(
+    def test_MaterialBrowser_SearchAssets_FoundSuccessfully(
         self, request, launcher_platform, generic_launcher, exe_file_name,
     ):
-
+        """
+        Please review the hydra script run by this test for more specific test info.
+        Tests searching for assets in the MaterialBrowser.
+        """
         expected_lines = [
-            "Asset Browser opened: True",
             "All materials with the word 'basic' in their names are filtered in Asset Browser: True",
             "basic_grey.material asset is filtered in Asset Browser",
         ]
-
         unexpected_lines = [
             "Trace::Assert",
             "Trace::Error",
             "Traceback (most recent call last):",
-            "Asset Browser opened: False",
             "All materials with the word 'basic' in their names are filtered in Asset Browser: False",
         ]
 

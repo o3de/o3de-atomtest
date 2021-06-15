@@ -18,17 +18,13 @@ You need to launch this script with MaterialEditor.exe in order for azlmbr.mater
 
 import os
 import sys
-
 import azlmbr.paths
 from editor_python_test_tools import pyside_utils
 from PySide2 import QtWidgets, QtCore
-import azlmbr.materialeditor.general as general
 
 sys.path.append(os.path.join(azlmbr.paths.devroot, "AtomTest", "Gem", "PythonTests"))
 
-import Automated.atom_utils.material_editor_utils as material_editor
 from Automated.atom_utils.material_editor_utils import MaterialEditorHelper
-
 
 class TestMaterialBrowserSearchAssets(MaterialEditorHelper):
     def __init__(self):
@@ -40,7 +36,7 @@ class TestMaterialBrowserSearchAssets(MaterialEditorHelper):
         Searching Assets in Material Browser
 
         Test Steps:
-        1) Open Asset Browser
+        1) Initialize QT objects
         2) Search assets with "basic" in Material Browser
         3) Make sure all materials with the word 'basic' in their names are filtered
         4) Search assets with "basic_grey" in Material Browser
@@ -59,27 +55,20 @@ class TestMaterialBrowserSearchAssets(MaterialEditorHelper):
         :return: None
         """
 
-        # 1) Open Asset Browser
-        pane_name = "Asset Browser"
-        result = material_editor.is_pane_visible(pane_name)
-        if not result:
-            material_editor.set_pane_visibility(pane_name, True)
-        result = material_editor.is_pane_visible(pane_name)
-        print(f"{pane_name} opened: {result}")
-        general.idle_wait_frames(3)
+        # 1) Initialize QT objects
+        editor_window = pyside_utils.get_editor_main_window()
+        asset_browser = self.get_asset_browser(editor_window)
+        search_frame = asset_browser.findChild(QtWidgets.QFrame, "m_searchWidget")
+        search_bar = search_frame.findChild(QtWidgets.QWidget, "textSearch")
+        tree = asset_browser.findChild(QtWidgets.QTreeView, "m_assetBrowserTreeViewWidget")
 
         # 2) Search assets with "basic" in Material Browser
-        editor_window = pyside_utils.get_editor_main_window()
-        asset_browser = editor_window.findChildren(QtWidgets.QWidget, "Asset Browser")[0]
-        search_bar = asset_browser.findChildren(QtWidgets.QLineEdit, "textSearch")[0]
         search_bar.setText("basic")
-        general.idle_wait_frames(1)
-        asset_browser_tree = asset_browser.findChild(QtWidgets.QTreeView, "m_assetBrowserTreeViewWidget")
-        asset_browser_tree.expandAll()
+        self.wait_for_condition(lambda: self.find_material_in_browser(tree, "basic.material") is not None, 2.0)
 
         # 3) Make sure all materials with the word 'basic' in their names are filtered
         self.incorrect_file_found = False
-        model = asset_browser_tree.model()
+        model = tree.model()
         indexes = [QtCore.QModelIndex()]
         while len(indexes) > 0:
             parent_index = indexes.pop()
@@ -99,14 +88,44 @@ class TestMaterialBrowserSearchAssets(MaterialEditorHelper):
 
         # 4) Search assets with "basic_grey" in Material Browser
         search_bar.setText("basic_grey.material")
-        general.idle_wait_frames(1)
-        asset_browser_tree = asset_browser.findChild(QtWidgets.QTreeView, "m_assetBrowserTreeViewWidget")
-        model_index = pyside_utils.find_child_by_pattern(asset_browser_tree, "basic_grey.material")
+        self.wait_for_condition(lambda: self.find_material_in_browser(tree, "basic_grey.material") is not None, 2.0)
+        tree = asset_browser.findChild(QtWidgets.QTreeView, "m_assetBrowserTreeViewWidget")
+        model_index = pyside_utils.find_child_by_pattern(tree, "basic_grey.material")
 
         # 5) Make sure basic_grey.material asset is filtered only
-        if (asset_browser_tree.indexBelow(model_index)) == (QtCore.QModelIndex()) and model_index is not None:
+        if (tree.indexBelow(model_index)) == (QtCore.QModelIndex()) and model_index is not None:
             print("basic_grey.material asset is filtered in Asset Browser")
 
+    def get_asset_browser(self, editor_window):
+        """
+        Opens the Asset Browser if not opened already and returns the Qt object of Asset Browser
+        :param editor_window - editor_window Qt object
+        :returns asset_browser - Qt object
+        """
+        asset_browser = self.get_asset_browser_dock_widget(editor_window)
+        if asset_browser is None or not asset_browser.isVisible():
+            action = pyside_utils.find_child_by_pattern(editor_window, {"iconText": "Asset Browser"})
+            action.trigger()
+        self.wait_for_condition(lambda: self.get_asset_browser_dock_widget(editor_window) is not None)
+        asset_browser = self.get_asset_browser_dock_widget(editor_window)
+        return asset_browser
+
+    def get_asset_browser_dock_widget(self, editor_window):
+        """
+        Returns the Qt object of Asset Browser
+        :param editor_window - editor_window Qt object
+        :returns asset_browser - Qt object (QDockWidget)
+        """
+        return editor_window.findChild(QtWidgets.QDockWidget, "Asset Browser_DockWidget")
+
+    def find_material_in_browser(self, tree, MATERIAL_NAME):
+        """
+        Finds a material in Asset Browser tree
+        :param tree - QTreeView object to be searched
+        :returns QModelIndex if material is found, else None
+        """
+        tree.expandAll()
+        return pyside_utils.find_child_by_pattern(tree, MATERIAL_NAME) is not None
 
 test = TestMaterialBrowserSearchAssets()
-test.run()
+test.run_test()
