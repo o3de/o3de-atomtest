@@ -66,8 +66,8 @@ class TestOpeningFileSourceLocation(MaterialEditorHelper):
         pyside_utils.trigger_context_menu_entry(tree, "Open in Explorer", index=model_index)
 
         # 4) Make sure beach_parking_1k_iblglobalcm.exr opened with relative path: \dev\Gems\Atom\TestData\TestData\LightingPresets in WindowsExplorer
-        self.wait_for_condition(lambda: self.window_exists("LightingPresets"), 2.0)
-        if self.window_exists("LightingPresets"):
+        result = self.wait_for_condition(lambda: self.window_exists("LightingPresets"), 2.0)
+        if result:
             print(
                 "beach_parking_1k_iblglobalcm.exr opened with relative path: \dev\Gems\Atom\TestData\TestData\LightingPresets in WindowsExplorer"
             )
@@ -107,7 +107,7 @@ class TestOpeningFileSourceLocation(MaterialEditorHelper):
         """
         Finds a material is opened or not in Windows Explorer
         :param title - Window title to be searched
-        :returns 1 If Window found, else 0
+        :returns True If Window found, else False
         """
         EnumWindows = ctypes.windll.user32.EnumWindows
         EnumWindowsProc = ctypes.WINFUNCTYPE(ctypes.c_bool, ctypes.POINTER(ctypes.c_int), ctypes.POINTER(ctypes.c_int))
