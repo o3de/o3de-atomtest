@@ -6,9 +6,6 @@ distribution (the "License"). All use of this software is governed by the Licens
 or, if provided, by the license below or the license accompanying this file. Do not
 remove or modify any license notices. This file is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-
-
-Opening Material via Asset Browser
 """
 
 import os
@@ -23,24 +20,24 @@ LOG_MONITOR_TIMEOUT = 60
 
 @pytest.mark.parametrize("project", ["AtomTest"])
 @pytest.mark.parametrize("launcher_platform", ["windows_generic"])
-@pytest.mark.system
 class TestOpeningMaterialAssetBrowser(TestAutomationBase):
     @pytest.mark.parametrize("exe_file_name", ["MaterialEditor"])
-    def test_OpeningMaterialAssetBrowser(
-        self, request, project, workspace, launcher_platform, generic_launcher, exe_file_name
+    def test_OpeningMaterial_InMaterialBrowser_OpenedSuccessfully(
+        self, request, launcher_platform, generic_launcher, exe_file_name
     ):
-
+        """
+        Please review the hydra script run by this test for more specific test info.
+        Test for opening material in Material Browser.
+        """
         expected_lines = [
-            "Asset Browser opened: True",
             "basic_grey.material asset is filtered in Asset Browser",
-            "basic_grey.material opened in viewport: True"
+            "basic_grey.material opened in viewport: True",
         ]
-
         unexpected_lines = [
             "Trace::Assert",
             "Trace::Error",
             "Traceback (most recent call last):",
-            "basic_grey.material opened in viewport: False"
+            "basic_grey.material opened in viewport: False",
         ]
 
         hydra.launch_and_validate_results(
@@ -54,4 +51,3 @@ class TestOpeningMaterialAssetBrowser(TestAutomationBase):
             halt_on_unexpected=True,
             log_file_name="MaterialEditor.log",
         )
-
