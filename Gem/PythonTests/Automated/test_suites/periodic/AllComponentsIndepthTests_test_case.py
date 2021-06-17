@@ -88,8 +88,32 @@ def run():
         material.
     18. Selects the "directional_light" entity and enables the Directional Light component.
     19. Selects the "global_skylight" entity and enables the HDRi Skybox component & Global Skylight (IBL) component.
-    20. Prints general.log("Component tests completed") when completely finished with the test.
+    
+    Test Case - Grid:
+    1. Selects the "default_level" entity.
+    2. Select Grid component inside default_entity.
+    3. Change the Grid Size value to 64.
+    4. Enters game mode to take a screenshot for comparison, then exits game mode.
+    5. Change the Axis Color to: 13,255,0
+    6. Enters game mode to take a screenshot for comparison, then exits game mode.
+    7. Change the Primary Grid Spacing value to: 0.5
+    8. Enters game mode to take a screenshot for comparison, then exits game mode.
+    9. Change the Primary Color to: 129,96,0
+    10. Enters game mode to take a screenshot for comparison, then exits game mode.
+    11. Change the Secondary Grid Spacing value to: 0.75
+    12. Enters game mode to take a screenshot for comparison, then exits game mode.
+    13. Change the Secondary Color to: 0,35,161
+    14. Enters game mode to take a screenshot for comparison, then exits game mode.
+    15. Change the values back to original values like below
+        Grid Size value to 32.
+        Axis Color to: 0,0,255.
+        Primary Grid Spacing value to: 1.0.
+        Primary Color to: 64,64,64.
+        Secondary Grid Spacing value to: 1.0.
+        Secondary Color to: 128,128,128.
 
+    Finally prints the string "Component tests completed" after completion
+    
     Tests will fail immediately if any of these log lines are found:
     1. Trace::Assert
     2. Trace::Error
