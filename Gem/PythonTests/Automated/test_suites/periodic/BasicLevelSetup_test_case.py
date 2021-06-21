@@ -69,7 +69,6 @@ def run():
         general.log(general.get_viewport_size().y)
         general.log(general.get_viewport_size().z)
         general.log(f"Viewport is set to the expected size: {result}")
-        general.log("Basic level created")
         general.run_console("r_DisplayInfo = 0")
 
     def after_level_load():
@@ -121,7 +120,6 @@ def run():
 
     # Basic setup for newly created level.
     after_level_load()
-    initial_viewport_setup(SCREEN_WIDTH, SCREEN_HEIGHT)
 
     # Create default_level entity
     hydra.delete_all_existing_entities()
@@ -129,6 +127,9 @@ def run():
     position = math.Vector3(0.0, 0.0, 0.0)
     default_level.create_entity(position, ["Grid"])
     default_level.get_set_test(0, "Controller|Configuration|Secondary Grid Spacing", 1.0)
+
+    # Set the viewport up correctly after adding the parent default_level entity.
+    initial_viewport_setup(SCREEN_WIDTH, SCREEN_HEIGHT)
 
     # Create global_skylight entity and set the properties
     global_skylight = hydra.Entity("global_skylight")

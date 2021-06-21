@@ -21,7 +21,7 @@ from Automated.atom_utils import hydra_test_utils as hydra
 from Automated.atom_utils.automated_test_base import TestAutomationBase
 from Automated.atom_utils.automated_test_base import DEFAULT_SUBFOLDER_PATH
 
-EDITOR_TIMEOUT = 240
+EDITOR_TIMEOUT = 60
 TEST_DIRECTORY = os.path.dirname(__file__)
 
 
