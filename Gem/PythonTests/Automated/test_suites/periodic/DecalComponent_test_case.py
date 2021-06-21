@@ -71,9 +71,8 @@ def SetEntityPosition(entity, x, y, z):
     azlmbr.components.TransformBus(azlmbr.bus.Event, "SetWorldTranslation", entity, position)
 
 
-def SetEntityScale(entity, x, y, z):
-    scale = azlmbr.math.Vector3(x, y, z)
-    azlmbr.components.TransformBus(azlmbr.bus.Event, "SetScale", entity, scale)
+def SetEntityScale(entity, scale):
+    azlmbr.components.TransformBus(azlmbr.bus.Event, "SetLocalUniformScale", entity, scale)
 
 
 def SetRotationX(entity, degrees):
@@ -158,7 +157,7 @@ def CreateAngleAttenuationTestDecal():
 def CreatePlane():
     planeId = helper_create_entity_with_mesh('objects/plane.azmodel')
     SetEntityPosition(planeId, 0.0, 0.0, 0.0)
-    SetEntityScale(planeId, 10.0, 10.0, 10.0)
+    SetEntityScale(planeId, 10.0)
 
 
 def MoveCamera():

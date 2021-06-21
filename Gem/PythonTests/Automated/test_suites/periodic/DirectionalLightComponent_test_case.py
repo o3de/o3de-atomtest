@@ -160,7 +160,7 @@ def prepare_for_floor_and_bunny(base_entity):
 
     # Move the plane to beneath the bunny and scale the plane to be a shadow catcher.
     components.TransformBus(bus.Event, 'SetLocalTranslation', floor, azlmbr.math.Vector3(0.0, 0.0, 0.8))
-    components.TransformBus(bus.Event, 'SetLocalScale', floor, azlmbr.math.Vector3(20.0, 20.0, 1.0))
+    components.TransformBus(bus.Event, "SetLocalUniformScale", floor, 20.0)
 
 
 def prepare_for_directional_light_component(base_entity):
