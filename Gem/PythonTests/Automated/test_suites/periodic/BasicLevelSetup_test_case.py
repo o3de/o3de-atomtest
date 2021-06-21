@@ -133,22 +133,27 @@ def run():
     # Create global_skylight entity and set the properties
     global_skylight = hydra.Entity("global_skylight")
     global_skylight.create_entity(
-        components=["HDRi Skybox", "Global Skylight (IBL)"], parent_id=default_level.id
-    )
-    asset_value = hydra.get_asset_by_path(
-        os.path.join("LightingPresets", "greenwich_park_02_4k_iblskyboxcm_iblspecular.exr.streamingimage")
-    )
-    global_skylight.get_set_test(0, "Controller|Configuration|Cubemap Texture", asset_value)
-    global_skylight.get_set_test(1, "Controller|Configuration|Diffuse Image", asset_value)
-    global_skylight.get_set_test(1, "Controller|Configuration|Specular Image", asset_value)
+        entity_position=math.Vector3(0.0, 0.0, 0.0),
+        components=["HDRi Skybox", "Global Skylight (IBL)"],
+        parent_id=default_level.id)
+    global_skylight_asset_path = os.path.join(
+        "LightingPresets", "greenwich_park_02_4k_iblskyboxcm_iblspecular.exr.streamingimage")
+    global_skylight_asset_value = hydra.get_asset_by_path(global_skylight_asset_path)
+    global_skylight.get_set_test(0, "Controller|Configuration|Cubemap Texture", global_skylight_asset_value)
+    global_skylight.get_set_test(1, "Controller|Configuration|Diffuse Image", global_skylight_asset_value)
+    global_skylight.get_set_test(1, "Controller|Configuration|Specular Image", global_skylight_asset_value)
 
     # Create ground_plane entity and set the properties
     ground_plane = hydra.Entity("ground_plane")
-    scale = math.Vector3(32.0, 32.0, 1.0)
-    ground_plane.create_entity(components=["Material"], parent_id=default_level.id)
-    azlmbr.components.TransformBus(azlmbr.bus.Event, "SetLocalScale", ground_plane.id, scale)
-    asset_value = hydra.get_asset_by_path(os.path.join("Materials", "Presets", "PBR", "metal_chrome.azmaterial"))
-    ground_plane.get_set_test(0, "Default Material|Material Asset", asset_value)
+    ground_plane.create_entity(
+        entity_position=math.Vector3(0.0, 0.0, 0, 0),
+        components=["Material"],
+        parent_id=default_level.id)
+    azlmbr.components.TransformBus(azlmbr.bus.Event, "SetLocalUniformScale", ground_plane.id, 32.0)
+    ground_plane_material_asset_path = os.path.join(
+        "AtomTest", "Materials", "Presets", "PBR", "metal_chrome.azmaterial")
+    ground_plane_material_asset_value = hydra.get_asset_by_path(ground_plane_material_asset_path)
+    ground_plane.get_set_test(0, "Default Material|Material Asset", ground_plane_material_asset_value)
     # Work around to add the correct Atom Mesh component
     mesh_type_id = azlmbr.globals.property.EditorMeshComponentTypeId
     ground_plane.components.append(
@@ -156,41 +161,44 @@ def run():
             bus.Broadcast, "AddComponentsOfType", ground_plane.id, [mesh_type_id]
         ).GetValue()[0]
     )
-    asset_value = hydra.get_asset_by_path(os.path.join("Objects", "plane.azmodel"))
-    ground_plane.get_set_test(1, "Controller|Configuration|Mesh asset", asset_value)
+    ground_plane_mesh_asset_path = os.path.join("AtomTest", "Objects", "plane.azmodel")
+    ground_plane_mesh_asset_value = hydra.get_asset_by_path(ground_plane_mesh_asset_path)
+    hydra.get_set_test(ground_plane, 1, "Controller|Configuration|Mesh Asset", ground_plane_mesh_asset_value)
 
     # Create directional_light entity and set the properties
     directional_light = hydra.Entity("directional_light")
-    position = math.Vector3(0.0, 0.0, 10.0)
     directional_light.create_entity(
-        components=["Directional Light"], entity_position=position, parent_id=default_level.id
-    )
+        entity_position=math.Vector3(0.0, 0.0, 10.0),
+        components=["Directional Light"],
+        parent_id=default_level.id)
     rotation = math.Vector3(DEGREE_RADIAN_FACTOR * -90.0, 0.0, 0.0)
     azlmbr.components.TransformBus(azlmbr.bus.Event, "SetLocalRotation", directional_light.id, rotation)
 
     # Create sphere entity and set the properties
     sphere = hydra.Entity("sphere")
-    position = math.Vector3(0.0, 0.0, 1.0)
     sphere.create_entity(
-        components=["Material"], entity_position=position, parent_id=default_level.id
-    )
-    asset_value = hydra.get_asset_by_path(
-        os.path.join("Materials", "Presets", "PBR", "metal_brass_polished.azmaterial")
-    )
-    sphere.get_set_test(0, "Default Material|Material Asset", asset_value)
+        entity_position=math.Vector3(0.0, 0.0, 1.0),
+        components=["Material"],
+        parent_id=default_level.id)
+    sphere_material_asset_path = os.path.join("Materials", "Presets", "PBR", "metal_brass_polished.azmaterial")
+    sphere_material_asset_value = hydra.get_asset_by_path(sphere_material_asset_path)
+    sphere.get_set_test(0, "Default Material|Material Asset", sphere_material_asset_value)
     # Work around to add the correct Atom Mesh component
     sphere.components.append(
         editor.EditorComponentAPIBus(
             bus.Broadcast, "AddComponentsOfType", sphere.id, [mesh_type_id]
         ).GetValue()[0]
     )
-    asset_value = hydra.get_asset_by_path(os.path.join("Objects", "sphere.azmodel"))
-    sphere.get_set_test(1, "Controller|Configuration|Mesh asset", asset_value)
+    sphere_mesh_asset_path = os.path.join("Models", "sphere.azmodel")
+    sphere_mesh_asset_value = hydra.get_asset_by_path(sphere_mesh_asset_path)
+    hydra.get_set_test(sphere, 1, "Controller|Configuration|Mesh Asset", sphere_mesh_asset_value)
 
     # Create camera component and set the properties
     camera = hydra.Entity("camera")
-    position = math.Vector3(5.5, -12.0, 9.0)
-    camera.create_entity(components=["Camera"], entity_position=position, parent_id=default_level.id)
+    camera.create_entity(
+        entity_position=math.Vector3(5.5, -12.0, 9.0),
+        components=["Camera"],
+        parent_id=default_level.id)
     rotation = math.Vector3(
         DEGREE_RADIAN_FACTOR * -27.0, DEGREE_RADIAN_FACTOR * -12.0, DEGREE_RADIAN_FACTOR * 25.0
     )
