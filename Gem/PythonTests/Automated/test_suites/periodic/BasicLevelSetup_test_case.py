@@ -133,7 +133,7 @@ def run():
     # Create global_skylight entity and set the properties
     global_skylight = hydra.Entity("global_skylight")
     global_skylight.create_entity(
-        entity_position=math.Vector3(0.0, 0.0, 0.0),
+        entity_position=None,
         components=["HDRi Skybox", "Global Skylight (IBL)"],
         parent_id=default_level.id)
     global_skylight_asset_path = os.path.join(
@@ -146,12 +146,12 @@ def run():
     # Create ground_plane entity and set the properties
     ground_plane = hydra.Entity("ground_plane")
     ground_plane.create_entity(
-        entity_position=math.Vector3(0.0, 0.0, 0, 0),
+        entity_position=None,
         components=["Material"],
         parent_id=default_level.id)
     azlmbr.components.TransformBus(azlmbr.bus.Event, "SetLocalUniformScale", ground_plane.id, 32.0)
     ground_plane_material_asset_path = os.path.join(
-        "AtomTest", "Materials", "Presets", "PBR", "metal_chrome.azmaterial")
+        "Materials", "Presets", "PBR", "metal_chrome.azmaterial")
     ground_plane_material_asset_value = hydra.get_asset_by_path(ground_plane_material_asset_path)
     ground_plane.get_set_test(0, "Default Material|Material Asset", ground_plane_material_asset_value)
     # Work around to add the correct Atom Mesh component
@@ -161,7 +161,7 @@ def run():
             bus.Broadcast, "AddComponentsOfType", ground_plane.id, [mesh_type_id]
         ).GetValue()[0]
     )
-    ground_plane_mesh_asset_path = os.path.join("AtomTest", "Objects", "plane.azmodel")
+    ground_plane_mesh_asset_path = os.path.join("Objects", "plane.azmodel")
     ground_plane_mesh_asset_value = hydra.get_asset_by_path(ground_plane_mesh_asset_path)
     hydra.get_set_test(ground_plane, 1, "Controller|Configuration|Mesh Asset", ground_plane_mesh_asset_value)
 
