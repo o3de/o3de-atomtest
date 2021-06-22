@@ -49,7 +49,7 @@ class TestReloadingConfigurationFiles(MaterialEditorHelper):
 
         # 1) Initialize QT objects
         editor_window = pyside_utils.get_editor_main_window()
-        self.get_viewport_settings(editor_window)
+        self.open_viewport_settings(editor_window)
         model_settings = editor_window.findChild(QtWidgets.QWidget, "modelSettings")
 
         # 2) Select "Reload Config Files" in File Menu
@@ -58,7 +58,7 @@ class TestReloadingConfigurationFiles(MaterialEditorHelper):
         )
         push_button.click()
 
-    def get_viewport_settings(self, editor_window):
+    def open_viewport_settings(self, editor_window):
         """
         Opens the Viewport Settings if not opened already and returns the Qt object of Viewport Settings
         :param editor_window - editor_window Qt object
