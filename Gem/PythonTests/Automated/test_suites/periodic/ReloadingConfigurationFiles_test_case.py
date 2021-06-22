@@ -49,17 +49,13 @@ class TestReloadingConfigurationFiles(MaterialEditorHelper):
 
         # 1) Initialize QT objects
         editor_window = pyside_utils.get_editor_main_window()
-        viewport_dockwidget = self.get_viewport_settings(editor_window)
-        viewport_settings = viewport_dockwidget.findChild(QtWidgets.QWidget, "Viewport Settings")
-        scroll_area = viewport_settings.findChild(QtWidgets.QWidget, "m_propertyScrollArea")
-        scroll_area_viewport = scroll_area.findChild(QtWidgets.QWidget, "qt_scrollarea_viewport")
-        scroll_area_widget = scroll_area_viewport.findChild(QtWidgets.QWidget, "scrollAreaWidgetContents")
-        property_content = scroll_area_widget.findChild(QtWidgets.QFrame, "m_propertyContent")
-        model_settings = property_content.findChild(QtWidgets.QWidget, "modelSettings")
-        widget = model_settings.children()[0]
+        self.get_viewport_settings(editor_window)
+        model_settings = editor_window.findChild(QtWidgets.QWidget, "modelSettings")
 
         # 2) Select "Reload Config Files" in File Menu
-        push_button = widget.children()[3]
+        push_button = pyside_utils.find_child_by_pattern(
+            model_settings, {"text": "Refresh", "type": QtWidgets.QPushButton}
+        )
         push_button.click()
 
     def get_viewport_settings(self, editor_window):
@@ -85,4 +81,4 @@ class TestReloadingConfigurationFiles(MaterialEditorHelper):
         return editor_window.findChild(QtWidgets.QDockWidget, "Viewport Settings_DockWidget")
 
 test = TestReloadingConfigurationFiles()
-test.run_test()
+test.run()
