@@ -8,18 +8,22 @@ or, if provided, by the license below or the license accompanying this file. Do 
 remove or modify any license notices. This file is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 """
+import collections.abc
+import os
 from typing import List
 from math import isclose
-import collections.abc
 
 import azlmbr.bus as bus
 import azlmbr.editor as editor
 import azlmbr.entity as entity
+import azlmbr.legacy.general as general
 import azlmbr.math as math
 import azlmbr.asset as asset
 import azlmbr.camera as camera
 import azlmbr.object
 from azlmbr.entity import EntityType
+
+from Automated.atom_utils.automated_test_utils import TestHelper as helper
 
 
 def find_entity_by_name(entity_name):
@@ -505,3 +509,206 @@ def helper_create_entity_with_mesh(path_to_mesh, offset=azlmbr.math.Vector3(0.0,
         print('Failed to set mesh asset property')
 
     return myEntityId
+
+
+def initial_viewport_setup(screen_width, screen_height):
+    """
+    Initial viewport setup for a test to keep screenshots consistent.
+    :param screen_width: integer representing the screen resolution width.
+    :param screen_height: integer representing the screen resolution height.
+    :return: None
+    """
+    general.set_viewport_size(screen_width, screen_height)
+    general.update_viewport()
+    helper.wait_for_condition(
+        function=lambda: helper.isclose(a=general.get_viewport_size().x, b=screen_width, rel_tol=0.1)
+        and helper.isclose(a=general.get_viewport_size().y, b=screen_height, rel_tol=0.1),
+        timeout_in_seconds=4.0
+    )
+    result = helper.isclose(a=general.get_viewport_size().x, b=screen_width, rel_tol=0.1) and helper.isclose(
+        a=general.get_viewport_size().y, b=screen_height, rel_tol=0.1)
+    general.log(general.get_viewport_size().x)
+    general.log(general.get_viewport_size().y)
+    general.log(general.get_viewport_size().z)
+    general.log(f"Viewport is set to the expected size: {result}")
+    general.log("Basic level created")
+    general.run_console("r_DisplayInfo = 0")
+
+
+def after_level_load():
+    """Function to call after creating/opening a level to ensure it loads."""
+    # Give everything a second to initialize.
+    general.idle_enable(True)
+    general.idle_wait(1.0)
+    general.update_viewport()
+    general.idle_wait(0.5)  # half a second is more than enough for updating the viewport.
+
+    # Close out problematic windows, FPS meters, and anti-aliasing.
+    if general.is_helpers_shown():  # Turn off the helper gizmos if visible
+        general.toggle_helpers()
+        general.idle_wait(1.0)
+    if general.is_pane_visible("Error Report"):  # Close Error Report windows that block focus.
+        general.close_pane("Error Report")
+    if general.is_pane_visible("Error Log"):  # Close Error Log windows that block focus.
+        general.close_pane("Error Log")
+    general.idle_wait(1.0)
+    general.run_console("r_displayInfo=0")
+    general.run_console("r_antialiasingmode=0")
+    general.idle_wait(1.0)
+
+    return True
+
+
+def create_basic_atom_level(level_name):
+    """
+    Creates a new level inside the Editor matching level_name & adds the following:
+    1. "default_level" entity to hold all other entities.
+    2. Adds Grid, Global Skylight (IBL), ground Mesh, Directional Light, Sphere w/ material+mesh, & Camera components.
+    3. Each of these components has its settings tweaked slightly to match the ideal scene to test Atom rendering.
+    :param level_name: name of the level to create and apply this basic setup to.
+    :return: None
+    """
+    # Create a new level.
+    new_level_name = level_name
+    heightmap_resolution = 512
+    heightmap_meters_per_pixel = 1
+    terrain_texture_resolution = 412
+    use_terrain = False
+
+    # Return codes are ECreateLevelResult defined in CryEdit.h
+    return_code = general.create_level_no_prompt(
+        new_level_name, heightmap_resolution, heightmap_meters_per_pixel, terrain_texture_resolution, use_terrain)
+    if return_code == 1:
+        general.log(f"{new_level_name} level already exists")
+    elif return_code == 2:
+        general.log("Failed to create directory")
+    elif return_code == 3:
+        general.log("Directory length is too long")
+    elif return_code != 0:
+        general.log("Unknown error, failed to create level")
+    else:
+        general.log(f"{new_level_name} level created successfully")
+
+    # Basic setup for newly created level.
+    after_level_load()
+
+    # Create default_level entity
+    delete_all_existing_entities()
+    default_level = Entity("default_level")
+    position = math.Vector3(0.0, 0.0, 0.0)
+    default_level.create_entity(position, ["Grid"])
+    default_level.get_set_test(0, "Controller|Configuration|Secondary Grid Spacing", 1.0)
+
+    # Set the viewport up correctly after adding the parent default_level entity.
+    screen_width = 1280
+    screen_height = 720
+    degree_radian_factor = 0.0174533  # Used by "Rotation" property for the Transform component.
+    initial_viewport_setup(screen_width, screen_height)
+
+    # Create global_skylight entity and set the properties
+    global_skylight = Entity("global_skylight")
+    global_skylight.create_entity(
+        entity_position=None,
+        components=["HDRi Skybox", "Global Skylight (IBL)"],
+        parent_id=default_level.id)
+    global_skylight_asset_path = os.path.join(
+        "LightingPresets", "greenwich_park_02_4k_iblskyboxcm_iblspecular.exr.streamingimage")
+    global_skylight_asset_value = get_asset_by_path(global_skylight_asset_path)
+    global_skylight.get_set_test(0, "Controller|Configuration|Cubemap Texture", global_skylight_asset_value)
+    global_skylight.get_set_test(1, "Controller|Configuration|Diffuse Image", global_skylight_asset_value)
+    global_skylight.get_set_test(1, "Controller|Configuration|Specular Image", global_skylight_asset_value)
+
+    # Create ground_plane entity and set the properties
+    ground_plane = Entity("ground_plane")
+    ground_plane.create_entity(
+        entity_position=None,
+        components=["Material"],
+        parent_id=default_level.id)
+    azlmbr.components.TransformBus(azlmbr.bus.Event, "SetLocalUniformScale", ground_plane.id, 32.0)
+    ground_plane_material_asset_path = os.path.join(
+        "Materials", "Presets", "PBR", "metal_chrome.azmaterial")
+    ground_plane_material_asset_value = get_asset_by_path(ground_plane_material_asset_path)
+    ground_plane.get_set_test(0, "Default Material|Material Asset", ground_plane_material_asset_value)
+    # Work around to add the correct Atom Mesh component
+    mesh_type_id = azlmbr.globals.property.EditorMeshComponentTypeId
+    ground_plane.components.append(
+        editor.EditorComponentAPIBus(
+            bus.Broadcast, "AddComponentsOfType", ground_plane.id, [mesh_type_id]
+        ).GetValue()[0]
+    )
+    ground_plane_mesh_asset_path = os.path.join("Objects", "plane.azmodel")
+    ground_plane_mesh_asset_value = get_asset_by_path(ground_plane_mesh_asset_path)
+    get_set_test(ground_plane, 1, "Controller|Configuration|Mesh Asset", ground_plane_mesh_asset_value)
+
+    # Create directional_light entity and set the properties
+    directional_light = Entity("directional_light")
+    directional_light.create_entity(
+        entity_position=math.Vector3(0.0, 0.0, 10.0),
+        components=["Directional Light"],
+        parent_id=default_level.id)
+    directional_light_rotation = math.Vector3(degree_radian_factor * -90.0, 0.0, 0.0)
+    azlmbr.components.TransformBus(
+        azlmbr.bus.Event, "SetLocalRotation", directional_light.id, directional_light_rotation)
+
+    # Create sphere entity and set the properties
+    sphere = Entity("sphere")
+    sphere.create_entity(
+        entity_position=math.Vector3(0.0, 0.0, 1.0),
+        components=["Material"],
+        parent_id=default_level.id)
+    sphere_material_asset_path = os.path.join("Materials", "Presets", "PBR", "metal_brass_polished.azmaterial")
+    sphere_material_asset_value = get_asset_by_path(sphere_material_asset_path)
+    sphere.get_set_test(0, "Default Material|Material Asset", sphere_material_asset_value)
+    # Work around to add the correct Atom Mesh component
+    sphere.components.append(
+        editor.EditorComponentAPIBus(
+            bus.Broadcast, "AddComponentsOfType", sphere.id, [mesh_type_id]
+        ).GetValue()[0]
+    )
+    sphere_mesh_asset_path = os.path.join("Models", "sphere.azmodel")
+    sphere_mesh_asset_value = get_asset_by_path(sphere_mesh_asset_path)
+    get_set_test(sphere, 1, "Controller|Configuration|Mesh Asset", sphere_mesh_asset_value)
+
+    # Create camera component and set the properties
+    camera = Entity("camera")
+    camera.create_entity(
+        entity_position=math.Vector3(5.5, -12.0, 9.0),
+        components=["Camera"],
+        parent_id=default_level.id)
+    rotation = math.Vector3(
+        degree_radian_factor * -27.0, degree_radian_factor * -12.0, degree_radian_factor * 25.0
+    )
+    azlmbr.components.TransformBus(azlmbr.bus.Event, "SetLocalRotation", camera.id, rotation)
+    camera.get_set_test(0, "Controller|Configuration|Field of view", 60.0)
+    be_this_camera(camera.id)
+
+
+def level_load_save(level_name, entities_to_search):
+    """
+    Opens an existing level matching level_name, then optionally verifies certain expected entities exist in the level.
+    :param level_name: name of the level to load and then save, ex. "Emptylevel"
+    :param entities_to_search: list of entity names to search for in the level, ex. ["default_level", "sphere"]
+    :return:
+    """
+    general.open_level_no_prompt(level_name)
+    helper.wait_for_condition(lambda: level_name in general.get_current_level_name(), 5.0)
+
+    # Ensure the level is saved by checking if all the entities are present
+    search_filter = azlmbr.entity.SearchFilter()
+    search_filter.names = entities_to_search
+    result = len(entity.SearchBus(azlmbr.bus.Broadcast, "SearchEntities", search_filter)) == len(entities_to_search)
+    general.log(f"Level is saved successfully: {result}")
+
+    # Create new entity
+    temp_entity = Entity("temp_entity")
+    temp_entity.create_entity()
+    search_filter = azlmbr.entity.SearchFilter()
+    search_filter.names = ["temp_entity"]
+    result = len(entity.SearchBus(azlmbr.bus.Broadcast, "SearchEntities", search_filter)) == 1
+    general.log(f"New entity created: {result}")
+
+    # Delete the new entity
+    editor.ToolsApplicationRequestBus(bus.Broadcast, "DeleteEntityById", temp_entity.id)
+    result = len(entity.SearchBus(azlmbr.bus.Broadcast, "SearchEntities", search_filter)) == 0
+    general.log(f"New entity deleted: {result}")
+    general.save_level()

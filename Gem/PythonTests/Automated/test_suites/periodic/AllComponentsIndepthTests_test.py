@@ -32,7 +32,7 @@ class AllComponentsIndepthTestsException(Exception):
 
 @pytest.mark.parametrize("project", ["AtomTest"])
 @pytest.mark.parametrize("launcher_platform", ["windows_editor"])
-@pytest.mark.parametrize("level", ["all_components_indepth_level"])
+@pytest.mark.parametrize("level", ["EmptyLevel"])
 class TestAllComponentsIndepthTests(TestAutomationBase):
 
     @pytest.mark.parametrize("screenshot_name", ["AtomBasicLevelSetup.ppm"])
@@ -43,9 +43,6 @@ class TestAllComponentsIndepthTests(TestAutomationBase):
         Please review the hydra script run by this test for more specific test info.
         Tests that a basic rendering level setup can be created (lighting, meshes, materials, etc.).
         """
-        # Clear the test level to start the test.
-        file_system.delete([os.path.join(workspace.paths.engine_root(), project, "Levels", level)], True, True)
-
         cache_images = [os.path.join(
             workspace.paths.engine_root(), project, DEFAULT_SUBFOLDER_PATH, screenshot_name)]
         self.remove_artifacts(cache_images)
@@ -79,17 +76,6 @@ class TestAllComponentsIndepthTests(TestAutomationBase):
 
     def test_ComponentsInBasicLevel_ScreenshotsMatchGoldenImages(
             self, request, editor, workspace, project, launcher_platform, level, golden_images_directory):
-        basic_level = os.path.join(workspace.paths.engine_root(), project, "Levels", level)
-        if not os.path.exists(basic_level):
-            raise AllComponentsIndepthTestsException(
-                f'Level "{level}" does not exist at path: "{basic_level}"\n'
-                'Please run the "BasicLevelSetup_SetsUpLevel()" test first. '
-                'You may also run the hydra script "BasicLevelSetup_test_case.py" directly to create the level.')
-
-        def teardown():
-            file_system.delete([os.path.join(workspace.paths.engine_root(), project, "Levels", level)], True, True)
-        request.addfinalizer(teardown)
-
         screenshot_names = [
             "AreaLight_1.ppm",
             "AreaLight_2.ppm",

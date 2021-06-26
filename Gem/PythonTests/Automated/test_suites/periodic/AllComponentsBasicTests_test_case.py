@@ -242,6 +242,13 @@ def run():
         lambda entity_obj: verify_required_component_addition(entity_obj, ["Box Shape"], reflection_probe),
         lambda entity_obj: verify_cubemap_generation(reflection_probe, entity_obj),)
 
+    # Light Component
+    light_component = "Light"
+    ComponentTests(
+        light_component,
+        lambda entity_obj: verify_set_property(
+            entity_obj, "Controller|Configuration|Light Type", "Capsule"))
+
 
 if __name__ == "__main__":
     run()
