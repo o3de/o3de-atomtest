@@ -119,9 +119,9 @@ class TestAllComponentsIndepthTests(TestAutomationBase):
             "area_light_test: Component added to the entity: True",
             "area_light_test: Entered game mode: True",
             "area_light_test: Exit game mode: True",
-            f"area_light_test: Light type is {capsule_light_type} which matches {capsule_light_type}",
-            f"area_light_test: Light type is {spot_disk_light_type} which matches {spot_disk_light_type}",
-            f"area_light_test: Light type is {point_sphere_light_type} which matches {point_sphere_light_type}",
+            f"area_light_test: Property value is {capsule_light_type} which matches {capsule_light_type}",
+            f"area_light_test: Property value is {spot_disk_light_type} which matches {spot_disk_light_type}",
+            f"area_light_test: Property value is {point_sphere_light_type} which matches {point_sphere_light_type}",
             # Spot Light Component
             "spot_light Entity successfully created",
             "spot_light_test: Component added to the entity: True",

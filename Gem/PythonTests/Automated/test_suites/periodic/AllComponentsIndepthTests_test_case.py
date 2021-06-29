@@ -203,9 +203,9 @@ class TestAllComponentsIndepthTests(object):
         :param expected_property_value: The value expected from the value inside property_path.
         :return: None, but prints to general.log() which the test uses to verify against.
         """
-        light_type_property_value = editor.EditorComponentAPIBus(
+        property_value = editor.EditorComponentAPIBus(
             bus.Broadcast, "GetComponentProperty", component, property_path).GetValue()
-        general.log(f"{entity_name}_test: Light type is {light_type_property_value} "
+        general.log(f"{entity_name}_test: Property value is {property_value} "
                     f"which matches {expected_property_value}")
 
     def take_screenshot_game_mode(self, screenshot_name):
