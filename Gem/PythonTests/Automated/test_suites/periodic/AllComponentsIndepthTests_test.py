@@ -15,11 +15,10 @@ Utilizes screenshots & log lines printed from a hydra script to verify test resu
 import os
 import pytest
 
-import ly_test_tools.environment.file_system as file_system
-
 from Automated.atom_utils import hydra_test_utils as hydra
 from Automated.atom_utils.automated_test_base import TestAutomationBase
 from Automated.atom_utils.automated_test_base import DEFAULT_SUBFOLDER_PATH
+from Automated.atom_utils.automated_test_utils import LIGHT_TYPES
 
 EDITOR_TIMEOUT = 60
 TEST_DIRECTORY = os.path.dirname(__file__)
@@ -82,8 +81,6 @@ class TestAllComponentsIndepthTests(TestAutomationBase):
             "AreaLight_3.ppm",
             "AreaLight_4.ppm",
             "AreaLight_5.ppm",
-            "AreaLight_6.ppm",
-            "AreaLight_7.ppm",
             "SpotLight_1.ppm",
             "SpotLight_2.ppm",
             "SpotLight_3.ppm",
@@ -105,30 +102,25 @@ class TestAllComponentsIndepthTests(TestAutomationBase):
                 golden_images_directory, "Windows", "AllComponentsIndepthTests", golden_image)
             golden_images.append(golden_image_path)
 
+        point_sphere_light_type = LIGHT_TYPES[1]
+        spot_disk_light_type = LIGHT_TYPES[2]
+        capsule_light_type = LIGHT_TYPES[3]
         component_test_expected_lines = [
             # Level save/load
             "Level is saved successfully: True",
             "New entity created: True",
             "New entity deleted: True",
             # Area Light Component
-            "Area Light Entity successfully created",
-            "Area Light_test: Component added to the entity: True",
-            "Area Light_test: Component removed after UNDO: True",
-            "Area Light_test: Component added after REDO: True",
-            "Area Light_test: Entered game mode: True",
-            "Area Light_test: Exit game mode: True",
-            "Area Light_test: Entity disabled initially: True",
-            "Area Light_test: Entity enabled after adding required components: True",
-            "Area Light_test: Entity is hidden: True",
-            "Area Light_test: Entity is shown: True",
-            "Area Light_test: Entity deleted: True",
-            "Area Light_test: UNDO entity deletion works: True",
-            "Area Light_test: REDO entity deletion works: True",
+            "area_light Entity successfully created",
+            "area_light_test: Component added to the entity: True",
+            "area_light_test: Entered game mode: True",
+            "area_light_test: Exit game mode: True",
+            f"area_light_test: Light type is {capsule_light_type} which matches {capsule_light_type}",
+            f"area_light_test: Light type is {spot_disk_light_type} which matches {spot_disk_light_type}",
+            f"area_light_test: Light type is {point_sphere_light_type} which matches {point_sphere_light_type}",
             # Spot Light Component
             "Spot Light Entity successfully created",
             "Spot Light_test: Component added to the entity: True",
-            "Spot Light_test: Component removed after UNDO: True",
-            "Spot Light_test: Component added after REDO: True",
             "Spot Light_test: Entered game mode: True",
             "Spot Light_test: Exit game mode: True",
             "Spot Light_test: Entity is hidden: True",

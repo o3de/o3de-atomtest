@@ -123,7 +123,7 @@ def get_component_property_value(component, component_propertyPath):
     """
     Given a component name and component property path, outputs the property's value.
     :param component: Component object to act on.
-    :param componentPropertyPath: String of component property. (e.g. 'Settings|Visible')
+    :param component_propertyPath: String of component property. (e.g. 'Settings|Visible')
     :return: Value set in given componentPropertyPath
     """
     componentPropertyObj = editor.EditorComponentAPIBus(
