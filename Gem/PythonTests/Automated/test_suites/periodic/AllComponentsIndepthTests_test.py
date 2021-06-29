@@ -8,7 +8,7 @@ or, if provided, by the license below or the license accompanying this file. Do 
 remove or modify any license notices. This file is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
-Does in-depth component tests for a new level setup, as well as the Light component with "Area" and "Spot" options.
+Does in-depth component tests for a new level setup, as well as tests for the Atom renderer Light component.
 Utilizes screenshots & log lines printed from a hydra script to verify test results.
 """
 
@@ -75,6 +75,10 @@ class TestAllComponentsIndepthTests(TestAutomationBase):
 
     def test_ComponentsInBasicLevel_ScreenshotsMatchGoldenImages(
             self, request, editor, workspace, project, launcher_platform, level, golden_images_directory):
+        """
+        Please review the hydra script run by this test for more specific test info.
+        Tests that the Light component gives the output we expect when used in a level.
+        """
         screenshot_names = [
             "AreaLight_1.ppm",
             "AreaLight_2.ppm",
@@ -119,15 +123,10 @@ class TestAllComponentsIndepthTests(TestAutomationBase):
             f"area_light_test: Light type is {spot_disk_light_type} which matches {spot_disk_light_type}",
             f"area_light_test: Light type is {point_sphere_light_type} which matches {point_sphere_light_type}",
             # Spot Light Component
-            "Spot Light Entity successfully created",
-            "Spot Light_test: Component added to the entity: True",
-            "Spot Light_test: Entered game mode: True",
-            "Spot Light_test: Exit game mode: True",
-            "Spot Light_test: Entity is hidden: True",
-            "Spot Light_test: Entity is shown: True",
-            "Spot Light_test: Entity deleted: True",
-            "Spot Light_test: UNDO entity deletion works: True",
-            "Spot Light_test: REDO entity deletion works: True",
+            "spot_light Entity successfully created",
+            "spot_light_test: Component added to the entity: True",
+            "spot_light_test: Entered game mode: True",
+            "spot_light_test: Exit game mode: True",
             "Component tests completed",
         ]
         unexpected_lines = [

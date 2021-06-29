@@ -9,7 +9,7 @@ remove or modify any license notices. This file is distributed on an "AS IS" BAS
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 
 Hydra script to verify basic Atom rendering components after setting up and saving the scene in EmptyLevel.
-Loads updated EmptyLevel, manipulates Area Lights & Spot Lights against a sphere object, and takes screenshots.
+Loads updated EmptyLevel, manipulates entities with Light components against a sphere object, and takes screenshots.
 Screenshots are diffed against golden images to verify pass/fail results of the test.
 
 See the run() function for more in-depth test info.
@@ -42,37 +42,34 @@ def run():
     Sets up the tests by making sure the required level is created & setup correctly.
     It then executes 2 test cases:
 
-    Test Case - Area Light:
-    1. Creates "area_light" entity w/ an Area Light component that has a Capsule Shape w/ the color set to 255, 0, 0
+    Test Case - Light Component: Capsule, Spot (disk), and Point (sphere):
+    1. Creates "area_light" entity w/ a Light component that has a Capsule Light type w/ the color set to 255, 0, 0
     2. Enters game mode to take a screenshot for comparison, then exits game mode.
-    3. Sets the Area Light component Intensity Mode to Lumens (default).
-    4. Ensures the Area Light component Mode is Automatic (default).
-    5. Sets the Intensity value of the Area Light component to 0.0
+    3. Sets the Light component Intensity Mode to Lumens (default).
+    4. Ensures the Light component Mode is Automatic (default).
+    5. Sets the Intensity value of the Light component to 0.0
     6. Enters game mode again, takes another  screenshot for comparison, then exits game mode.
-    7. Updates the Intensity value of the Area Light component to 1000.0
+    7. Updates the Intensity value of the Light component to 1000.0
     8. Enters game mode again, takes another  screenshot for comparison, then exits game mode.
-    9. Deletes the Capsule Shape from "area_light" entity and adds a Disk Shape component to "area_light" entity.
-    10. Updates "area_light" Transform rotate value to x: 90.0, y:0.0, z:0.0
+    9. Swaps the Capsule light type option to Spot (disk) light type on the Light component
+    10. Updates "area_light" entity Transform rotate value to x: 90.0, y:0.0, z:0.0
     11. Enters game mode again, takes another  screenshot for comparison, then exits game mode.
-    12. Enables the "Both Directions" field in the Area Light component.
+    12. Swaps the Spot (disk) light type for the Point (sphere) light type in the Light component.
     13. Enters game mode again, takes another  screenshot for comparison, then exits game mode.
-    14. Disables the "Both Directions" field in the Area Light component.
-    15. Enters game mode again, takes another  screenshot for comparison, then exits game mode.
-    16. Deletes Disk Shape component from "area_light" entity & adds a Sphere Shape component to "area_light" entity.
-    17. Enters game mode again, takes another  screenshot for comparison, then exits game mode.
-    18. Deletes the Area Light component from the "area_light" entity and verifies its successful.
+    14. Deletes the Light component from the "area_light" entity and verifies its successful.
 
+    # TODO: Update this test case similar to how the above was updated:
     Test Case - Spot Light:
-    1. Creates "spot_light" entity w/ a Spot Light component attached to it.
+    1. Creates "spot_light" entity w/ a Light component attached to it.
     2. Selects the "directional_light" entity already present in the level and disables it.
     3. Selects the "global_skylight" entity already present in the level and disables the HDRi Skybox component,
         as well as the Global Skylight (IBL) component.
     4. Enters game mode to take a screenshot for comparison, then exits game mode.
     5. Selects the "ground_plane" entity and changes updates the material to a new material.
     6. Enters game mode to take a screenshot for comparison, then exits game mode.
-    7. Selects the "spot_light" entity and increases the Spot Light component Intensity to 800 lm
+    7. Selects the "spot_light" entity and increases the Light component Intensity to 800 lm
     8. Enters game mode to take a screenshot for comparison, then exits game mode.
-    9. Selects the "spot_light" entity and sets the Spot Light component Color to 47, 75, 37
+    9. Selects the "spot_light" entity and sets the Light component Color to 47, 75, 37
     10. Enters game mode to take a screenshot for comparison, then exits game mode.
     11. Selects the "spot_light" entity and modifies the Cone Configuration controls to the following values:
         - Outer Cone Angle: 130
@@ -112,8 +109,8 @@ def run():
     # Run tests.
     test_class = TestAllComponentsIndepthTests()
     test_class.area_light_component_test()
-    # test_class.spot_light_component_test()
-    # general.log("Component tests completed")
+    test_class.spot_light_component_test()
+    general.log("Component tests completed")
 
 
 class TestAllComponentsIndepthTests(object):
@@ -221,10 +218,10 @@ class TestAllComponentsIndepthTests(object):
 
     def area_light_component_test(self):
         """
-        Basic test for the "Light" component attached to an "Area Light" entity.
-        Example: Entity addition/deletion, undo/redo, game mode w/ Light component attached using Light Type Capsule.
+        Basic test for the "Light" component attached to an "area_light" entity.
+        Example: Entity addition/deletion, undo/redo, game mode w/ Light component attached using various light types.
         """
-        # Create "Area Light" entity with "Light" component using Light Type of "Capsule"
+        # Create an "area_light" entity with "Light" component using Light type of "Capsule"
         area_light_entity_name = "area_light"
         area_light_entity = self.create_entity_undo_redo_component_addition(
             entity_name=area_light_entity_name,
@@ -300,65 +297,83 @@ class TestAllComponentsIndepthTests(object):
         )
         self.take_screenshot_game_mode("AreaLight_5")
 
-        # Delete Area Light entity
         hydra.delete_entity(area_light_entity.id)
 
     def spot_light_component_test(self):
         """
-        Basic test for the Spot Light component attached to an entity.
-        Example: Entity addition/deletion undo/redo, game mode etc. with Spot Light component attached.
+        Basic test for the Light component attached to a "spot_light" entity.
+        Example: Entity addition/deletion, undo/redo, game mode w/ Light component attached using various light types.
         """
-        component_name = "Spot Light"
-        entity_obj = self.create_entity_undo_redo_component_addition(component_name)
-        self.verify_enter_exit_game_mode()
-        self.verify_hide_unhide_entity(entity_obj)
-        self.verify_deletion_undo_redo(entity_obj)
-
-        # Create entity with Spot Light component
-        self.spot_light = hydra.Entity("Spot Light")
-        position = math.Vector3(0.7, -2.0, 3.8)
-        self.spot_light.create_entity(position, ["Spot Light"])
+        # Create a "spot_light" entity with "Light" component using Light Type of "Capsule"
+        spot_light_entity_name = "spot_light"
+        spot_light_entity = self.create_entity_undo_redo_component_addition(
+            entity_name=spot_light_entity_name,
+            component="Light",
+            entity_translate_value=math.Vector3(0.7, -2.0, 3.8)
+        )
         rotation = math.Vector3(DEGREE_RADIAN_FACTOR * 300.0, 0.0, 0.0)
-        azlmbr.components.TransformBus(azlmbr.bus.Event, "SetLocalRotation", self.spot_light.id, rotation)
+        azlmbr.components.TransformBus(azlmbr.bus.Event, "SetLocalRotation", spot_light_entity.id, rotation)
+        light_component_id_pair = helper.attach_component_to_entity(spot_light_entity.id, "Light")
+        light_type_property = 'Controller|Configuration|Light type'
+        spot_disk_light_type = LIGHT_TYPES[2]
+        azlmbr.editor.EditorComponentAPIBus(
+            azlmbr.bus.Broadcast,
+            'SetComponentProperty',
+            light_component_id_pair,
+            light_type_property,
+            spot_disk_light_type
+        )
+
+        # Verify required checks.
+        self.verify_enter_exit_game_mode(entity_name=spot_light_entity_name)
+        self.verify_required_component_property_value(
+            entity_name=spot_light_entity_name,
+            component=spot_light_entity.components[0],
+            property_path=light_type_property,
+            expected_property_value=spot_disk_light_type
+        )
 
         # Disable components in directional_light and global_skylight and take a screenshot in game mode
-        hydra.disable_component(self.directional_light.components[0])
-        hydra.disable_component(self.global_skylight.components[0])
-        hydra.disable_component(self.global_skylight.components[1])
+        directional_light_entity = hydra.find_entity_by_name("directional_light")
+        global_skylight_entity = hydra.find_entity_by_name("global_skylight")
+        hydra.disable_component(directional_light_entity.components[0])
+        hydra.disable_component(global_skylight_entity.components[0])
+        hydra.disable_component(global_skylight_entity.components[1])
         self.take_screenshot_game_mode("SpotLight_1")
 
         # Change default material of ground plane entity and take screenshot
         asset_value = hydra.get_asset_by_path(
             os.path.join("Materials", "Presets", "MacBeth", "22_neutral_5-0_0-70d.azmaterial")
         )
-        self.ground_plane.get_set_test(0, "Default Material|Material Asset", asset_value)
+        ground_plane_entity = hydra.find_entity_by_name("ground_plane")
+        ground_plane_entity.get_set_test(0, "Default Material|Material Asset", asset_value)
         self.take_screenshot_game_mode("SpotLight_2")
 
         # Increase intensity value of the Spot light and take screenshot in game mode
-        self.spot_light.get_set_test(0, "Controller|Configuration|Intensity", 800.0)
+        spot_light_entity.get_set_test(0, "Controller|Configuration|Intensity", 800.0)
         self.take_screenshot_game_mode("SpotLight_3")
 
         # Update the Spot light color and take screenshot in game mode
         color_value = math.Color(47.0 / 255.0, 75.0 / 255.0, 37.0 / 255.0, 255.0 / 255.0)
-        self.spot_light.get_set_test(0, "Controller|Configuration|Color", color_value)
+        spot_light_entity.get_set_test(0, "Controller|Configuration|Color", color_value)
         self.take_screenshot_game_mode("SpotLight_4")
 
-        # Update the Cone Configuration controls of spot light and take screenshot
-        self.spot_light.get_set_test(0, "Controller|Configuration|Cone Configuration|Outer Cone Angle", 130)
-        self.spot_light.get_set_test(0, "Controller|Configuration|Cone Configuration|Inner Cone Angle", 80)
-        self.spot_light.get_set_test(0, "Controller|Configuration|Cone Configuration|Penumbra Bias", 0.9)
-        self.take_screenshot_game_mode("SpotLight_5")
-
-        # Update the Attenuation Radius controls of spot light and take screenshot
-        hydra.get_property_tree(self.spot_light.components[0])
-        self.spot_light.get_set_test(0, "Controller|Configuration|Attenuation Radius|Mode", 0)
-        self.spot_light.get_set_test(0, "Controller|Configuration|Attenuation Radius|Radius", 8.0)
-        self.take_screenshot_game_mode("SpotLight_6")
-
-        # Update the Shadow controls and take screenshot
-        self.spot_light.get_set_test(0, "Controller|Configuration|Shadow|ShadowmapSize", 256.0)
-        self.spot_light.get_set_test(0, "Controller|Configuration|Shadow|Enable Shadow", True)
-        self.take_screenshot_game_mode("SpotLight_7")
+        # # Update the Cone Configuration controls of spot light and take screenshot
+        # self.spot_light.get_set_test(0, "Controller|Configuration|Cone Configuration|Outer Cone Angle", 130)
+        # self.spot_light.get_set_test(0, "Controller|Configuration|Cone Configuration|Inner Cone Angle", 80)
+        # self.spot_light.get_set_test(0, "Controller|Configuration|Cone Configuration|Penumbra Bias", 0.9)
+        # self.take_screenshot_game_mode("SpotLight_5")
+        #
+        # # Update the Attenuation Radius controls of spot light and take screenshot
+        # hydra.get_property_tree(self.spot_light.components[0])
+        # self.spot_light.get_set_test(0, "Controller|Configuration|Attenuation Radius|Mode", 0)
+        # self.spot_light.get_set_test(0, "Controller|Configuration|Attenuation Radius|Radius", 8.0)
+        # self.take_screenshot_game_mode("SpotLight_6")
+        #
+        # # Update the Shadow controls and take screenshot
+        # self.spot_light.get_set_test(0, "Controller|Configuration|Shadow|ShadowmapSize", 256.0)
+        # self.spot_light.get_set_test(0, "Controller|Configuration|Shadow|Enable Shadow", True)
+        # self.take_screenshot_game_mode("SpotLight_7")
 
 
 if __name__ == "__main__":
