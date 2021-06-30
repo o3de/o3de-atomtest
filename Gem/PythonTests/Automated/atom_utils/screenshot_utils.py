@@ -77,7 +77,7 @@ class ScreenshotHelper:
         else:
             general.log("screenshot failed: {}".format(parameters[1]))
         self.done = True
-        self.handler.disconnect();
+        self.handler.disconnect()
 
     def wait_until_screenshot(self):
         frames_waited = 0

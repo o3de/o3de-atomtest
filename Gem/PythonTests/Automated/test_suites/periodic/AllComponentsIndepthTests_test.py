@@ -92,6 +92,12 @@ class TestAllComponentsIndepthTests(TestAutomationBase):
             "SpotLight_5.ppm",
             "SpotLight_6.ppm",
             "SpotLight_7.ppm",
+            "Grid_1.ppm",
+            "Grid_2.ppm",
+            "Grid_3.ppm",
+            "Grid_4.ppm",
+            "Grid_5.ppm",
+            "Grid_6.ppm",
         ]
 
         cache_images = []
@@ -147,5 +153,5 @@ class TestAllComponentsIndepthTests(TestAutomationBase):
             cfg_args=[level],
         )
 
-        for test_screenshot, golden_screenshot in zip(self.cache_images, self.golden_images):
+        for test_screenshot, golden_screenshot in zip(cache_images, golden_images):
             self.compare_screenshots(test_screenshot, golden_screenshot)
