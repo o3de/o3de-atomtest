@@ -25,7 +25,7 @@ sys.path.append(os.path.join(azlmbr.paths.devroot, "AtomTest", "Gem", "PythonTes
 import Automated.atom_utils.material_editor_utils as material_editor
 from Automated.atom_utils.material_editor_utils import MaterialEditorHelper, capture_screenshot
 
-screenshotsFolder = os.path.join(azlmbr.paths.devroot, "AtomTest", "Cache", "pc", "Screenshots")
+screenshotsFolder = os.path.join(azlmbr.paths.devroot, "AtomTest", "Cache", "pc", "screenshots")
 
 
 class TestOpeningMaterialAssetBrowser(MaterialEditorHelper):
@@ -59,9 +59,10 @@ class TestOpeningMaterialAssetBrowser(MaterialEditorHelper):
         search_bar.setText("basic_grey.material")
         general.idle_wait_frames(1)
         asset_browser_tree = asset_browser.findChild(QtWidgets.QTreeView, "m_assetBrowserTreeViewWidget")
+        model_index = pyside_utils.find_child_by_pattern(asset_browser_tree, "basic_grey.material")    
 
         # Make sure basic_grey.material asset is filtered in asset browser
-        if (asset_browser_tree.indexBelow(asset_browser_tree.currentIndex())) == (QtCore.QModelIndex()):
+        if (asset_browser_tree.indexBelow(asset_browser_tree.currentIndex())) == (QtCore.QModelIndex()) and model_index is not None:
             print("basic_grey.material asset is filtered in Asset Browser")
         
         # Click on basic_grey.material in asset browser

@@ -37,7 +37,7 @@ class TestOpeningMaterialAssetBrowser(TestAutomationBase):
                 project,
                 "Cache",
                 "pc",
-                "Screenshots",
+                "screenshots",
                 "screenshot_basic_grey.ppm",
             ),
         ]
