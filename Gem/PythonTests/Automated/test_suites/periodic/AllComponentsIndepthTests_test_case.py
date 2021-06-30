@@ -99,6 +99,23 @@ def run():
         Secondary Grid Spacing value to: 1.0.
         Secondary Color to: 128,128,128.
 
+    Test Case - decal:
+    1. Create child entity "decal_1" at position (3.0, 0.0, 1.0) under "default_level" entity.
+    2. Find the Material property and set it to "airship_symbol_decal.material"
+    3. Enters game mode to take a screenshot for comparison, then exits game mode.
+    4. Change the Scale value in Transform component to 3.
+    5. Enters game mode to take a screenshot for comparison, then exits game mode.
+    6. Set the Attenuation Angle in decal component to: 0.75.
+    7. Enters game mode to take a screenshot for comparison, then exits game mode.
+    8. Set Opacity to: 0.03.
+    9. Enters game mode to take a screenshot for comparison, then exits game mode.
+    10. Set Opacity back to 1.
+    11. Create child entity "decal_2" at position (5.0, 0.0, 0.5) under "default_level" entity.
+    12. Set the material value to "valenaactor_helmetmat.material" and Sort Key value to: 0.
+    13. Enters game mode to take a screenshot for comparison, then exits game mode.
+    14. Set the Sort Key value to: 50.
+    15. Enters game mode to take a screenshot for comparison, then exits game mode.
+
     Finally prints the string "Component tests completed" after completion
     
     Tests will fail immediately if any of these log lines are found:
@@ -122,6 +139,7 @@ def run():
     test_class.area_light_component_test()
     test_class.spot_light_component_test()
     test_class.grid_component_test()
+    test_class.decal_component_test()
     general.log("Component tests completed")
 
 
@@ -225,6 +243,7 @@ class TestAllComponentsIndepthTests(object):
         general.idle_wait(1.0)
         helper.wait_for_condition(lambda: general.is_in_game_mode())
         ScreenshotHelper(general.idle_wait_frames).capture_screenshot_blocking(f"{screenshot_name}.ppm")
+        general.idle_wait(1.0)
         general.exit_game_mode()
         helper.wait_for_condition(lambda: not general.is_in_game_mode())
 
@@ -461,6 +480,56 @@ class TestAllComponentsIndepthTests(object):
         helper.set_component_property(grid_component, "Controller|Configuration|Secondary Grid Spacing", 1.0)
         color = math.Color(128.0 / 255.0, 128.0 / 255.0, 128.0 / 255.0, 255.0 / 255.0)
         helper.set_component_property(grid_component, "Controller|Configuration|Secondary Color", color)
+
+    def decal_component_test(self):
+        """
+        Basic test for the Decal(Atom) component attached to an entity.
+        """
+        # NOTE: This step is repeated to ensure we have the expected setup while running the test for each component
+        self.atom_component_basic_setup()
+        # Create child entity 'decal_1' under Default entity and add decal component to it
+        component_name = "Decal (Atom)"
+        search_filter = azlmbr.entity.SearchFilter()
+        search_filter.names = ['default_level']
+        default_level_id = azlmbr.entity.SearchBus(azlmbr.bus.Broadcast, 'SearchEntities', search_filter)[0]
+        decal_1 = hydra.Entity("decal_1")
+        decal_1.create_entity(math.Vector3(3.0, 0.0, 1.0), components=[component_name], parent_id= default_level_id)
+        # Set the Material Property in decal component to "airship_symbol_decal.material" and take screenshot
+        asset_value = hydra.get_asset_by_path(
+            os.path.join("Materials", "decal", "airship_symbol_decal.azmaterial")
+        )
+        hydra.get_set_test(decal_1, 0, "Controller|Configuration|Material", asset_value)
+        self.take_screenshot_game_mode("Decal_1")
+
+        # Change the Uniform scale value in Transform component to: 3.0 and take screenshot
+        azlmbr.components.TransformBus(azlmbr.bus.Event, "SetLocalUniformScale", decal_1.id, 3.0)
+        self.take_screenshot_game_mode("Decal_2")
+
+        # Set the Attenuation Angle to: 0.75 in Decal component and take screenshot
+        hydra.get_set_test(decal_1, 0, "Controller|Configuration|Attenuation Angle", 0.75)
+        self.take_screenshot_game_mode("Decal_3")
+
+        # Set the Set Opacity to: 0.03 in Decal component and take screenshot
+        hydra.get_set_test(decal_1, 0, "Controller|Configuration|Opacity", 0.03)
+        self.take_screenshot_game_mode("Decal_4")
+
+        # Set Opacity back to 1.0
+        hydra.get_set_test(decal_1, 0, "Controller|Configuration|Opacity", 1.0)
+
+        # Create another child entity 'decal_2' under Default entity and add decal component to it
+        decal_2 = hydra.Entity("decal_2")
+        decal_2.create_entity(math.Vector3(5.0, 0.0, 0.5), components=[component_name], parent_id= default_level_id)
+
+        # Set the material value to "valenaactor_helmetmat.material", Sort Key value to: 0 and take screenshot
+        asset_value = hydra.get_asset_by_path(
+            os.path.join("Valena", "valenaactor_helmetmat.azmaterial")
+        )
+        hydra.get_set_test(decal_2, 0, "Controller|Configuration|Material", asset_value)
+        hydra.get_set_test(decal_2, 0, "Controller|Configuration|Sort Key", 0.0)
+        self.take_screenshot_game_mode("Decal_5")
+        # Set the Sort Key value of decal_2 to: 50 and take screenshot
+        hydra.get_set_test(decal_2, 0, "Controller|Configuration|Sort Key", 50.0)
+        self.take_screenshot_game_mode("Decal_6")
 
 
 if __name__ == "__main__":
