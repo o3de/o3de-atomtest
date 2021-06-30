@@ -1,12 +1,7 @@
 """
-All or portions of this file Copyright (c) Amazon.com, Inc. or its affiliates or
-its licensors.
+Copyright (c) Contributors to the Open 3D Engine Project
 
-For complete copyright and license terms please see the LICENSE at the root of this
-distribution (the "License"). All use of this software is governed by the License,
-or, if provided, by the license below or the license accompanying this file. Do not
-remove or modify any license notices. This file is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+SPDX-License-Identifier: Apache-2.0 OR MIT
 
 Hydra script to verify basic Atom rendering components after setting up and saving the scene in EmptyLevel.
 Loads updated EmptyLevel, manipulates entities with Light components against a sphere object, and takes screenshots.
@@ -58,8 +53,7 @@ def run():
     13. Enters game mode again, takes another  screenshot for comparison, then exits game mode.
     14. Deletes the Light component from the "area_light" entity and verifies its successful.
 
-    # TODO: Update this test case similar to how the above was updated:
-    Test Case - Spot Light:
+    Test Case - Light Component: Spot (disk) with shadows & colors:
     1. Creates "spot_light" entity w/ a Light component attached to it.
     2. Selects the "directional_light" entity already present in the level and disables it.
     3. Selects the "global_skylight" entity already present in the level and disables the HDRi Skybox component,
@@ -71,24 +65,17 @@ def run():
     8. Enters game mode to take a screenshot for comparison, then exits game mode.
     9. Selects the "spot_light" entity and sets the Light component Color to 47, 75, 37
     10. Enters game mode to take a screenshot for comparison, then exits game mode.
-    11. Selects the "spot_light" entity and modifies the Cone Configuration controls to the following values:
-        - Outer Cone Angle: 130
-        - Inner Cone Angle: 80
-        - Penumbra Bias: 0.9
+    11. Selects the "spot_light" entity and modifies the Shutter controls to the following values:
+        - Enable shutters: True
+        - Inner Angle: 60.0
+        - Outer Angle: 75.0
     12. Enters game mode to take a screenshot for comparison, then exits game mode.
-    13. Selects the "spot_light" entity and modifies the Attenuation Radius controls to the following values:
-        - Mode: Explicit
-        - Radius: 8
-    14. Enters game mode to take a screenshot for comparison, then exits game mode.
-    15. Selects the "spot_light" entity and modifies the Shadow controls to the following values:
-        - Enable Shadow: On
+    13. Selects the "spot_light" entity and modifies the Shadow controls to the following values:
+        - Enable Shadow: True
         - ShadowmapSize: 256
-    16. Enters game mode to take a screenshot for comparison, then exits game mode.
-    17. Deletes the "spotlight_entity" and selects the "ground_plane" entity, updating the Material component to a new
-        material.
-    18. Selects the "directional_light" entity and enables the Directional Light component.
-    19. Selects the "global_skylight" entity and enables the HDRi Skybox component & Global Skylight (IBL) component.
-    
+    14. Modifies the world translate position of the "spot_light" entity to 0.7, -2.0, 1.9 (for casting shadows better)
+    15. Enters game mode to take a screenshot for comparison, then exits game mode.
+
     Test Case - Grid:
     1. Selects the "default_level" entity.
     2. Select Grid component inside default_entity.
@@ -248,12 +235,12 @@ class TestAllComponentsIndepthTests(object):
         """
         # Create an "area_light" entity with "Light" component using Light type of "Capsule"
         area_light_entity_name = "area_light"
-        area_light_entity = self.create_entity_undo_redo_component_addition(
+        area_light = self.create_entity_undo_redo_component_addition(
             entity_name=area_light_entity_name,
             component="Light",
             entity_translate_value=math.Vector3(-1.0, -2.0, 3.0)
         )
-        light_component_id_pair = helper.attach_component_to_entity(area_light_entity.id, "Light")
+        light_component_id_pair = helper.attach_component_to_entity(area_light.id, "Light")
         light_type_property = 'Controller|Configuration|Light type'
         capsule_light_type = LIGHT_TYPES[3]
         azlmbr.editor.EditorComponentAPIBus(
@@ -268,22 +255,22 @@ class TestAllComponentsIndepthTests(object):
         self.verify_enter_exit_game_mode(entity_name=area_light_entity_name)
         self.verify_required_component_property_value(
             entity_name=area_light_entity_name,
-            component=area_light_entity.components[0],
+            component=area_light.components[0],
             property_path=light_type_property,
             expected_property_value=capsule_light_type
         )
         # Update color and take screenshot in game mode
         color = math.Color(255.0, 0.0, 0.0, 0.0)
-        area_light_entity.get_set_test(0, "Controller|Configuration|Color", color)
+        area_light.get_set_test(0, "Controller|Configuration|Color", color)
         self.take_screenshot_game_mode("AreaLight_1")
 
         # Update intensity value to 0.0 and take screenshot in game mode
-        area_light_entity.get_set_test(0, "Controller|Configuration|Attenuation Radius|Mode", 1)
-        area_light_entity.get_set_test(0, "Controller|Configuration|Intensity", 0.0)
+        area_light.get_set_test(0, "Controller|Configuration|Attenuation Radius|Mode", 1)
+        area_light.get_set_test(0, "Controller|Configuration|Intensity", 0.0)
         self.take_screenshot_game_mode("AreaLight_2")
 
         # Update intensity value to 1000.0 and take screenshot in game mode
-        area_light_entity.get_set_test(0, "Controller|Configuration|Intensity", 1000.0)
+        area_light.get_set_test(0, "Controller|Configuration|Intensity", 1000.0)
         self.take_screenshot_game_mode("AreaLight_3")
 
         # Swap the "Capsule" light type option to "Spot (disk)" light type
@@ -297,12 +284,12 @@ class TestAllComponentsIndepthTests(object):
         )
         self.verify_required_component_property_value(
             entity_name=area_light_entity_name,
-            component=area_light_entity.components[0],
+            component=area_light.components[0],
             property_path=light_type_property,
             expected_property_value=spot_disk_light_type
         )
-        rotation = math.Vector3(DEGREE_RADIAN_FACTOR * 90.0, 0.0, 0.0)
-        azlmbr.components.TransformBus(azlmbr.bus.Event, "SetLocalRotation", area_light_entity.id, rotation)
+        area_light_rotation = math.Vector3(DEGREE_RADIAN_FACTOR * 90.0, 0.0, 0.0)
+        azlmbr.components.TransformBus(azlmbr.bus.Event, "SetLocalRotation", area_light.id, area_light_rotation)
         self.take_screenshot_game_mode("AreaLight_4")
 
         # Swap the "Spot (disk)" light type to the "Point (sphere)" light type and take screenshot.
@@ -316,89 +303,111 @@ class TestAllComponentsIndepthTests(object):
         )
         self.verify_required_component_property_value(
             entity_name=area_light_entity_name,
-            component=area_light_entity.components[0],
+            component=area_light.components[0],
             property_path=light_type_property,
             expected_property_value=point_sphere_light_type
         )
         self.take_screenshot_game_mode("AreaLight_5")
 
-        hydra.delete_entity(area_light_entity.id)
+        hydra.delete_entity(area_light.id)
 
     def spot_light_component_test(self):
         """
         Basic test for the Light component attached to a "spot_light" entity.
         Example: Entity addition/deletion, undo/redo, game mode w/ Light component attached using various light types.
         """
-        # Create a "spot_light" entity with "Light" component using Light Type of "Capsule"
+        # Disable "Directional Light" component for the "directional_light" entity
+        directional_light_entity_id = hydra.find_entity_by_name("directional_light")
+        directional_light = hydra.Entity(name='directional_light', id=directional_light_entity_id)
+        directional_light_component_type = azlmbr.editor.EditorComponentAPIBus(
+            azlmbr.bus.Broadcast, 'FindComponentTypeIdsByEntityType', ["Directional Light"], 0)[0]
+        directional_light_component = azlmbr.editor.EditorComponentAPIBus(
+            azlmbr.bus.Broadcast, 'GetComponentOfType', directional_light.id, directional_light_component_type
+        ).GetValue()
+        hydra.disable_component(directional_light_component)
+        general.idle_wait(0.5)
+
+        # Disable "Global Skylight (IBL)" and "HDRi Skybox" components for the "global_skylight" entity
+        global_skylight_entity_id = hydra.find_entity_by_name("global_skylight")
+        global_skylight = hydra.Entity(name='global_skylight', id=global_skylight_entity_id)
+        global_skylight_component_type = azlmbr.editor.EditorComponentAPIBus(
+            azlmbr.bus.Broadcast, 'FindComponentTypeIdsByEntityType', ["Global Skylight (IBL)"], 0)[0]
+        global_skylight_component = azlmbr.editor.EditorComponentAPIBus(
+            azlmbr.bus.Broadcast, 'GetComponentOfType', global_skylight.id, global_skylight_component_type
+        ).GetValue()
+        hydra.disable_component(global_skylight_component)
+        hdri_skybox_component_type = azlmbr.editor.EditorComponentAPIBus(
+            azlmbr.bus.Broadcast, 'FindComponentTypeIdsByEntityType', ["HDRi Skybox"], 0)[0]
+        hdri_skybox_component = azlmbr.editor.EditorComponentAPIBus(
+            azlmbr.bus.Broadcast, 'GetComponentOfType', global_skylight.id, hdri_skybox_component_type
+        ).GetValue()
+        hydra.disable_component(hdri_skybox_component)
+        general.idle_wait(0.5)
+
+        # Create a "spot_light" entity with "Light" component using Light Type of "Spot (disk)"
         spot_light_entity_name = "spot_light"
-        spot_light_entity = self.create_entity_undo_redo_component_addition(
+        spot_light = self.create_entity_undo_redo_component_addition(
             entity_name=spot_light_entity_name,
             component="Light",
-            entity_translate_value=math.Vector3(0.7, -2.0, 3.8)
+            entity_translate_value=math.Vector3(0.7, -2.0, 1.0)
         )
         rotation = math.Vector3(DEGREE_RADIAN_FACTOR * 300.0, 0.0, 0.0)
-        azlmbr.components.TransformBus(azlmbr.bus.Event, "SetLocalRotation", spot_light_entity.id, rotation)
-        light_component_id_pair = helper.attach_component_to_entity(spot_light_entity.id, "Light")
-        light_type_property = 'Controller|Configuration|Light type'
+        azlmbr.components.TransformBus(azlmbr.bus.Event, "SetLocalRotation", spot_light.id, rotation)
+        light_component_type = helper.attach_component_to_entity(spot_light.id, "Light")
+        light_type_property_path = 'Controller|Configuration|Light type'
         spot_disk_light_type = LIGHT_TYPES[2]
-        azlmbr.editor.EditorComponentAPIBus(
-            azlmbr.bus.Broadcast,
-            'SetComponentProperty',
-            light_component_id_pair,
-            light_type_property,
-            spot_disk_light_type
-        )
+        hydra.set_component_property(
+            component=light_component_type, property_path=light_type_property_path, property_value=spot_disk_light_type)
+        general.idle_wait(0.5)
 
-        # Verify required checks.
+        # Verify required checks and take a screenshot in game mode
         self.verify_enter_exit_game_mode(entity_name=spot_light_entity_name)
         self.verify_required_component_property_value(
             entity_name=spot_light_entity_name,
-            component=spot_light_entity.components[0],
-            property_path=light_type_property,
+            component=spot_light.components[0],
+            property_path=light_type_property_path,
             expected_property_value=spot_disk_light_type
         )
-
-        # Disable components in directional_light and global_skylight and take a screenshot in game mode
-        directional_light_entity = hydra.find_entity_by_name("directional_light")
-        global_skylight_entity = hydra.find_entity_by_name("global_skylight")
-        hydra.disable_component(directional_light_entity.components[0])
-        hydra.disable_component(global_skylight_entity.components[0])
-        hydra.disable_component(global_skylight_entity.components[1])
+        general.idle_wait(0.5)
         self.take_screenshot_game_mode("SpotLight_1")
 
         # Change default material of ground plane entity and take screenshot
-        asset_value = hydra.get_asset_by_path(
-            os.path.join("Materials", "Presets", "MacBeth", "22_neutral_5-0_0-70d.azmaterial")
-        )
-        ground_plane_entity = hydra.find_entity_by_name("ground_plane")
-        ground_plane_entity.get_set_test(0, "Default Material|Material Asset", asset_value)
+        ground_plane_entity_id = hydra.find_entity_by_name("ground_plane")
+        ground_plane = hydra.Entity(name='ground_plane', id=ground_plane_entity_id)
+        ground_plane_asset_path = os.path.join("Materials", "Presets", "MacBeth", "22_neutral_5-0_0-70d.azmaterial")
+        ground_plane_asset_value = hydra.get_asset_by_path(ground_plane_asset_path)
+        material_property_path = "Default Material|Material Asset"
+        material_component_type = azlmbr.editor.EditorComponentAPIBus(
+            azlmbr.bus.Broadcast, 'FindComponentTypeIdsByEntityType', ["Material"], 0)[0]
+        material_component = azlmbr.editor.EditorComponentAPIBus(
+            azlmbr.bus.Broadcast, 'GetComponentOfType', ground_plane.id, material_component_type).GetValue()
+        hydra.set_component_property(
+            component=material_component, property_path=material_property_path, property_value=ground_plane_asset_value)
         self.take_screenshot_game_mode("SpotLight_2")
 
         # Increase intensity value of the Spot light and take screenshot in game mode
-        spot_light_entity.get_set_test(0, "Controller|Configuration|Intensity", 800.0)
+        spot_light.get_set_test(0, "Controller|Configuration|Intensity", 800.0)
+        general.idle_wait(0.5)
         self.take_screenshot_game_mode("SpotLight_3")
 
         # Update the Spot light color and take screenshot in game mode
         color_value = math.Color(47.0 / 255.0, 75.0 / 255.0, 37.0 / 255.0, 255.0 / 255.0)
-        spot_light_entity.get_set_test(0, "Controller|Configuration|Color", color_value)
+        spot_light.get_set_test(0, "Controller|Configuration|Color", color_value)
+        general.idle_wait(0.5)
         self.take_screenshot_game_mode("SpotLight_4")
 
-        # # Update the Cone Configuration controls of spot light and take screenshot
-        # self.spot_light.get_set_test(0, "Controller|Configuration|Cone Configuration|Outer Cone Angle", 130)
-        # self.spot_light.get_set_test(0, "Controller|Configuration|Cone Configuration|Inner Cone Angle", 80)
-        # self.spot_light.get_set_test(0, "Controller|Configuration|Cone Configuration|Penumbra Bias", 0.9)
-        # self.take_screenshot_game_mode("SpotLight_5")
-        #
-        # # Update the Attenuation Radius controls of spot light and take screenshot
-        # hydra.get_property_tree(self.spot_light.components[0])
-        # self.spot_light.get_set_test(0, "Controller|Configuration|Attenuation Radius|Mode", 0)
-        # self.spot_light.get_set_test(0, "Controller|Configuration|Attenuation Radius|Radius", 8.0)
-        # self.take_screenshot_game_mode("SpotLight_6")
-        #
-        # # Update the Shadow controls and take screenshot
-        # self.spot_light.get_set_test(0, "Controller|Configuration|Shadow|ShadowmapSize", 256.0)
-        # self.spot_light.get_set_test(0, "Controller|Configuration|Shadow|Enable Shadow", True)
-        # self.take_screenshot_game_mode("SpotLight_7")
+        # Update the Shutter controls of the Light component and take screenshot
+        spot_light.get_set_test(0, "Controller|Configuration|Shutters|Enable shutters", True)
+        spot_light.get_set_test(0, "Controller|Configuration|Shutters|Inner Angle", 60.0)
+        spot_light.get_set_test(0, "Controller|Configuration|Shutters|Outer Angle", 75.0)
+        self.take_screenshot_game_mode("SpotLight_5")
+
+        # Update the Shadow controls, move the spot_light entity world translate position and take screenshot
+        spot_light.get_set_test(0, "Controller|Configuration|Shadows|Enable shadow", True)
+        spot_light.get_set_test(0, "Controller|Configuration|Shadow|Shadowmap size", 256.0)
+        azlmbr.components.TransformBus(
+            azlmbr.bus.Event, "SetWorldTranslation", spot_light.id, math.Vector3(0.7, -2.0, 1.9))
+        self.take_screenshot_game_mode("SpotLight_7")
 
     def grid_component_test(self):
         """
@@ -409,8 +418,10 @@ class TestAllComponentsIndepthTests(object):
         search_filter = azlmbr.entity.SearchFilter()
         search_filter.names = ['default_level']
         default_level_id = azlmbr.entity.SearchBus(azlmbr.bus.Broadcast, 'SearchEntities', search_filter)[0]
-        type_id_list = azlmbr.editor.EditorComponentAPIBus(azlmbr.bus.Broadcast, 'FindComponentTypeIdsByEntityType', [component_name], 0)
-        outcome = azlmbr.editor.EditorComponentAPIBus(azlmbr.bus.Broadcast, 'GetComponentOfType', default_level_id, type_id_list[0])
+        type_id_list = azlmbr.editor.EditorComponentAPIBus(
+            azlmbr.bus.Broadcast, 'FindComponentTypeIdsByEntityType', [component_name], 0)
+        outcome = azlmbr.editor.EditorComponentAPIBus(
+            azlmbr.bus.Broadcast, 'GetComponentOfType', default_level_id, type_id_list[0])
         grid_component = outcome.GetValue()
 
         # Update grid size of the Grid component of default_level and take screenshot

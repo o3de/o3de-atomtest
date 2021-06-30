@@ -1,12 +1,7 @@
 """
-All or portions of this file Copyright (c) Amazon.com, Inc. or its affiliates or
-its licensors.
+Copyright (c) Contributors to the Open 3D Engine Project
 
-For complete copyright and license terms please see the LICENSE at the root of this
-distribution (the "License"). All use of this software is governed by the License,
-or, if provided, by the license below or the license accompanying this file. Do not
-remove or modify any license notices. This file is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+SPDX-License-Identifier: Apache-2.0 OR MIT
 """
 import collections.abc
 import os
@@ -398,6 +393,17 @@ def disable_component(component):
 # Be this camera
 def be_this_camera(camera_entity_id):
     camera.EditorCameraViewRequestBus(azlmbr.bus.Event, "ToggleCameraAsActiveView", camera_entity_id)
+
+
+def set_component_property(component, property_path, property_value):
+    """
+    Given a component returned by 'GetComponentOfType', update its property_path value to property_value
+    :param component: The component to target in the Editor to set a property for
+    :param property_path: path to the property to set in the component
+    :param property_value: the value to set the property to in the property_path
+    :return: None
+    """
+    editor.EditorComponentAPIBus(azlmbr.bus.Broadcast, 'SetComponentProperty', component, property_path, property_value)
 
 
 class PathNotFoundError(Exception):

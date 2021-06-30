@@ -171,12 +171,6 @@ def run():
             for test in self.additional_tests:
                 test(entity_obj)
 
-            # Hide/Unhide entity test
-            verify_hide_unhide_entity(self.component_name, entity_obj)
-
-            # Deletion/Undo/Redo test
-            verify_deletion_undo_redo(self.component_name, entity_obj)
-
     # DepthOfField Component
     camera_entity = hydra.Entity("camera_entity")
     camera_entity.create_entity(math.Vector3(512.0, 512.0, 34.0), ["Camera"])
