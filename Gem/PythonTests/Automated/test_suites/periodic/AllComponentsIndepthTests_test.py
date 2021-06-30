@@ -93,6 +93,12 @@ class TestAllComponentsIndepthTests(TestAutomationBase):
             "Grid_4.ppm",
             "Grid_5.ppm",
             "Grid_6.ppm",
+            "Decal_1.ppm",
+            "Decal_2.ppm",
+            "Decal_3.ppm",
+            "Decal_4.ppm",
+            "Decal_5.ppm",
+            "Decal_6.ppm",
         ]
 
         cache_images = []
