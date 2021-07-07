@@ -148,10 +148,10 @@ class TestAllComponentsIndepthTests(object):
     Holds shared hydra test functions for this set of tests.
     """
 
-    def create_entity_undo_redo_component_addition(
+    def create_entity_at_position(
             self, entity_name, component, entity_translate_value=math.Vector3(512.0, 512.0, 34.0)):
         """
-        Create a new entity with required components, then undo/redo those components.
+        Create a new entity with required components at world position matching entity_translate_value param.
         :param entity_name: name for the created entity
         :param component: name matching a valid component to attach to the created entity
         :param entity_translate_value: optional math.Vector3() value to set the entity's world translate (position),
@@ -163,18 +163,6 @@ class TestAllComponentsIndepthTests(object):
         general.log(
             f"{entity_name}_test: Component added to the entity: {hydra.has_components(new_entity.id, [component])}")
 
-        # undo component addition
-        general.undo()
-        helper.wait_for_condition(lambda: not hydra.has_components(new_entity.id, [component]), 2.0)
-        general.log(
-            f"{entity_name}_test: Component removed after UNDO: {not hydra.has_components(new_entity.id, [component])}")
-
-        # redo component addition
-        general.redo()
-        helper.wait_for_condition(lambda: hydra.has_components(new_entity.id, [component]), 2.0)
-        general.log(
-            f"{entity_name}_test: Component added after REDO: {hydra.has_components(new_entity.id, [component])}")
-
         return new_entity
 
     def verify_enter_exit_game_mode(self, entity_name):
@@ -184,45 +172,6 @@ class TestAllComponentsIndepthTests(object):
         general.exit_game_mode()
         helper.wait_for_condition(lambda: not general.is_in_game_mode(), 1.0)
         general.log(f"{entity_name}_test: Exit game mode: {not general.is_in_game_mode()}")
-
-    def verify_required_component_addition(self, entity_name, entity_obj, components_to_add):
-        """Verify if addition of required components activates entity."""
-        general.log(f"Entity disabled initially: {not hydra.is_component_enabled(entity_obj.components[0])}")
-        for component in components_to_add:
-            entity_obj.add_component(component)
-        general.idle_wait(1.0)
-        helper.wait_for_condition(lambda: hydra.is_component_enabled(entity_obj.components[0]), 1.0)
-        general.log(
-            f"{entity_name}_test: Entity enabled after adding required components: "
-            f"{hydra.is_component_enabled(entity_obj.components[0])}"
-        )
-
-    def verify_hide_unhide_entity(self, entity_name, entity_obj):
-        """Verify Hide/Unhide entity with component."""
-        hydra.set_visibility_state(entity_obj.id, False)
-        general.idle_wait(1.0)
-        helper.wait_for_condition(lambda: hydra.is_entity_hidden(entity_obj.id), 1.0)
-        general.log(f"{entity_name}_test: Entity is hidden: {hydra.is_entity_hidden(entity_obj.id)}")
-        hydra.set_visibility_state(entity_obj.id, True)
-        helper.wait_for_condition(lambda: not hydra.is_entity_hidden(entity_obj.id), 1.0)
-        general.log(f"{entity_name}_test: Entity is shown: {not hydra.is_entity_hidden(entity_obj.id)}")
-
-    def verify_deletion_undo_redo(self, entity_name, entity_obj):
-        """Verify delete/Undo/Redo deletion."""
-        hydra.delete_entity(entity_obj.id)
-        helper.wait_for_condition(lambda: not hydra.find_entity_by_name(entity_obj.name), 1.0)
-        general.log(f"{entity_name}_test: Entity deleted: {not hydra.find_entity_by_name(entity_obj.name)}")
-
-        general.undo()
-        helper.wait_for_condition(lambda: hydra.find_entity_by_name(entity_obj.name) is not None, 1.0)
-        general.log(
-            f"{entity_name}_test: UNDO entity deletion works: {hydra.find_entity_by_name(entity_obj.name) is not None}"
-        )
-
-        general.redo()
-        general.idle_wait(0.5)
-        helper.wait_for_condition(lambda: not hydra.find_entity_by_name(entity_obj.name), 1.0)
-        general.log(f"{entity_name}_test: REDO entity deletion works: {not hydra.find_entity_by_name(entity_obj.name)}")
 
     def verify_required_component_property_value(self, entity_name, component, property_path, expected_property_value):
         """
@@ -250,11 +199,11 @@ class TestAllComponentsIndepthTests(object):
     def area_light_component_test(self):
         """
         Basic test for the "Light" component attached to an "area_light" entity.
-        Example: Entity addition/deletion, undo/redo, game mode w/ Light component attached using various light types.
+        Example: Entity addition/deletion, & enters game mode w/ Light component attached using various light types.
         """
         # Create an "area_light" entity with "Light" component using Light type of "Capsule"
         area_light_entity_name = "area_light"
-        area_light = self.create_entity_undo_redo_component_addition(
+        area_light = self.create_entity_at_position(
             entity_name=area_light_entity_name,
             component="Light",
             entity_translate_value=math.Vector3(-1.0, -2.0, 3.0)
@@ -312,19 +261,19 @@ class TestAllComponentsIndepthTests(object):
         self.take_screenshot_game_mode("AreaLight_4")
 
         # Swap the "Spot (disk)" light type to the "Point (sphere)" light type and take screenshot.
-        point_sphere_light_type = LIGHT_TYPES[1]
+        sphere_light_type = LIGHT_TYPES[1]
         azlmbr.editor.EditorComponentAPIBus(
             azlmbr.bus.Broadcast,
             'SetComponentProperty',
             light_component_id_pair,
             light_type_property,
-            point_sphere_light_type
+            sphere_light_type
         )
         self.verify_required_component_property_value(
             entity_name=area_light_entity_name,
             component=area_light.components[0],
             property_path=light_type_property,
-            expected_property_value=point_sphere_light_type
+            expected_property_value=sphere_light_type
         )
         self.take_screenshot_game_mode("AreaLight_5")
 
@@ -333,7 +282,7 @@ class TestAllComponentsIndepthTests(object):
     def spot_light_component_test(self):
         """
         Basic test for the Light component attached to a "spot_light" entity.
-        Example: Entity addition/deletion, undo/redo, game mode w/ Light component attached using various light types.
+        Example: Entity addition/deletion & enters game mode w/ Light component attached using various light types.
         """
         # Disable "Directional Light" component for the "directional_light" entity
         directional_light_entity_id = hydra.find_entity_by_name("directional_light")
@@ -365,7 +314,7 @@ class TestAllComponentsIndepthTests(object):
 
         # Create a "spot_light" entity with "Light" component using Light Type of "Spot (disk)"
         spot_light_entity_name = "spot_light"
-        spot_light = self.create_entity_undo_redo_component_addition(
+        spot_light = self.create_entity_at_position(
             entity_name=spot_light_entity_name,
             component="Light",
             entity_translate_value=math.Vector3(0.7, -2.0, 1.0)

@@ -113,7 +113,7 @@ class TestAllComponentsIndepthTests(TestAutomationBase):
                 golden_images_directory, "Windows", "AllComponentsIndepthTests", golden_image)
             golden_images.append(golden_image_path)
 
-        point_sphere_light_type = LIGHT_TYPES[1]
+        sphere_light_type = LIGHT_TYPES[1]
         spot_disk_light_type = LIGHT_TYPES[2]
         capsule_light_type = LIGHT_TYPES[3]
         component_test_expected_lines = [
@@ -128,7 +128,7 @@ class TestAllComponentsIndepthTests(TestAutomationBase):
             "area_light_test: Exit game mode: True",
             f"area_light_test: Property value is {capsule_light_type} which matches {capsule_light_type}",
             f"area_light_test: Property value is {spot_disk_light_type} which matches {spot_disk_light_type}",
-            f"area_light_test: Property value is {point_sphere_light_type} which matches {point_sphere_light_type}",
+            f"area_light_test: Property value is {sphere_light_type} which matches {sphere_light_type}",
             # Spot Light Component
             "spot_light Entity successfully created",
             "spot_light_test: Component added to the entity: True",
