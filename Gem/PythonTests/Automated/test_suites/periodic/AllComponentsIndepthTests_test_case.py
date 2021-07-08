@@ -23,7 +23,7 @@ sys.path.append(os.path.join(azlmbr.paths.devroot, "AtomTest", "Gem", "PythonTes
 
 from Automated.atom_utils import hydra_editor_utils as hydra
 from Automated.atom_utils.automated_test_utils import TestHelper as helper
-from Automated.atom_utils.automated_test_utils import LIGHT_TYPES
+from Automated.atom_utils.automated_test_base import LIGHT_TYPES
 from Automated.atom_utils.screenshot_utils import ScreenshotHelper
 
 BASIC_LEVEL_NAME = "EmptyLevel"
@@ -138,8 +138,10 @@ def run():
     test_class = TestAllComponentsIndepthTests()
     test_class.area_light_component_test()
     test_class.spot_light_component_test()
-    test_class.grid_component_test()
-    test_class.decal_component_test()
+    # These tests are going to be re-enabled in a new file in the future.
+    # The code has been left here for reference when we work on re-enabling them.
+    # test_class.grid_component_test()
+    # test_class.decal_component_test()
     general.log("Component tests completed")
 
 
@@ -165,14 +167,6 @@ class TestAllComponentsIndepthTests(object):
 
         return new_entity
 
-    def verify_enter_exit_game_mode(self, entity_name):
-        general.enter_game_mode()
-        helper.wait_for_condition(lambda: general.is_in_game_mode(), 1.0)
-        general.log(f"{entity_name}_test: Entered game mode: {general.is_in_game_mode()}")
-        general.exit_game_mode()
-        helper.wait_for_condition(lambda: not general.is_in_game_mode(), 1.0)
-        general.log(f"{entity_name}_test: Exit game mode: {not general.is_in_game_mode()}")
-
     def verify_required_component_property_value(self, entity_name, component, property_path, expected_property_value):
         """
         Compares the property value of component against the expected_property_value.
@@ -187,14 +181,15 @@ class TestAllComponentsIndepthTests(object):
         general.log(f"{entity_name}_test: Property value is {property_value} "
                     f"which matches {expected_property_value}")
 
-    def take_screenshot_game_mode(self, screenshot_name):
+    def take_screenshot_game_mode(self, screenshot_name, entity_name=None):
         general.enter_game_mode()
-        general.idle_wait(1.0)
-        helper.wait_for_condition(lambda: general.is_in_game_mode())
+        helper.wait_for_condition(lambda: general.is_in_game_mode(), 2.0)
+        general.log(f"{entity_name}_test: Entered game mode: {general.is_in_game_mode()}")
         ScreenshotHelper(general.idle_wait_frames).capture_screenshot_blocking(f"{screenshot_name}.ppm")
         general.idle_wait(1.0)
         general.exit_game_mode()
-        helper.wait_for_condition(lambda: not general.is_in_game_mode())
+        helper.wait_for_condition(lambda: not general.is_in_game_mode(), 2.0)
+        general.log(f"{entity_name}_test: Exit game mode: {not general.is_in_game_mode()}")
 
     def area_light_component_test(self):
         """
@@ -220,29 +215,29 @@ class TestAllComponentsIndepthTests(object):
         )
 
         # Verify required checks.
-        self.verify_enter_exit_game_mode(entity_name=area_light_entity_name)
         self.verify_required_component_property_value(
             entity_name=area_light_entity_name,
             component=area_light.components[0],
             property_path=light_type_property,
             expected_property_value=capsule_light_type
         )
+
         # Update color and take screenshot in game mode
         color = math.Color(255.0, 0.0, 0.0, 0.0)
         area_light.get_set_test(0, "Controller|Configuration|Color", color)
         general.idle_wait(1.0)
-        self.take_screenshot_game_mode("AreaLight_1")
+        self.take_screenshot_game_mode("AreaLight_1", area_light_entity_name)
 
         # Update intensity value to 0.0 and take screenshot in game mode
         area_light.get_set_test(0, "Controller|Configuration|Attenuation Radius|Mode", 1)
         area_light.get_set_test(0, "Controller|Configuration|Intensity", 0.0)
         general.idle_wait(1.0)
-        self.take_screenshot_game_mode("AreaLight_2")
+        self.take_screenshot_game_mode("AreaLight_2", area_light_entity_name)
 
         # Update intensity value to 1000.0 and take screenshot in game mode
         area_light.get_set_test(0, "Controller|Configuration|Intensity", 1000.0)
         general.idle_wait(1.0)
-        self.take_screenshot_game_mode("AreaLight_3")
+        self.take_screenshot_game_mode("AreaLight_3", area_light_entity_name)
 
         # Swap the "Capsule" light type option to "Spot (disk)" light type
         spot_disk_light_type = LIGHT_TYPES[2]
@@ -262,7 +257,7 @@ class TestAllComponentsIndepthTests(object):
         area_light_rotation = math.Vector3(DEGREE_RADIAN_FACTOR * 90.0, 0.0, 0.0)
         azlmbr.components.TransformBus(azlmbr.bus.Event, "SetLocalRotation", area_light.id, area_light_rotation)
         general.idle_wait(1.0)
-        self.take_screenshot_game_mode("AreaLight_4")
+        self.take_screenshot_game_mode("AreaLight_4", area_light_entity_name)
 
         # Swap the "Spot (disk)" light type to the "Point (sphere)" light type and take screenshot.
         sphere_light_type = LIGHT_TYPES[1]
@@ -280,7 +275,7 @@ class TestAllComponentsIndepthTests(object):
             expected_property_value=sphere_light_type
         )
         general.idle_wait(1.0)
-        self.take_screenshot_game_mode("AreaLight_5")
+        self.take_screenshot_game_mode("AreaLight_5", area_light_entity_name)
 
         hydra.delete_entity(area_light.id)
 
@@ -334,7 +329,6 @@ class TestAllComponentsIndepthTests(object):
         general.idle_wait(0.5)
 
         # Verify required checks and take a screenshot in game mode
-        self.verify_enter_exit_game_mode(entity_name=spot_light_entity_name)
         self.verify_required_component_property_value(
             entity_name=spot_light_entity_name,
             component=spot_light.components[0],
@@ -342,7 +336,7 @@ class TestAllComponentsIndepthTests(object):
             expected_property_value=spot_disk_light_type
         )
         general.idle_wait(1.0)
-        self.take_screenshot_game_mode("SpotLight_1")
+        self.take_screenshot_game_mode("SpotLight_1", spot_light_entity_name)
 
         # Change default material of ground plane entity and take screenshot
         ground_plane_entity_id = hydra.find_entity_by_name("ground_plane")
@@ -357,25 +351,25 @@ class TestAllComponentsIndepthTests(object):
         hydra.set_component_property(
             component=material_component, property_path=material_property_path, property_value=ground_plane_asset_value)
         general.idle_wait(1.0)
-        self.take_screenshot_game_mode("SpotLight_2")
+        self.take_screenshot_game_mode("SpotLight_2", spot_light_entity_name)
 
         # Increase intensity value of the Spot light and take screenshot in game mode
         spot_light.get_set_test(0, "Controller|Configuration|Intensity", 800.0)
         general.idle_wait(1.0)
-        self.take_screenshot_game_mode("SpotLight_3")
+        self.take_screenshot_game_mode("SpotLight_3", spot_light_entity_name)
 
         # Update the Spot light color and take screenshot in game mode
         color_value = math.Color(47.0 / 255.0, 75.0 / 255.0, 37.0 / 255.0, 255.0 / 255.0)
         spot_light.get_set_test(0, "Controller|Configuration|Color", color_value)
         general.idle_wait(1.0)
-        self.take_screenshot_game_mode("SpotLight_4")
+        self.take_screenshot_game_mode("SpotLight_4", spot_light_entity_name)
 
         # Update the Shutter controls of the Light component and take screenshot
         spot_light.get_set_test(0, "Controller|Configuration|Shutters|Enable shutters", True)
         spot_light.get_set_test(0, "Controller|Configuration|Shutters|Inner angle", 60.0)
         spot_light.get_set_test(0, "Controller|Configuration|Shutters|Outer angle", 75.0)
         general.idle_wait(1.0)
-        self.take_screenshot_game_mode("SpotLight_5")
+        self.take_screenshot_game_mode("SpotLight_5", spot_light_entity_name)
 
         # Update the Shadow controls, move the spot_light entity world translate position and take screenshot
         spot_light.get_set_test(0, "Controller|Configuration|Shadows|Enable shadow", True)
@@ -383,7 +377,7 @@ class TestAllComponentsIndepthTests(object):
         azlmbr.components.TransformBus(
             azlmbr.bus.Event, "SetWorldTranslation", spot_light.id, math.Vector3(0.7, -2.0, 1.9))
         general.idle_wait(1.0)
-        self.take_screenshot_game_mode("SpotLight_6")
+        self.take_screenshot_game_mode("SpotLight_6", spot_light_entity_name)
 
     def grid_component_test(self):
         """

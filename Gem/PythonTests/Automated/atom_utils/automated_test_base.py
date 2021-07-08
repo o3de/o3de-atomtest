@@ -18,6 +18,17 @@ SIMILARITY_THRESHOLD = 0.99
 DEFAULT_SUBFOLDER_PATH = 'user/PythonTests/Automated/Screenshots'
 logger = logging.getLogger(__name__)
 
+LIGHT_TYPES = [
+    0,  # UNKNOWN
+    1,  # SPHERE
+    2,  # SPOTDISK
+    3,  # CAPSULE
+    4,  # QUAD
+    5,  # POLYGON
+    6,  # SIMPLEPOINT
+    7,  # SIMPLESPOT
+]
+
 
 @pytest.mark.usefixtures('automatic_process_killer')
 class TestAutomationBase:

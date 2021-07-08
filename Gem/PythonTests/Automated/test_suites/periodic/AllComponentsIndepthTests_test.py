@@ -11,11 +11,9 @@ import os
 import pytest
 
 from Automated.atom_utils import hydra_test_utils as hydra
-from Automated.atom_utils.automated_test_base import TestAutomationBase
-from Automated.atom_utils.automated_test_base import DEFAULT_SUBFOLDER_PATH
-from Automated.atom_utils.automated_test_utils import LIGHT_TYPES
+from Automated.atom_utils.automated_test_base import TestAutomationBase, DEFAULT_SUBFOLDER_PATH, LIGHT_TYPES
 
-EDITOR_TIMEOUT = 60
+EDITOR_TIMEOUT = 180
 TEST_DIRECTORY = os.path.dirname(__file__)
 
 
@@ -87,18 +85,6 @@ class TestAllComponentsIndepthTests(TestAutomationBase):
             "SpotLight_5.ppm",
             "SpotLight_6.ppm",
             "SpotLight_7.ppm",
-            "Grid_1.ppm",
-            "Grid_2.ppm",
-            "Grid_3.ppm",
-            "Grid_4.ppm",
-            "Grid_5.ppm",
-            "Grid_6.ppm",
-            "Decal_1.ppm",
-            "Decal_2.ppm",
-            "Decal_3.ppm",
-            "Decal_4.ppm",
-            "Decal_5.ppm",
-            "Decal_6.ppm",
         ]
 
         cache_images = []
@@ -134,12 +120,14 @@ class TestAllComponentsIndepthTests(TestAutomationBase):
             "spot_light_test: Component added to the entity: True",
             "spot_light_test: Entered game mode: True",
             "spot_light_test: Exit game mode: True",
+            f"spot_light_test: Property value is {spot_disk_light_type} which matches {spot_disk_light_type}",
             "Component tests completed",
         ]
         unexpected_lines = [
             "Trace::Assert",
             "Trace::Error",
             "Traceback (most recent call last):",
+            "screenshot failed",
         ]
 
         hydra.launch_and_validate_results(

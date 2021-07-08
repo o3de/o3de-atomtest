@@ -7,17 +7,6 @@ import time
 import azlmbr.legacy.general as general
 import azlmbr.atom
 
-LIGHT_TYPES = [
-    0,  # UNKNOWN
-    1,  # SPHERE
-    2,  # SPOTDISK
-    3,  # CAPSULE
-    4,  # QUAD
-    5,  # POLYGON
-    6,  # SIMPLEPOINT
-    7,  # SIMPLESPOT
-]
-
 
 class FailFast(BaseException):
     """
@@ -25,7 +14,8 @@ class FailFast(BaseException):
     """
 
     pass
-    
+
+
 class TestHelper:
     @staticmethod
     def init_idle():
