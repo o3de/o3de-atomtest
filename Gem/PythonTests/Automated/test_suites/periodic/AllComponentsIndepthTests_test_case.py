@@ -230,15 +230,18 @@ class TestAllComponentsIndepthTests(object):
         # Update color and take screenshot in game mode
         color = math.Color(255.0, 0.0, 0.0, 0.0)
         area_light.get_set_test(0, "Controller|Configuration|Color", color)
+        general.idle_wait(1.0)
         self.take_screenshot_game_mode("AreaLight_1")
 
         # Update intensity value to 0.0 and take screenshot in game mode
         area_light.get_set_test(0, "Controller|Configuration|Attenuation Radius|Mode", 1)
         area_light.get_set_test(0, "Controller|Configuration|Intensity", 0.0)
+        general.idle_wait(1.0)
         self.take_screenshot_game_mode("AreaLight_2")
 
         # Update intensity value to 1000.0 and take screenshot in game mode
         area_light.get_set_test(0, "Controller|Configuration|Intensity", 1000.0)
+        general.idle_wait(1.0)
         self.take_screenshot_game_mode("AreaLight_3")
 
         # Swap the "Capsule" light type option to "Spot (disk)" light type
@@ -258,6 +261,7 @@ class TestAllComponentsIndepthTests(object):
         )
         area_light_rotation = math.Vector3(DEGREE_RADIAN_FACTOR * 90.0, 0.0, 0.0)
         azlmbr.components.TransformBus(azlmbr.bus.Event, "SetLocalRotation", area_light.id, area_light_rotation)
+        general.idle_wait(1.0)
         self.take_screenshot_game_mode("AreaLight_4")
 
         # Swap the "Spot (disk)" light type to the "Point (sphere)" light type and take screenshot.
@@ -275,6 +279,7 @@ class TestAllComponentsIndepthTests(object):
             property_path=light_type_property,
             expected_property_value=sphere_light_type
         )
+        general.idle_wait(1.0)
         self.take_screenshot_game_mode("AreaLight_5")
 
         hydra.delete_entity(area_light.id)
@@ -336,7 +341,7 @@ class TestAllComponentsIndepthTests(object):
             property_path=light_type_property_path,
             expected_property_value=spot_disk_light_type
         )
-        general.idle_wait(0.5)
+        general.idle_wait(1.0)
         self.take_screenshot_game_mode("SpotLight_1")
 
         # Change default material of ground plane entity and take screenshot
@@ -351,31 +356,34 @@ class TestAllComponentsIndepthTests(object):
             azlmbr.bus.Broadcast, 'GetComponentOfType', ground_plane.id, material_component_type).GetValue()
         hydra.set_component_property(
             component=material_component, property_path=material_property_path, property_value=ground_plane_asset_value)
+        general.idle_wait(1.0)
         self.take_screenshot_game_mode("SpotLight_2")
 
         # Increase intensity value of the Spot light and take screenshot in game mode
         spot_light.get_set_test(0, "Controller|Configuration|Intensity", 800.0)
-        general.idle_wait(0.5)
+        general.idle_wait(1.0)
         self.take_screenshot_game_mode("SpotLight_3")
 
         # Update the Spot light color and take screenshot in game mode
         color_value = math.Color(47.0 / 255.0, 75.0 / 255.0, 37.0 / 255.0, 255.0 / 255.0)
         spot_light.get_set_test(0, "Controller|Configuration|Color", color_value)
-        general.idle_wait(0.5)
+        general.idle_wait(1.0)
         self.take_screenshot_game_mode("SpotLight_4")
 
         # Update the Shutter controls of the Light component and take screenshot
         spot_light.get_set_test(0, "Controller|Configuration|Shutters|Enable shutters", True)
-        spot_light.get_set_test(0, "Controller|Configuration|Shutters|Inner Angle", 60.0)
-        spot_light.get_set_test(0, "Controller|Configuration|Shutters|Outer Angle", 75.0)
+        spot_light.get_set_test(0, "Controller|Configuration|Shutters|Inner angle", 60.0)
+        spot_light.get_set_test(0, "Controller|Configuration|Shutters|Outer angle", 75.0)
+        general.idle_wait(1.0)
         self.take_screenshot_game_mode("SpotLight_5")
 
         # Update the Shadow controls, move the spot_light entity world translate position and take screenshot
         spot_light.get_set_test(0, "Controller|Configuration|Shadows|Enable shadow", True)
-        spot_light.get_set_test(0, "Controller|Configuration|Shadow|Shadowmap size", 256.0)
+        spot_light.get_set_test(0, "Controller|Configuration|Shadows|Shadowmap size", 256.0)
         azlmbr.components.TransformBus(
             azlmbr.bus.Event, "SetWorldTranslation", spot_light.id, math.Vector3(0.7, -2.0, 1.9))
-        self.take_screenshot_game_mode("SpotLight_7")
+        general.idle_wait(1.0)
+        self.take_screenshot_game_mode("SpotLight_6")
 
     def grid_component_test(self):
         """
@@ -394,29 +402,35 @@ class TestAllComponentsIndepthTests(object):
 
         # Update grid size of the Grid component of default_level and take screenshot
         helper.set_component_property(grid_component, "Controller|Configuration|Grid Size", 64.0)
+        general.idle_wait(1.0)
         self.take_screenshot_game_mode("Grid_1")
 
         # Update axis color of the Grid component of default_level and take screenshot
         color = math.Color(13.0 / 255.0, 255.0 / 255.0, 0.0 / 255.0, 255.0 / 255.0)
         helper.set_component_property(grid_component, "Controller|Configuration|Axis Color", color)
+        general.idle_wait(1.0)
         self.take_screenshot_game_mode("Grid_2")
 
         # Update Primary Grid Spacing of the Grid component of default_level and take screenshot
         helper.set_component_property(grid_component, "Controller|Configuration|Primary Grid Spacing", 0.5)
+        general.idle_wait(1.0)
         self.take_screenshot_game_mode("Grid_3")
 
         # Update Primary color of the Grid component of default_level and take screenshot
         color = math.Color(129.0 / 255.0, 96.0 / 255.0, 0.0 / 255.0, 255.0 / 255.0)
         helper.set_component_property(grid_component, "Controller|Configuration|Primary Color", color)
+        general.idle_wait(1.0)
         self.take_screenshot_game_mode("Grid_4")
 
         # Update Secondary Grid Spacing of the Grid component of default_level and take screenshot
         helper.set_component_property(grid_component, "Controller|Configuration|Secondary Grid Spacing", 0.75)
+        general.idle_wait(1.0)
         self.take_screenshot_game_mode("Grid_5")
 
         # Update Secondary color of the Grid component of default_level and take screenshot
         color = math.Color(0.0 / 255.0, 35.0 / 255.0, 161.0 / 255.0, 255.0 / 255.0)
         helper.set_component_property(grid_component, "Controller|Configuration|Secondary Color", color)
+        general.idle_wait(1.0)
         self.take_screenshot_game_mode("Grid_6")
 
         # Restore default grid values
@@ -446,18 +460,22 @@ class TestAllComponentsIndepthTests(object):
             os.path.join("Materials", "decal", "airship_symbol_decal.azmaterial")
         )
         hydra.get_set_test(decal_1, 0, "Controller|Configuration|Material", asset_value)
+        general.idle_wait(1.0)
         self.take_screenshot_game_mode("Decal_1")
 
         # Change the Uniform scale value in Transform component to: 3.0 and take screenshot
         azlmbr.components.TransformBus(azlmbr.bus.Event, "SetLocalUniformScale", decal_1.id, 3.0)
+        general.idle_wait(1.0)
         self.take_screenshot_game_mode("Decal_2")
 
         # Set the Attenuation Angle to: 0.75 in Decal component and take screenshot
         hydra.get_set_test(decal_1, 0, "Controller|Configuration|Attenuation Angle", 0.75)
+        general.idle_wait(1.0)
         self.take_screenshot_game_mode("Decal_3")
 
         # Set the Set Opacity to: 0.03 in Decal component and take screenshot
         hydra.get_set_test(decal_1, 0, "Controller|Configuration|Opacity", 0.03)
+        general.idle_wait(1.0)
         self.take_screenshot_game_mode("Decal_4")
 
         # Set Opacity back to 1.0
@@ -473,9 +491,11 @@ class TestAllComponentsIndepthTests(object):
         )
         hydra.get_set_test(decal_2, 0, "Controller|Configuration|Material", asset_value)
         hydra.get_set_test(decal_2, 0, "Controller|Configuration|Sort Key", 0.0)
+        general.idle_wait(1.0)
         self.take_screenshot_game_mode("Decal_5")
         # Set the Sort Key value of decal_2 to: 50 and take screenshot
         hydra.get_set_test(decal_2, 0, "Controller|Configuration|Sort Key", 50.0)
+        general.idle_wait(1.0)
         self.take_screenshot_game_mode("Decal_6")
 
 
