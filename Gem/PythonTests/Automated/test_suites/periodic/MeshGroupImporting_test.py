@@ -29,7 +29,7 @@ class TestAutomation(TestAutomationBase):
         """
         golden_screenshot = os.path.join(golden_images_directory, 'Windows', 'FBXMeshGroupImportScaling.ppm')
         test_screenshot = os.path.join(
-            workspace.paths.engine_root(), project, DEFAULT_SUBFOLDER_PATH,
+            workspace.paths.project(), DEFAULT_SUBFOLDER_PATH,
             "screenshot_atom_FBXMeshGroupImportScaling.dds")
         self.remove_artifacts([test_screenshot])
 

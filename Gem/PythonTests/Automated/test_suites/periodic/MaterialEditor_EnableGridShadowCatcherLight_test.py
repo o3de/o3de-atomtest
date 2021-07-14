@@ -33,13 +33,13 @@ class TestMaterialEditorEnableGridShadowCatcherLight(TestAutomationBase):
         ]
 
         test_screenshots = [
-            os.path.join(workspace.paths.engine_root(), project, 'Cache', 'pc', 'Screenshots', 'screenshot_materialeditor_cube.ppm'),
-            os.path.join(workspace.paths.engine_root(), project, 'Cache', 'pc', 'Screenshots', 'screenshot_materialeditor_griddisable.ppm'),
-            os.path.join(workspace.paths.engine_root(), project, 'Cache', 'pc', 'Screenshots', 'screenshot_materialeditor_gridenable.ppm'),
-            os.path.join(workspace.paths.engine_root(), project, 'Cache', 'pc', 'Screenshots', 'screenshot_materialeditor_light.ppm'),
-            os.path.join(workspace.paths.engine_root(), project, 'Cache', 'pc', 'Screenshots', 'screenshot_materialeditor_shaderball.ppm'),
-            os.path.join(workspace.paths.engine_root(), project, 'Cache', 'pc', 'Screenshots', 'screenshot_materialeditor_shadowdisable.ppm'),
-            os.path.join(workspace.paths.engine_root(), project, 'Cache', 'pc', 'Screenshots', 'screenshot_materialeditor_shadowenable.ppm'),
+            os.path.join(workspace.paths.project(), 'Cache', 'pc', 'Screenshots', 'screenshot_materialeditor_cube.ppm'),
+            os.path.join(workspace.paths.project(), 'Cache', 'pc', 'Screenshots', 'screenshot_materialeditor_griddisable.ppm'),
+            os.path.join(workspace.paths.project(), 'Cache', 'pc', 'Screenshots', 'screenshot_materialeditor_gridenable.ppm'),
+            os.path.join(workspace.paths.project(), 'Cache', 'pc', 'Screenshots', 'screenshot_materialeditor_light.ppm'),
+            os.path.join(workspace.paths.project(), 'Cache', 'pc', 'Screenshots', 'screenshot_materialeditor_shaderball.ppm'),
+            os.path.join(workspace.paths.project(), 'Cache', 'pc', 'Screenshots', 'screenshot_materialeditor_shadowdisable.ppm'),
+            os.path.join(workspace.paths.project(), 'Cache', 'pc', 'Screenshots', 'screenshot_materialeditor_shadowenable.ppm'),
         ]
 
         self.remove_artifacts(test_screenshots)

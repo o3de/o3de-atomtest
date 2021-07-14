@@ -19,7 +19,7 @@ import azlmbr.legacy.general as general
 import azlmbr.paths
 from azlmbr.entity import EntityId
 
-sys.path.append(os.path.join(azlmbr.paths.devroot, "AtomTest", "Gem", "PythonTests"))
+sys.path.append(os.path.join(azlmbr.paths.devassets, "Gem", "PythonTests"))
 
 from Automated.atom_utils.screenshot_utils import ScreenshotHelper
 from Automated.atom_utils.automated_test_utils import TestHelper as helper

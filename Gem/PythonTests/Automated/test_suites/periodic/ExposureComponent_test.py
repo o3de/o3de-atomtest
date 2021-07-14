@@ -34,9 +34,9 @@ class TestAutomation(TestAutomationBase):
         ]
 
         test_screenshots = [
-            os.path.join(workspace.paths.engine_root(), project, DEFAULT_SUBFOLDER_PATH,
+            os.path.join(workspace.paths.project(), DEFAULT_SUBFOLDER_PATH,
                          'screenshot_atom_ExposureComponent_Manual.ppm'),
-            os.path.join(workspace.paths.engine_root(), project, DEFAULT_SUBFOLDER_PATH,
+            os.path.join(workspace.paths.project(), DEFAULT_SUBFOLDER_PATH,
                          'screenshot_atom_ExposureComponent_EyeAdaptation.ppm')
         ]
 

@@ -47,5 +47,5 @@ class TestAutomation(TestAutomationBase):
 
         golden_screenshot = os.path.join(golden_images_directory, 'Windows', 'FBXMeshScaling.ppm')
         test_screenshot = os.path.join(
-            workspace.paths.engine_root(), project, DEFAULT_SUBFOLDER_PATH, "screenshot_atom_FBXMeshScaling.dds")
+            workspace.paths.project(), DEFAULT_SUBFOLDER_PATH, "screenshot_atom_FBXMeshScaling.dds")
         self.compare_screenshots(test_screenshot, golden_screenshot)

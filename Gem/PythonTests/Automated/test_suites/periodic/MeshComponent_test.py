@@ -30,7 +30,7 @@ class TestAutomation(TestAutomationBase):
         """
         golden_screenshot = os.path.join(golden_images_directory, 'Windows', 'MeshComponent.ppm')
         test_screenshot = os.path.join(
-            workspace.paths.engine_root(), project, DEFAULT_SUBFOLDER_PATH, 'screenshot_atom_MeshComponent.ppm')
+            workspace.paths.project(), DEFAULT_SUBFOLDER_PATH, 'screenshot_atom_MeshComponent.ppm')
         self.remove_artifacts([test_screenshot])
 
         expected_lines = [

@@ -22,7 +22,7 @@ import time
 import azlmbr.paths
 import azlmbr.math as math
 
-sys.path.append(os.path.join(azlmbr.paths.devroot, "AtomTest", "Gem", "PythonTests"))
+sys.path.append(os.path.join(azlmbr.paths.devassets, "Gem", "PythonTests"))
 
 from Automated.atom_utils.material_editor_utils import MaterialEditorHelper
 import Automated.atom_utils.material_editor_utils as material_editor_utils

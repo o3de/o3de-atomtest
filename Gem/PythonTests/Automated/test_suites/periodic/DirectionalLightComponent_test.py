@@ -32,7 +32,7 @@ class TestAutomation(TestAutomationBase):
             golden_images_directory, 'Windows', 'atom_directionallight')
         
         test_screenshot_base = os.path.join(
-            workspace.paths.engine_root(), project, DEFAULT_SUBFOLDER_PATH, 'screenshot_atom_directionallight')
+            workspace.paths.project(), DEFAULT_SUBFOLDER_PATH, 'screenshot_atom_directionallight')
         
         golden_screenshots = []
         test_screenshots = []

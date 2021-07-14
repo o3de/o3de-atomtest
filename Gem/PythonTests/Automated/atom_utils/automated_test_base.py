@@ -65,12 +65,6 @@ class TestAutomationBase:
         new_log_monitor.monitor_log_for_lines(expected_lines, unexpected_lines)
         editor.stop()
 
-    def _get_project_path(self, workspace):
-        """
-        return the full path of the project in this workspace
-        """
-        return os.path.join(workspace.paths.engine_root(), workspace.project)
-
     def _capture_screenshot(self):
         """
         Captures a screenshot from Atom
@@ -102,7 +96,7 @@ class TestAutomationBase:
             logger.warning("level_dir is empty, nothing to delete.")
             return
 
-        full_level_dir = os.path.join(self._get_project_path(workspace), 'Levels', level_dir)
+        full_level_dir = os.path.join(workspace.paths.project(), 'Levels', level_dir)
         if (not os.path.isdir(full_level_dir)):
             if (os.path.exists(full_level_dir)):
                 logger.error("level '{}' isn't a directory, it won't be deleted.".format(full_level_dir))

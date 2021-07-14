@@ -35,11 +35,11 @@ class TestAutomation(TestAutomationBase):
         ]
 
         test_screenshots = [
-            os.path.join(workspace.paths.engine_root(), project, DEFAULT_SUBFOLDER_PATH,
+            os.path.join(workspace.paths.project(), DEFAULT_SUBFOLDER_PATH,
                          'screenshot_atom_GradientWeightModifierComponent_RandomExposure1.ppm'),
-            os.path.join(workspace.paths.engine_root(), project, DEFAULT_SUBFOLDER_PATH,
+            os.path.join(workspace.paths.project(), DEFAULT_SUBFOLDER_PATH,
                          'screenshot_atom_GradientWeightModifierComponent_RandomExposure2.ppm'),
-            os.path.join(workspace.paths.engine_root(), project, DEFAULT_SUBFOLDER_PATH,
+            os.path.join(workspace.paths.project(), DEFAULT_SUBFOLDER_PATH,
                          'screenshot_atom_GradientWeightModifierComponent_NoExposure.ppm')
         ]
 

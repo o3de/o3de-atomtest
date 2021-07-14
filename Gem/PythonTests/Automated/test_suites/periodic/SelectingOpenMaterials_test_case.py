@@ -24,7 +24,7 @@ from PySide2 import QtWidgets, QtTest, QtCore
 
 import azlmbr.paths
 
-sys.path.append(os.path.join(azlmbr.paths.devroot, "AtomTest", "Gem", "PythonTests"))
+sys.path.append(os.path.join(azlmbr.paths.devassets, "Gem", "PythonTests"))
 
 from editor_python_test_tools import pyside_utils
 from Automated.atom_utils.material_editor_utils import MaterialEditorHelper
