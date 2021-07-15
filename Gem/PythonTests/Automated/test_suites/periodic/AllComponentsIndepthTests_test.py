@@ -66,7 +66,7 @@ class TestAllComponentsIndepthTests(TestAutomationBase):
         for test_screenshot, golden_screenshot in zip(cache_images, golden_images):
             self.compare_screenshots(test_screenshot, golden_screenshot)
 
-    def test_ComponentsInBasicLevel_ScreenshotsMatchGoldenImages(
+    def test_LightComponentsInBasicLevel_ScreenshotsMatchGoldenImages(
             self, request, editor, workspace, project, launcher_platform, level, golden_images_directory):
         """
         Please review the hydra script run by this test for more specific test info.
@@ -102,7 +102,7 @@ class TestAllComponentsIndepthTests(TestAutomationBase):
         sphere_light_type = LIGHT_TYPES[1]
         spot_disk_light_type = LIGHT_TYPES[2]
         capsule_light_type = LIGHT_TYPES[3]
-        component_test_expected_lines = [
+        expected_lines = [
             # Level save/load
             "Level is saved successfully: True",
             "New entity created: True",
@@ -136,7 +136,63 @@ class TestAllComponentsIndepthTests(TestAutomationBase):
             editor,
             "AllComponentsIndepthTests_test_case.py",
             timeout=EDITOR_TIMEOUT,
-            expected_lines=component_test_expected_lines,
+            expected_lines=expected_lines,
+            unexpected_lines=unexpected_lines,
+            halt_on_unexpected=True,
+            cfg_args=[level],
+        )
+
+        for test_screenshot, golden_screenshot in zip(cache_images, golden_images):
+            self.compare_screenshots(test_screenshot, golden_screenshot)
+
+    def test_DecalGridComponentsInBasicLevel_ScreenshotsMatchGoldenImages(
+            self, request, editor, workspace, project, launcher_platform, level, golden_images_directory):
+        """
+        Please review the hydra script run by this test for more specific test info.
+        Tests that the Decale & Grid components gives the output we expect when used in a level.
+        """
+        screenshot_names = [
+            "Grid_1.ppm",
+            "Grid_2.ppm",
+            "Grid_3.ppm",
+            "Grid_4.ppm",
+            "Grid_5.ppm",
+            "Grid_6.ppm",
+            "Decal_1.ppm",
+            "Decal_2.ppm",
+            "Decal_3.ppm",
+            "Decal_4.ppm",
+            "Decal_5.ppm",
+            "Decal_6.ppm",
+        ]
+
+        cache_images = []
+        for cache_image in screenshot_names:
+            screenshot_path = os.path.join(workspace.paths.project(), DEFAULT_SUBFOLDER_PATH, cache_image)
+            cache_images.append(screenshot_path)
+        self.remove_artifacts(cache_images)
+
+        golden_images = []
+        for golden_image in screenshot_names:
+            golden_image_path = os.path.join(
+                golden_images_directory, "Windows", "AllComponentsIndepthTests", golden_image)
+            golden_images.append(golden_image_path)
+
+        expected_lines = ["Component tests completed"]
+        unexpected_lines = [
+            "Trace::Assert",
+            "Trace::Error",
+            "Traceback (most recent call last):",
+            "screenshot failed",
+        ]
+
+        hydra.launch_and_validate_results(
+            request,
+            TEST_DIRECTORY,
+            editor,
+            "AllComponentsIndepthDecalGridTests_test_case.py",
+            timeout=EDITOR_TIMEOUT,
+            expected_lines=expected_lines,
             unexpected_lines=unexpected_lines,
             halt_on_unexpected=True,
             cfg_args=[level],

@@ -19,6 +19,7 @@ import azlmbr.object
 from azlmbr.entity import EntityType
 
 from Automated.atom_utils.automated_test_utils import TestHelper as helper
+from Automated.atom_utils.screenshot_utils import ScreenshotHelper
 
 
 def find_entity_by_name(entity_name):
@@ -718,3 +719,35 @@ def level_load_save(level_name, entities_to_search):
     result = len(entity.SearchBus(azlmbr.bus.Broadcast, "SearchEntities", search_filter)) == 0
     general.log(f"New entity deleted: {result}")
     general.save_level()
+
+
+def verify_required_component_property_value(entity_name, component, property_path, expected_property_value):
+    """
+    Compares the property value of component against the expected_property_value.
+    :param entity_name: name of the entity to use (for test verification purposes).
+    :param component: component to check on a given entity for its current property value.
+    :param property_path: the path to the property inside the component.
+    :param expected_property_value: The value expected from the value inside property_path.
+    :return: None, but prints to general.log() which the test uses to verify against.
+    """
+    property_value = editor.EditorComponentAPIBus(
+        bus.Broadcast, "GetComponentProperty", component, property_path).GetValue()
+    general.log(f"{entity_name}_test: Property value is {property_value} "
+                f"which matches {expected_property_value}")
+
+
+def take_screenshot_game_mode(screenshot_name, entity_name=None):
+    """
+    Enters game mode & takes a screenshot, then exits game mode after.
+    :param screenshot_name: name to give the captured screenshot .ppm file.
+    :param entity_name: name of the entity being tested (for generating unique log lines).
+    :return:
+    """
+    general.enter_game_mode()
+    helper.wait_for_condition(lambda: general.is_in_game_mode(), 2.0)
+    general.log(f"{entity_name}_test: Entered game mode: {general.is_in_game_mode()}")
+    ScreenshotHelper(general.idle_wait_frames).capture_screenshot_blocking(f"{screenshot_name}.ppm")
+    general.idle_wait(1.0)
+    general.exit_game_mode()
+    helper.wait_for_condition(lambda: not general.is_in_game_mode(), 2.0)
+    general.log(f"{entity_name}_test: Exit game mode: {not general.is_in_game_mode()}")
