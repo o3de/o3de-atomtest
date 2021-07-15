@@ -13,7 +13,6 @@ import pytest
 from Automated.atom_utils import hydra_test_utils as hydra
 from Automated.atom_utils.automated_test_base import TestAutomationBase, DEFAULT_SUBFOLDER_PATH, LIGHT_TYPES
 
-EDITOR_TIMEOUT = 180
 TEST_DIRECTORY = os.path.dirname(__file__)
 
 
@@ -56,7 +55,7 @@ class TestAllComponentsIndepthTests(TestAutomationBase):
             TEST_DIRECTORY,
             editor,
             "BasicLevelSetup_test_case.py",
-            timeout=EDITOR_TIMEOUT,
+            timeout=180,
             expected_lines=level_creation_expected_lines,
             unexpected_lines=unexpected_lines,
             halt_on_unexpected=True,
@@ -135,7 +134,7 @@ class TestAllComponentsIndepthTests(TestAutomationBase):
             TEST_DIRECTORY,
             editor,
             "AllComponentsIndepthTests_test_case.py",
-            timeout=EDITOR_TIMEOUT,
+            timeout=120,
             expected_lines=expected_lines,
             unexpected_lines=unexpected_lines,
             halt_on_unexpected=True,
@@ -191,7 +190,7 @@ class TestAllComponentsIndepthTests(TestAutomationBase):
             TEST_DIRECTORY,
             editor,
             "AllComponentsIndepthDecalGridTests_test_case.py",
-            timeout=EDITOR_TIMEOUT,
+            timeout=120,
             expected_lines=expected_lines,
             unexpected_lines=unexpected_lines,
             halt_on_unexpected=True,

@@ -209,7 +209,6 @@ def decal_component_test():
     hydra.get_set_test(decal_2, 0, "Controller|Configuration|Sort Key", 50.0)
     general.idle_wait(1.0)
     hydra.take_screenshot_game_mode("Decal_6")
-    exit(0)
 
 
 if __name__ == "__main__":
