@@ -91,8 +91,8 @@ def run():
     hydra.initial_viewport_setup(screen_width=SCREEN_WIDTH, screen_height=SCREEN_HEIGHT)
 
     # Run tests.
-    grid_component_test()
     decal_component_test()
+    grid_component_test()
     general.log("Component tests completed")
 
 
@@ -100,49 +100,61 @@ def grid_component_test():
     """
     Basic test for the Grid component attached to an entity.
     """
-    # Get the default_entity and Grid component objects
-    component_name = "Grid"
+    # Delete entities not required by the test or screenshot comparison will fail.
+    entities_to_delete = ["ground_plane", "directional_light", "sphere"]
+    for entity_name in entities_to_delete:
+        entity_id = hydra.find_entity_by_name(entity_name)
+        hydra.delete_entity(entity_id)
+
+    # Get the default_level entity and Grid component object attached to it.
+    grid_component_name = "Grid"
+    default_level = "default_level"
     search_filter = azlmbr.entity.SearchFilter()
-    search_filter.names = ['default_level']
+    search_filter.names = [default_level]
     default_level_id = azlmbr.entity.SearchBus(azlmbr.bus.Broadcast, 'SearchEntities', search_filter)[0]
     type_id_list = azlmbr.editor.EditorComponentAPIBus(
-        azlmbr.bus.Broadcast, 'FindComponentTypeIdsByEntityType', [component_name], 0)
+        azlmbr.bus.Broadcast, 'FindComponentTypeIdsByEntityType', [grid_component_name], 0)
     outcome = azlmbr.editor.EditorComponentAPIBus(
         azlmbr.bus.Broadcast, 'GetComponentOfType', default_level_id, type_id_list[0])
     grid_component = outcome.GetValue()
 
+    # Bind the default_level entity and Grid component to a new hydra Entity class object for the test.
+    grid_entity_id = hydra.find_entity_by_name(default_level)
+    grid_entity_name = "grid_entity"
+    grid_entity = hydra.Entity(grid_entity_name, grid_entity_id)
+    grid_entity.components = [grid_component]
+
     # Update grid size of the Grid component of default_level and take screenshot
-    helper.set_component_property(grid_component, "Controller|Configuration|Grid Size", 64.0)
+    hydra.get_set_test(grid_entity, 0, "Controller|Configuration|Grid Size", 64.0)
     general.idle_wait(1.0)
-    hydra.take_screenshot_game_mode("Grid_1")
+    hydra.take_screenshot_game_mode("Grid_1", grid_entity_name)
 
     # Update axis color of the Grid component of default_level and take screenshot
     color = math.Color(13.0 / 255.0, 255.0 / 255.0, 0.0 / 255.0, 255.0 / 255.0)
-    helper.set_component_property(grid_component, "Controller|Configuration|Axis Color", color)
+    hydra.get_set_test(grid_entity, 0, "Controller|Configuration|Axis Color", color)
     general.idle_wait(1.0)
-    hydra.take_screenshot_game_mode("Grid_2")
+    hydra.take_screenshot_game_mode("Grid_2", grid_entity_name)
 
     # Update Primary Grid Spacing of the Grid component of default_level and take screenshot
-    helper.set_component_property(grid_component, "Controller|Configuration|Primary Grid Spacing", 0.5)
+    hydra.get_set_test(grid_entity, 0, "Controller|Configuration|Primary Grid Spacing", 0.5)
     general.idle_wait(1.0)
-    hydra.take_screenshot_game_mode("Grid_3")
+    hydra.take_screenshot_game_mode("Grid_3", grid_entity_name)
 
     # Update Primary color of the Grid component of default_level and take screenshot
     color = math.Color(129.0 / 255.0, 96.0 / 255.0, 0.0 / 255.0, 255.0 / 255.0)
-    helper.set_component_property(grid_component, "Controller|Configuration|Primary Color", color)
+    hydra.get_set_test(grid_entity, 0, "Controller|Configuration|Primary Color", color)
     general.idle_wait(1.0)
-    hydra.take_screenshot_game_mode("Grid_4")
+    hydra.take_screenshot_game_mode("Grid_4", grid_entity_name)
 
     # Update Secondary Grid Spacing of the Grid component of default_level and take screenshot
-    helper.set_component_property(grid_component, "Controller|Configuration|Secondary Grid Spacing", 0.75)
+    hydra.get_set_test(grid_entity, 0, "Controller|Configuration|Secondary Grid Spacing", 0.75)
     general.idle_wait(1.0)
-    hydra.take_screenshot_game_mode("Grid_5")
+    hydra.take_screenshot_game_mode("Grid_5", grid_entity_name)
 
     # Update Secondary color of the Grid component of default_level and take screenshot
-    color = math.Color(0.0 / 255.0, 35.0 / 255.0, 161.0 / 255.0, 255.0 / 255.0)
-    helper.set_component_property(grid_component, "Controller|Configuration|Secondary Color", color)
+    hydra.get_set_test(grid_entity, 0, "Controller|Configuration|Secondary Color", color)
     general.idle_wait(1.0)
-    hydra.take_screenshot_game_mode("Grid_6")
+    hydra.take_screenshot_game_mode("Grid_6", grid_entity_name)
 
     # Restore default grid values
     helper.set_component_property(grid_component, "Controller|Configuration|Grid Size", 32.0)
@@ -165,37 +177,39 @@ def decal_component_test():
     search_filter = azlmbr.entity.SearchFilter()
     search_filter.names = ['default_level']
     default_level_id = azlmbr.entity.SearchBus(azlmbr.bus.Broadcast, 'SearchEntities', search_filter)[0]
-    decal_1 = hydra.Entity("decal_1")
-    decal_1.create_entity(math.Vector3(3.0, 0.0, 1.0), components=[component_name], parent_id= default_level_id)
+    decal_1_entity_name = "decal_1"
+    decal_1 = hydra.Entity(decal_1_entity_name)
+    decal_1.create_entity(math.Vector3(3.0, 0.0, 1.0), components=[component_name], parent_id=default_level_id)
     # Set the Material Property in decal component to "airship_symbol_decal.material" and take screenshot
     asset_value = hydra.get_asset_by_path(
         os.path.join("Materials", "decal", "airship_symbol_decal.azmaterial")
     )
     hydra.get_set_test(decal_1, 0, "Controller|Configuration|Material", asset_value)
     general.idle_wait(1.0)
-    hydra.take_screenshot_game_mode("Decal_1")
+    hydra.take_screenshot_game_mode("Decal_1", decal_1_entity_name)
 
     # Change the Uniform scale value in Transform component to: 3.0 and take screenshot
     azlmbr.components.TransformBus(azlmbr.bus.Event, "SetLocalUniformScale", decal_1.id, 3.0)
     general.idle_wait(1.0)
-    hydra.take_screenshot_game_mode("Decal_2")
+    hydra.take_screenshot_game_mode("Decal_2", decal_1_entity_name)
 
     # Set the Attenuation Angle to: 0.75 in Decal component and take screenshot
     hydra.get_set_test(decal_1, 0, "Controller|Configuration|Attenuation Angle", 0.75)
     general.idle_wait(1.0)
-    hydra.take_screenshot_game_mode("Decal_3")
+    hydra.take_screenshot_game_mode("Decal_3", decal_1_entity_name)
 
     # Set the Set Opacity to: 0.03 in Decal component and take screenshot
     hydra.get_set_test(decal_1, 0, "Controller|Configuration|Opacity", 0.03)
     general.idle_wait(1.0)
-    hydra.take_screenshot_game_mode("Decal_4")
+    hydra.take_screenshot_game_mode("Decal_4", decal_1_entity_name)
 
     # Set Opacity back to 1.0
     hydra.get_set_test(decal_1, 0, "Controller|Configuration|Opacity", 1.0)
 
     # Create another child entity 'decal_2' under Default entity and add decal component to it
-    decal_2 = hydra.Entity("decal_2")
-    decal_2.create_entity(math.Vector3(5.0, 0.0, 0.5), components=[component_name], parent_id= default_level_id)
+    decal_2_entity_name = "decal_2"
+    decal_2 = hydra.Entity(decal_2_entity_name)
+    decal_2.create_entity(math.Vector3(5.0, 0.0, 0.5), components=[component_name], parent_id=default_level_id)
 
     # Set the material value to "valenaactor_helmetmat.material", Sort Key value to: 0 and take screenshot
     asset_value = hydra.get_asset_by_path(
@@ -204,11 +218,11 @@ def decal_component_test():
     hydra.get_set_test(decal_2, 0, "Controller|Configuration|Material", asset_value)
     hydra.get_set_test(decal_2, 0, "Controller|Configuration|Sort Key", 0.0)
     general.idle_wait(1.0)
-    hydra.take_screenshot_game_mode("Decal_5")
+    hydra.take_screenshot_game_mode("Decal_5", decal_2_entity_name)
     # Set the Sort Key value of decal_2 to: 50 and take screenshot
     hydra.get_set_test(decal_2, 0, "Controller|Configuration|Sort Key", 50.0)
     general.idle_wait(1.0)
-    hydra.take_screenshot_game_mode("Decal_6")
+    hydra.take_screenshot_game_mode("Decal_6", decal_2_entity_name)
 
 
 if __name__ == "__main__":

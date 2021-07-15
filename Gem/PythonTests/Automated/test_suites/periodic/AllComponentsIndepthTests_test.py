@@ -177,12 +177,41 @@ class TestAllComponentsIndepthTests(TestAutomationBase):
                 golden_images_directory, "Windows", "AllComponentsIndepthTests", golden_image)
             golden_images.append(golden_image_path)
 
-        expected_lines = ["Component tests completed"]
+        grid_entity = "grid_entity"
+        decal_1 = "decal_1"
+        decal_2 = "decal_2"
+        expected_lines = [
+            f"{grid_entity}_test: Entered game mode: True",
+            f"{grid_entity}_test: Exit game mode: True",
+            f"SUCCESS: Retrieved property Value for {grid_entity}",
+            f"{grid_entity} Controller|Configuration|Grid Size: SUCCESS",
+            f"{grid_entity} Controller|Configuration|Axis Color: SUCCESS",
+            f"{grid_entity} Controller|Configuration|Primary Grid Spacing: SUCCESS",
+            f"{grid_entity} Controller|Configuration|Primary Color: SUCCESS",
+            f"{grid_entity} Controller|Configuration|Secondary Color: SUCCESS",
+            f"{grid_entity} Controller|Configuration|Secondary Grid Spacing: SUCCESS",
+            f"{decal_1} Entity successfully created",
+            "Decal (Atom) component was added to entity",
+            f"{decal_1}_test: Entered game mode: True",
+            f"{decal_1}_test: Exit game mode: True",
+            f"SUCCESS: Retrieved new property Value for {decal_1}",
+            f"{decal_1} Controller|Configuration|Opacity: SUCCESS",
+            f"{decal_1} Controller|Configuration|Attenuation Angle: SUCCESS",
+            f"{decal_2}_test: Entered game mode: True",
+            f"{decal_2}_test: Exit game mode: True",
+            f"SUCCESS: Retrieved new property Value for {decal_2}",
+            f"{decal_2} Controller|Configuration|Material: SUCCESS",
+            f"{decal_2} Controller|Configuration|Sort Key: SUCCESS",
+            "Component tests completed",
+        ]
         unexpected_lines = [
             "Trace::Assert",
             "Trace::Error",
             "Traceback (most recent call last):",
             "screenshot failed",
+            f"FAILURE: Failed to find value in {grid_entity}",
+            f"FAILURE: Failed to find value in {decal_1}",
+            f"FAILURE: Failed to find value in {decal_2}"
         ]
 
         hydra.launch_and_validate_results(
