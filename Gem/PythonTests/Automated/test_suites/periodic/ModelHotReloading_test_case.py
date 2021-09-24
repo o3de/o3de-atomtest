@@ -63,42 +63,6 @@ class ModelReloadHelper():
             # copy_file failed
             return False
 
-MULTI_MAT_MESH_GROUPS_MATERIAL_PROPERTIES = [
-    'LOD Materials|LOD 0|[3]|Material Asset',
-    'Model Materials|[0]|Material Asset',
-    'Controller',
-    'LOD Materials|LOD 0|[0]',
-    'LOD Materials|LOD 0',
-    'Controller|Materials|[0]|Value<AZ::Render::MaterialAssignment>',
-    'LOD Materials|LOD 0|[2]',
-    'Controller|Materials|[0]',
-    'LOD Materials|LOD 0|[1]',
-    'Message',
-    'Controller|Materials|[0]|Key<AZ::Render::MaterialAssignmentId>',
-    'LOD Materials|LOD 0|[3]',
-    'Model Materials|[4]|Material Asset',
-    'Model Materials',
-    'Model Materials|[2]',
-    'Model Materials|[0]',
-    'Default Material|Material Asset',
-    'Default Material',
-    'LOD Materials|LOD 0|[0]|Material Asset',
-    'LOD Materials|LOD 0|[2]|Material Asset',
-    'Model Materials|[1]|Material Asset',
-    'Model Materials|[1]',
-    'Model Materials|[3]',
-    'LOD Materials|LOD 0|[1]|Material Asset',
-    'LOD Materials',
-    'Enable LOD Materials',
-    'LOD Materials|LOD 0|[4]',
-    'LOD Materials|LOD 0|[4]|Material Asset',
-    'Model Materials|[3]|Material Asset',
-    'Controller|Materials',
-    'Model Materials|[2]|Material Asset',
-    'Model Materials|[4]'
-]
-
-
 def run():
     """
     Test Case - Material:
