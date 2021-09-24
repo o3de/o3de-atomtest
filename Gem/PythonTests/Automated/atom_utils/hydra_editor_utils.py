@@ -507,7 +507,7 @@ def helper_create_entity_with_mesh(path_to_mesh, offset=azlmbr.math.Vector3(0.0,
     meshId = asset.AssetCatalogRequestBus(bus.Broadcast, 'GetAssetIdByPath', path_to_mesh, math.Uuid(), False)
 
     # set mesh asset
-    mesh_property_path = 'Controller|Configuration|Mesh asset'
+    mesh_property_path = 'Controller|Configuration|Mesh Asset'
     newObj = editor.EditorComponentAPIBus(
         azlmbr.bus.Broadcast, 'SetComponentProperty', component, mesh_property_path, meshId)
 
