@@ -3,13 +3,6 @@ Copyright (c) Contributors to the Open 3D Engine Project.
 For complete copyright and license terms please see the LICENSE at the root of this distribution.
 
 SPDX-License-Identifier: Apache-2.0 OR MIT
-
-Hydra script that is used to test the Material component functionality inside the Editor.
-Opens the MeshTest level & creates an entity w/ Mesh component, then uses this entity to test the Material component.
-Uses 3 different types of materials: a grouping of materials, 3 different LOD materials, and 1 default material.
-Results are verified using log messages & screenshot comparisons diffed against golden images.
-
-See the run() function for more in-depth test info.
 """
 
 import os
@@ -25,40 +18,33 @@ import azlmbr.asset
 sys.path.append(os.path.join(azlmbr.paths.devassets, "Gem", "PythonTests"))
 
 from Automated.atom_utils.automated_test_utils import TestHelper as helper
-from Automated.atom_utils.hydra_editor_utils import \
-    helper_create_entity_with_mesh
 from Automated.atom_utils.screenshot_utils import ScreenshotHelper
-
-TESTDATA_ASSET_PATH = os.path.join(
-    azlmbr.paths.devroot, "Gems", "Atom", "TestData", "TestData"
-)
+from Automated.atom_utils import hydra_editor_utils as hydra
 
 class ModelReloadHelper():
     def __init__(self):
-        self.isModelReady = False
+        self.is_model_ready = False
     
     def model_is_ready_predicate(self):
         """
         A predicate function what will be used in wait_for_condition.
         """
-        return self.isModelReady
+        return self.is_model_ready
 
     def on_model_ready(self, parameters):
-        self.isModelReady = True
+        self.is_model_ready = True
 
     def copy_file_and_wait_for_on_model_ready(self, entityId, sourceFile):
-        self.isModelReady = False
         # Connect to the MeshNotificationBus
         # Listen for notifications when entities are created/deleted
-        self.onModelReadyHandler = azlmbr.bus.NotificationHandler('MeshComponentNotificationBus')
-        self.onModelReadyHandler.connect(entityId)
-        self.onModelReadyHandler.add_callback('OnModelReady', self.on_model_ready)
+        self.on_model_ready_handler = azlmbr.bus.NotificationHandler('MeshComponentNotificationBus')
+        self.on_model_ready_handler.connect(entityId)
+        self.on_model_ready_handler.add_callback('OnModelReady', self.on_model_ready)
+        # Set is_model_ready to false after connecting, but before copying the new model
+        # in case an OnModelReady event is fired when adding the callback
+        self.is_model_ready = False
         if copy_file(sourceFile, 'Objects/ModelHotReload/hotreload.fbx'):
-            waitCondition = partial(self.model_is_ready_predicate)
-            if helper.wait_for_condition(waitCondition, 20.0):
-                return True
-            else:
-                return False
+            return helper.wait_for_condition(lambda: self.is_model_ready, 20.0)
         else:
             # copy_file failed
             return False
@@ -81,7 +67,7 @@ def run():
     13. Verifies the correct material slots appear on the material component.
     14. Reloads the model using one without lods and with an extra color stream.
     15. Verifies the correct material slots appear on the material component.
-    12. Closes the Editor and the test ends.
+    16. Closes the Editor and the test ends.
 
     :return: None
     """
@@ -90,108 +76,125 @@ def run():
     helper.open_level("EmptyLevel")
 
     # Create a new entity and attach a Mesh+Material component to it.
-    meshOffset = azlmbr.math.Vector3(4.5, 3.0, 0.0)
-    myEntityId = azlmbr.editor.ToolsApplicationRequestBus(azlmbr.bus.Broadcast, 'CreateNewEntity', azlmbr.entity.EntityId())
-    azlmbr.components.TransformBus(azlmbr.bus.Event, "SetWorldTranslation", myEntityId, meshOffset)
-    if myEntityId.IsValid():
+    mesh_offset = azlmbr.math.Vector3(4.5, 3.0, 0.0)
+    my_entity_id = azlmbr.editor.ToolsApplicationRequestBus(azlmbr.bus.Broadcast, 'CreateNewEntity', azlmbr.entity.EntityId())
+    azlmbr.components.TransformBus(azlmbr.bus.Event, "SetWorldTranslation", my_entity_id, mesh_offset)
+    if my_entity_id.IsValid():
         general.log("Entity successfully created.")
 
-    meshComponent = helper.attach_component_to_entity(myEntityId, 'Mesh')
-    materialComponent = helper.attach_component_to_entity(myEntityId, 'Material')
+    mesh_component = helper.attach_component_to_entity(my_entity_id, 'Mesh')
+    material_component = helper.attach_component_to_entity(my_entity_id, 'Material')
 
     
     # Find the entity with a camera  
-    searchFilter = azlmbr.entity.SearchFilter()
-    searchFilter.names = ['Camera']
-    cameraEntityId = azlmbr.entity.SearchBus(azlmbr.bus.Broadcast, 'SearchEntities', searchFilter)[0]
+    search_filter = azlmbr.entity.SearchFilter()
+    search_filter.names = ['Camera']
+    camera_entity_id = azlmbr.entity.SearchBus(azlmbr.bus.Broadcast, 'SearchEntities', search_filter)[0]
 
     # Make the camera look at the mesh component entity
-    cameraPosition = meshOffset.Add(azlmbr.math.Vector3(-5.0, 0.0, 0.0))
-    forwardAxis = 2 #YPositive
-    cameraTransform = azlmbr.math.Transform_CreateLookAt(cameraPosition, meshOffset, forwardAxis)
-    azlmbr.components.TransformBus(azlmbr.bus.Event, "SetWorldTM", cameraEntityId, cameraTransform)
+    camera_position = mesh_offset.Add(azlmbr.math.Vector3(-5.0, 0.0, 0.0))
+    forward_axis = 2 #YPositive
+    camera_transform = azlmbr.math.Transform_CreateLookAt(camera_position, mesh_offset, forward_axis)
+    azlmbr.components.TransformBus(azlmbr.bus.Event, "SetWorldTM", camera_entity_id, camera_transform)
     azlmbr.editor.EditorCameraRequestBus(
-        azlmbr.bus.Broadcast, "SetViewAndMovementLockFromEntityPerspective", cameraEntityId, False)
+        azlmbr.bus.Broadcast, "SetViewAndMovementLockFromEntityPerspective", camera_entity_id, False)
 
     # Apply a material that will display the vertex color
-    displayVertexColorPath = 'testdata/objects/modelhotreload/displayvertexcolor.azmaterial'
-    displayVertexColorAssetId = azlmbr.asset.AssetCatalogRequestBus(azlmbr.bus.Broadcast, 'GetAssetIdByPath', displayVertexColorPath, azlmbr.math.Uuid(), False)
+    display_vertex_color_path = os.path.join("testdata", "objects", "modelhotreload", "displayvertexcolor.azmaterial")
+    display_vertex_color_asset_id = hydra.get_asset_by_path(display_vertex_color_path)
     property_path = 'Default Material|Material Asset'
     azlmbr.editor.EditorComponentAPIBus(
-        azlmbr.bus.Broadcast, 'SetComponentProperty', materialComponent, property_path, displayVertexColorAssetId)
+        azlmbr.bus.Broadcast, 'SetComponentProperty', material_component, property_path, display_vertex_color_asset_id)
 
     # Set mesh asset 'testdata/objects/modelhotreload/hotreload.azmodel'
     # Note, this mesh does not yet exist. Part of the test is that it reloads once it is added
     # Since it doesn't exist in the asset catalog yet, and we have no way to auto-generate the correct sub-id, we must use the hard coded assetId
-    modelId = azlmbr.asset.AssetId_CreateString("{66ADF6FF-3CA4-51F6-9681-5697D4A29F56}:10241ecb")
+    model_id = azlmbr.asset.AssetId_CreateString("{66ADF6FF-3CA4-51F6-9681-5697D4A29F56}:10241ecb")
     mesh_property_path = 'Controller|Configuration|Mesh Asset'
     newObj = azlmbr.editor.EditorComponentAPIBus(
-        azlmbr.bus.Broadcast, 'SetComponentProperty', meshComponent, mesh_property_path, modelId)
+        azlmbr.bus.Broadcast, 'SetComponentProperty', mesh_component, mesh_property_path, model_id)
 
-    modelReloadHelper = ModelReloadHelper()
+    model_reload_helper = ModelReloadHelper()
 
     # Copy the vertexcolor.fbx file to the location of hotreload.azmodel, and wait for it to be ready
-    if not modelReloadHelper.copy_file_and_wait_for_on_model_ready(myEntityId, 'Objects/ModelHotReload/vertexcolor.fbx'):
+    if not model_reload_helper.copy_file_and_wait_for_on_model_ready(my_entity_id, 'Objects/ModelHotReload/vertexcolor.fbx'):
         general.log("OnModelReady never happened - vertexcolor.fbx")
 
     # Use a screenshot for validation since the presence of a vertex color stream should change the appearance of the object
-    screenshotHelper = ScreenshotHelper(general.idle_wait_frames)
-    screenshotHelper.capture_screenshot_blocking_in_game_mode('screenshot_atom_ModelHotReload_VertexColor.ppm')
+    screenshot_helper = ScreenshotHelper(general.idle_wait_frames)
+    screenshot_helper.capture_screenshot_blocking_in_game_mode('screenshot_atom_ModelHotReload_VertexColor.ppm')
 
     # Test that removing a vertex stream functions
-    if not modelReloadHelper.copy_file_and_wait_for_on_model_ready(myEntityId, 'Objects/ModelHotReload/novertexcolor.fbx'):
+    if not model_reload_helper.copy_file_and_wait_for_on_model_ready(my_entity_id, 'Objects/ModelHotReload/novertexcolor.fbx'):
         general.log("OnModelReady never happened - novertexcolor.fbx")
 
     # Use a screenshot for validation since the absence of a vertex color stream should change the appearance of the object
-    screenshotHelper.capture_screenshot_blocking_in_game_mode('screenshot_atom_ModelHotReload_NoVertexColor.ppm')
+    screenshot_helper.capture_screenshot_blocking_in_game_mode('screenshot_atom_ModelHotReload_NoVertexColor.ppm')
     
     # hot-reload the mesh that multiple materials, plus more/fewer vertices
-    if not modelReloadHelper.copy_file_and_wait_for_on_model_ready(myEntityId, 'Multi-mat_fbx/multi-mat_mesh-groups_1m_cubes.fbx'):
+    if not model_reload_helper.copy_file_and_wait_for_on_model_ready(my_entity_id, 'Multi-mat_fbx/multi-mat_mesh-groups_1m_cubes.fbx'):
         general.log("OnModelReady never happened - multi-mat_mesh-groups_1m_cubes.fbx")
 
     # Use the presence of multiple material slots in the material component to validate that the model was reloaded
     # and to verify the material component was updated
-    lodMaterialList = ["StingrayPBS1", "Red_Xaxis", "Green_Yaxis", "Blue_Zaxis", "With_Texture"]
-    modelMaterialOverrideLod = 18446744073709551615
-    materialLabelDict = {modelMaterialOverrideLod:lodMaterialList, 0:lodMaterialList}    
-    validate_material_slot_labels(myEntityId, materialLabelDict)
+    lod_material_list = ["StingrayPBS1", "Red_Xaxis", "Green_Yaxis", "Blue_Zaxis", "With_Texture"]
+    model_material_override_lod = 18446744073709551615
+    material_label_dict = {
+        model_material_override_lod:lod_material_list, 
+        0:lod_material_list,
+        }    
+    validate_material_slot_labels(my_entity_id, material_label_dict)
 
     # Test that increasing the lod count functions
-    if not modelReloadHelper.copy_file_and_wait_for_on_model_ready(myEntityId, 'Objects/ModelHotReload/sphere_5lods.fbx'):
+    if not model_reload_helper.copy_file_and_wait_for_on_model_ready(my_entity_id, 'Objects/ModelHotReload/sphere_5lods.fbx'):
         general.log("OnModelReady never happened - sphere_5lods.fbx")
     
     # The model material overrides have 5 slots, each individual lod only has 1 slot
-    materialLabelDict = {modelMaterialOverrideLod:["lambert0", "lambert3", "lambert4", "lambert5", "lambert6"], 0:["lambert0"], 1:["lambert3"], 2:["lambert4"], 3:["lambert5"], 4:["lambert6"]}
-    validate_material_slot_labels(myEntityId, materialLabelDict)
+    material_label_dict = {
+        model_material_override_lod:["lambert0", "lambert3", "lambert4", "lambert5", "lambert6"],
+        0:["lambert0"],
+        1:["lambert3"],
+        2:["lambert4"],
+        3:["lambert5"],
+        4:["lambert6"],
+        }
+    validate_material_slot_labels(my_entity_id, material_label_dict)
 
     # Test that adding a vertex stream and removing lods functions
-    if not modelReloadHelper.copy_file_and_wait_for_on_model_ready(myEntityId, 'Objects/ModelHotReload/vertexcolor.fbx'):
+    if not model_reload_helper.copy_file_and_wait_for_on_model_ready(my_entity_id, 'Objects/ModelHotReload/vertexcolor.fbx'):
         general.log("OnModelReady never happened - vertexcolor.fbx")
-    # Use the presence of a single material slot in the material component to validate the m
-    lodMaterialList = ["Material"]
-    materialLabelDict = {modelMaterialOverrideLod:lodMaterialList, 0:lodMaterialList}
-    validate_material_slot_labels(myEntityId, materialLabelDict)
+    # Use the presence of a single material slot in the material component to validate the model reloaded
+    lod_material_list = ["Material"]
+    material_label_dict = {
+        model_material_override_lod:lod_material_list,
+        0:lod_material_list,
+        }
+    validate_material_slot_labels(my_entity_id, material_label_dict)
+    print_material_slot_labels(my_entity_id)
+    """
+    Future steps for other test cases
     
-    # Future steps for other test cases
-    # apply a material override to two of the materials
-    # apply a property override to one of the materials
+    apply a material override to two of the materials
+    apply a property override to one of the materials
     
-    # Default material not properly being cleared
-    # - apply default material on one model
-    #  - reload to different model (sphere5_lods)
-    # - apply material slot overrides
-    # - clear the default material assignment (this might have been done before reloading the mesh, or without reloading at all, just assigning a new mesh) (it might have been done before or after applying the slot overrides)
-    # - expected: slots without overrides use their default material
-    # - actual: slots without overrides use the old default material
+    Default material not properly being cleared
+    - apply default material on one model
+    -- reload to different model (sphere5_lods)
+    - apply material slot overrides
+    - clear the default material assignment (this might have been done before reloading the mesh, or without reloading at all, just assigning a new mesh) (it might have been done before or after applying the slot overrides)
+    - expected: slots without overrides use their default material
+    - actual: slots without overrides use the old default material
 
-    # remove one of the materials
-    # change some faces to use the same material as one of the already overriden slots
-    # also change some faces to use one of the materials that has the default applied in the material component
-    # also change some faces to use a newly added material
+    remove one of the materials
+    change some faces to use the same material as one of the already overriden slots
+    also change some faces to use one of the materials that has the default applied in the material component
+    also change some faces to use a newly added material
 
-    # enable lod material override
+    enable lod material override
     
-    # Repeat with the actor component
+    Repeat with the actor component
+    Reload model with cloth component
+    """
 
     
     # Close the Editor to end the test.
@@ -200,60 +203,71 @@ def run():
 def print_material_slot_labels(entityId):
     # Helper function useful while writing/modifying the test that will output the available materials slots
     general.log("Printing Material Slot AssignmentIds and Labels")
-    materialAssignmentMap = azlmbr.render.MaterialComponentRequestBus(azlmbr.bus.Event, 'GetOriginalMaterialAssignments', entityId)
-    for assignmentId in materialAssignmentMap:
-        general.log("  AssignementId (slotId:lod): {0}".format(assignmentId.ToString()))
-        slotLabel = azlmbr.render.MaterialComponentRequestBus(azlmbr.bus.Event, 'GetMaterialSlotLabel', entityId, assignmentId)
-        general.log("  SlotLabel: {0}".format(slotLabel))
+    material_assignment_map = azlmbr.render.MaterialComponentRequestBus(azlmbr.bus.Event, 'GetOriginalMaterialAssignments', entityId)
+    for assignment_id in material_assignment_map:
+        general.log(f"  AssignementId (slotId:lod): {assignment_id.ToString()}")
+        slot_label = azlmbr.render.MaterialComponentRequestBus(azlmbr.bus.Event, 'GetMaterialSlotLabel', entityId, assignment_id)
+        general.log(f"  SlotLabel: {slot_label}")
 
 
-def validate_material_slot_labels(entityId, materialLabelDict):
+def validate_material_slot_labels(entityId, material_label_dict):
+    """
+    Validate that the original material assignment map on the entity matches what is expected
+
+    :param entityId: The entity with the material component
+    :param material_label_dict: A dict where each key is an lod index and each value a list of expected material slot labels.
+    :return: True if all the expected slot/lod combinations are found and no unexpected combinations are found. False otherwise.
+    """
     # keep track of whether or not each materialLabel for each lod is found
-    foundLabels = dict()
-    for lod in materialLabelDict:
-        foundLabels[lod] = dict()
-        for label in materialLabelDict[lod]:
-            foundLabels[lod][label] = False
+    found_labels = dict()
+    for lod in material_label_dict:
+        found_labels[lod] = dict()
+        for label in material_label_dict[lod]:
+            found_labels[lod][label] = False
 
     # Look for lods or slots that were not expected. Mark the expected ones as found
-    materialAssignmentMap = azlmbr.render.MaterialComponentRequestBus(azlmbr.bus.Event, 'GetOriginalMaterialAssignments', entityId)
-    for assignmentId in materialAssignmentMap:
+    material_assignment_map = azlmbr.render.MaterialComponentRequestBus(azlmbr.bus.Event, 'GetOriginalMaterialAssignments', entityId)
+    for assignment_id in material_assignment_map:
         # Ignore the default assignment, since it exists for every model/lod
-        if not assignmentId.IsDefault():
-            if assignmentId.lodIndex not in foundLabels:
+        if not assignment_id.IsDefault():
+            if assignment_id.lodIndex not in found_labels:
                 general.log("There is an unexpected lod in the material map")
-                general.log("  lod: {0}".format(assignmentId.lodIndex))
+                general.log(f"  lod: {assignment_id.lodIndex}")
                 return False
             else:
-                slotLabel = azlmbr.render.MaterialComponentRequestBus(azlmbr.bus.Event, 'GetMaterialSlotLabel', entityId, assignmentId)
-                if slotLabel not in foundLabels[assignmentId.lodIndex]:
+                slot_label = azlmbr.render.MaterialComponentRequestBus(azlmbr.bus.Event, 'GetMaterialSlotLabel', entityId, assignment_id)
+                if slot_label not in found_labels[assignment_id.lodIndex]:
                     general.log("There is an unexpected material slot in the lod")
-                    general.log("  lod: {0} slot label: {1}".format(assignmentId.lodIndex, slotLabel))
+                    general.log(f"  lod: {assignment_id.lodIndex} slot label: {slot_label}")
                     return False
                 else:
-                    foundLabels[assignmentId.lodIndex][slotLabel] = True
+                    found_labels[assignment_id.lodIndex][slot_label] = True
 
     # Check to see that all the expected lods and labels were found
-    for materialLod in foundLabels:
-        for label in foundLabels[materialLod]:
-            if not foundLabels[materialLod][label]:
+    for material_lod in found_labels:
+        for label in found_labels[material_lod]:
+            if not found_labels[material_lod][label]:
                 general.log("There was an expected material slot/lod combination that was not found")
-                general.log("  lod: {0} slot label: {1}".format(assignmentId.lodIndex, slotLabel))
+                general.log(f"  lod: {assignment_id.lodIndex} slot label: {slot_label}")
                 return False
 
     # All the expected material slot/lod combinations were found
     return True
 
-def copy_file(srcPath, dstPath):
-    srcPath = os.path.join(TESTDATA_ASSET_PATH, srcPath)
-    dstPath = os.path.join(TESTDATA_ASSET_PATH, dstPath)
-    dstDir = os.path.dirname(dstPath)
-    if not os.path.isdir(dstDir):
-        os.makedirs(dstDir)
+TESTDATA_ASSET_PATH = os.path.join(
+    azlmbr.paths.devroot, "Gems", "Atom", "TestData", "TestData"
+)
+
+def copy_file(src_path, dst_path):
+    src_path = os.path.join(TESTDATA_ASSET_PATH, src_path)
+    dst_path = os.path.join(TESTDATA_ASSET_PATH, dst_path)
+    dst_dir = os.path.dirname(dst_path)
+    if not os.path.isdir(dst_dir):
+        os.makedirs(dst_dir)
     try:
-        shutil.copyfile(srcPath, dstPath)
+        shutil.copyfile(src_path, dst_path)
         return True
-    except BaseException as error:
+    except Exception as error:
         general.log(f"ERROR: {error}")
         return False
 

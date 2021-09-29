@@ -3,9 +3,6 @@ Copyright (c) Contributors to the Open 3D Engine Project.
 For complete copyright and license terms please see the LICENSE at the root of this distribution.
 
 SPDX-License-Identifier: Apache-2.0 OR MIT
-
-Tests the Material component inside the Editor.
-Utilizes screenshots & log lines printed from a hydra script to verify test results.
 """
 
 import pytest
@@ -36,13 +33,13 @@ class TestAutomation(TestAutomationBase):
 
         engine_root = workspace.paths.engine_root()
         test_screenshots = [
-            os.path.join(engine_root, project, DEFAULT_SUBFOLDER_PATH, 'screenshot_atom_ModelHotReload_VertexColor.ppm'),
-            os.path.join(engine_root, project, DEFAULT_SUBFOLDER_PATH, 'screenshot_atom_ModelHotReload_NoVertexColor.ppm')
+            os.path.join(workspace.paths.project(), DEFAULT_SUBFOLDER_PATH, 'screenshot_atom_ModelHotReload_VertexColor.ppm'),
+            os.path.join(workspace.paths.project(), DEFAULT_SUBFOLDER_PATH, 'screenshot_atom_ModelHotReload_NoVertexColor.ppm')
         ]
 
         self.remove_artifacts(test_screenshots)
-        test_model = [os.path.join(engine_root, "Gems", "Atom", "TestData", "TestData", "Objects", "ModelHotReload", "hotreload.fbx")]
-        self.remove_artifacts(test_model)
+        test_models = [os.path.join(engine_root, "Gems", "Atom", "TestData", "TestData", "Objects", "ModelHotReload", "hotreload.fbx")]
+        self.remove_artifacts(test_models)
 
         expected_lines = [
             "Entity successfully created.",
@@ -73,6 +70,6 @@ class TestAutomation(TestAutomationBase):
         )
         
         # clean up after the fact to not pollute future test runs
-        self.remove_artifacts(test_model)
+        self.remove_artifacts(test_models)
         for test_screenshot, golden_screenshot in zip(test_screenshots, golden_screenshots):
             self.compare_screenshots(test_screenshot, golden_screenshot)
