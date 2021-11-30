@@ -1,5 +1,6 @@
 """
-Copyright (c) Contributors to the Open 3D Engine Project. For complete copyright and license terms please see the LICENSE at the root of this distribution.
+Copyright (c) Contributors to the Open 3D Engine Project.
+For complete copyright and license terms please see the LICENSE at the root of this distribution.
 
 SPDX-License-Identifier: Apache-2.0 OR MIT
 """
@@ -33,13 +34,13 @@ class TestMaterialEditorEnableGridShadowCatcherLight(TestAutomationBase):
         ]
 
         test_screenshots = [
-            os.path.join(workspace.paths.engine_root(), project, 'Cache', 'pc', 'Screenshots', 'screenshot_materialeditor_cube.ppm'),
-            os.path.join(workspace.paths.engine_root(), project, 'Cache', 'pc', 'Screenshots', 'screenshot_materialeditor_griddisable.ppm'),
-            os.path.join(workspace.paths.engine_root(), project, 'Cache', 'pc', 'Screenshots', 'screenshot_materialeditor_gridenable.ppm'),
-            os.path.join(workspace.paths.engine_root(), project, 'Cache', 'pc', 'Screenshots', 'screenshot_materialeditor_light.ppm'),
-            os.path.join(workspace.paths.engine_root(), project, 'Cache', 'pc', 'Screenshots', 'screenshot_materialeditor_shaderball.ppm'),
-            os.path.join(workspace.paths.engine_root(), project, 'Cache', 'pc', 'Screenshots', 'screenshot_materialeditor_shadowdisable.ppm'),
-            os.path.join(workspace.paths.engine_root(), project, 'Cache', 'pc', 'Screenshots', 'screenshot_materialeditor_shadowenable.ppm'),
+            os.path.join(workspace.paths.project(), 'Cache', 'pc', 'Screenshots', 'screenshot_materialeditor_cube.ppm'),
+            os.path.join(workspace.paths.project(), 'Cache', 'pc', 'Screenshots', 'screenshot_materialeditor_griddisable.ppm'),
+            os.path.join(workspace.paths.project(), 'Cache', 'pc', 'Screenshots', 'screenshot_materialeditor_gridenable.ppm'),
+            os.path.join(workspace.paths.project(), 'Cache', 'pc', 'Screenshots', 'screenshot_materialeditor_light.ppm'),
+            os.path.join(workspace.paths.project(), 'Cache', 'pc', 'Screenshots', 'screenshot_materialeditor_shaderball.ppm'),
+            os.path.join(workspace.paths.project(), 'Cache', 'pc', 'Screenshots', 'screenshot_materialeditor_shadowdisable.ppm'),
+            os.path.join(workspace.paths.project(), 'Cache', 'pc', 'Screenshots', 'screenshot_materialeditor_shadowenable.ppm'),
         ]
 
         self.remove_artifacts(test_screenshots)

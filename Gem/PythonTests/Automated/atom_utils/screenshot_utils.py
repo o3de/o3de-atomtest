@@ -1,5 +1,6 @@
 """
-Copyright (c) Contributors to the Open 3D Engine Project. For complete copyright and license terms please see the LICENSE at the root of this distribution.
+Copyright (c) Contributors to the Open 3D Engine Project.
+For complete copyright and license terms please see the LICENSE at the root of this distribution.
 
 SPDX-License-Identifier: Apache-2.0 OR MIT
 """
@@ -72,7 +73,7 @@ class ScreenshotHelper:
         else:
             general.log("screenshot failed: {}".format(parameters[1]))
         self.done = True
-        self.handler.disconnect();
+        self.handler.disconnect()
 
     def wait_until_screenshot(self):
         frames_waited = 0

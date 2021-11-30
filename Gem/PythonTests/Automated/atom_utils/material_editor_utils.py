@@ -1,5 +1,6 @@
 """
-Copyright (c) Contributors to the Open 3D Engine Project. For complete copyright and license terms please see the LICENSE at the root of this distribution.
+Copyright (c) Contributors to the Open 3D Engine Project.
+For complete copyright and license terms please see the LICENSE at the root of this distribution.
 
 SPDX-License-Identifier: Apache-2.0 OR MIT
 
@@ -12,7 +13,7 @@ import sys
 import time
 import azlmbr.atom
 import azlmbr.materialeditor as materialeditor
-import azlmbr.materialeditor.general as general
+import azlmbr.atomtools.general as general
 import azlmbr.bus as bus
 import os
 
@@ -238,6 +239,6 @@ class ScreenshotHelper:
 
 
 def capture_screenshot(file_path):
-    return ScreenshotHelper(azlmbr.materialeditor.general.idle_wait_frames).capture_screenshot_blocking(
+    return ScreenshotHelper(azlmbr.atomtools.general.idle_wait_frames).capture_screenshot_blocking(
         os.path.join(file_path)
     )

@@ -1,22 +1,19 @@
 """
-Copyright (c) Contributors to the Open 3D Engine Project. For complete copyright and license terms please see the LICENSE at the root of this distribution.
+Copyright (c) Contributors to the Open 3D Engine Project.
+For complete copyright and license terms please see the LICENSE at the root of this distribution.
 
 SPDX-License-Identifier: Apache-2.0 OR MIT
 
-Does in-depth component tests for a new level setup, as well as the Light component with "Area" and "Spot" options.
+Does in-depth component tests for a new level setup, as well as tests for the Atom renderer Light component.
 Utilizes screenshots & log lines printed from a hydra script to verify test results.
 """
 
 import os
 import pytest
 
-import ly_test_tools.environment.file_system as file_system
-
 from Automated.atom_utils import hydra_test_utils as hydra
-from Automated.atom_utils.automated_test_base import TestAutomationBase
-from Automated.atom_utils.automated_test_base import DEFAULT_SUBFOLDER_PATH
+from Automated.atom_utils.automated_test_base import TestAutomationBase, DEFAULT_SUBFOLDER_PATH, LIGHT_TYPES
 
-EDITOR_TIMEOUT = 60
 TEST_DIRECTORY = os.path.dirname(__file__)
 
 
@@ -27,7 +24,7 @@ class AllComponentsIndepthTestsException(Exception):
 
 @pytest.mark.parametrize("project", ["AtomTest"])
 @pytest.mark.parametrize("launcher_platform", ["windows_editor"])
-@pytest.mark.parametrize("level", ["all_components_indepth_level"])
+@pytest.mark.parametrize("level", ["EmptyLevel"])
 class TestAllComponentsIndepthTests(TestAutomationBase):
 
     @pytest.mark.parametrize("screenshot_name", ["AtomBasicLevelSetup.ppm"])
@@ -38,11 +35,8 @@ class TestAllComponentsIndepthTests(TestAutomationBase):
         Please review the hydra script run by this test for more specific test info.
         Tests that a basic rendering level setup can be created (lighting, meshes, materials, etc.).
         """
-        # Clear the test level to start the test.
-        file_system.delete([os.path.join(workspace.paths.engine_root(), project, "Levels", level)], True, True)
-
         cache_images = [os.path.join(
-            workspace.paths.engine_root(), project, DEFAULT_SUBFOLDER_PATH, screenshot_name)]
+            workspace.paths.project(), DEFAULT_SUBFOLDER_PATH, screenshot_name)]
         self.remove_artifacts(cache_images)
 
         golden_images = [os.path.join(golden_images_directory, "Windows", "AllComponentsIndepthTests", screenshot_name)]
@@ -62,7 +56,7 @@ class TestAllComponentsIndepthTests(TestAutomationBase):
             TEST_DIRECTORY,
             editor,
             "BasicLevelSetup_test_case.py",
-            timeout=EDITOR_TIMEOUT,
+            timeout=180,
             expected_lines=level_creation_expected_lines,
             unexpected_lines=unexpected_lines,
             halt_on_unexpected=True,
@@ -72,27 +66,18 @@ class TestAllComponentsIndepthTests(TestAutomationBase):
         for test_screenshot, golden_screenshot in zip(cache_images, golden_images):
             self.compare_screenshots(test_screenshot, golden_screenshot)
 
-    def test_ComponentsInBasicLevel_ScreenshotsMatchGoldenImages(
+    def test_LightComponentsInBasicLevel_ScreenshotsMatchGoldenImages(
             self, request, editor, workspace, project, launcher_platform, level, golden_images_directory):
-        basic_level = os.path.join(workspace.paths.engine_root(), project, "Levels", level)
-        if not os.path.exists(basic_level):
-            raise AllComponentsIndepthTestsException(
-                f'Level "{level}" does not exist at path: "{basic_level}"\n'
-                'Please run the "BasicLevelSetup_SetsUpLevel()" test first. '
-                'You may also run the hydra script "BasicLevelSetup_test_case.py" directly to create the level.')
-
-        def teardown():
-            file_system.delete([os.path.join(workspace.paths.engine_root(), project, "Levels", level)], True, True)
-        request.addfinalizer(teardown)
-
+        """
+        Please review the hydra script run by this test for more specific test info.
+        Tests that the Light component gives the output we expect when used in a level.
+        """
         screenshot_names = [
             "AreaLight_1.ppm",
             "AreaLight_2.ppm",
             "AreaLight_3.ppm",
             "AreaLight_4.ppm",
             "AreaLight_5.ppm",
-            "AreaLight_6.ppm",
-            "AreaLight_7.ppm",
             "SpotLight_1.ppm",
             "SpotLight_2.ppm",
             "SpotLight_3.ppm",
@@ -104,7 +89,7 @@ class TestAllComponentsIndepthTests(TestAutomationBase):
 
         cache_images = []
         for cache_image in screenshot_names:
-            screenshot_path = os.path.join(workspace.paths.engine_root(), project, DEFAULT_SUBFOLDER_PATH, cache_image)
+            screenshot_path = os.path.join(workspace.paths.project(), DEFAULT_SUBFOLDER_PATH, cache_image)
             cache_images.append(screenshot_path)
         self.remove_artifacts(cache_images)
 
@@ -114,43 +99,35 @@ class TestAllComponentsIndepthTests(TestAutomationBase):
                 golden_images_directory, "Windows", "AllComponentsIndepthTests", golden_image)
             golden_images.append(golden_image_path)
 
-        component_test_expected_lines = [
+        sphere_light_type = LIGHT_TYPES[1]
+        spot_disk_light_type = LIGHT_TYPES[2]
+        capsule_light_type = LIGHT_TYPES[3]
+        expected_lines = [
             # Level save/load
             "Level is saved successfully: True",
             "New entity created: True",
             "New entity deleted: True",
             # Area Light Component
-            "Area Light Entity successfully created",
-            "Area Light_test: Component added to the entity: True",
-            "Area Light_test: Component removed after UNDO: True",
-            "Area Light_test: Component added after REDO: True",
-            "Area Light_test: Entered game mode: True",
-            "Area Light_test: Exit game mode: True",
-            "Area Light_test: Entity disabled initially: True",
-            "Area Light_test: Entity enabled after adding required components: True",
-            "Area Light_test: Entity is hidden: True",
-            "Area Light_test: Entity is shown: True",
-            "Area Light_test: Entity deleted: True",
-            "Area Light_test: UNDO entity deletion works: True",
-            "Area Light_test: REDO entity deletion works: True",
+            "area_light Entity successfully created",
+            "area_light_test: Component added to the entity: True",
+            "area_light_test: Entered game mode: True",
+            "area_light_test: Exit game mode: True",
+            f"area_light_test: Property value is {capsule_light_type} which matches {capsule_light_type}",
+            f"area_light_test: Property value is {spot_disk_light_type} which matches {spot_disk_light_type}",
+            f"area_light_test: Property value is {sphere_light_type} which matches {sphere_light_type}",
             # Spot Light Component
-            "Spot Light Entity successfully created",
-            "Spot Light_test: Component added to the entity: True",
-            "Spot Light_test: Component removed after UNDO: True",
-            "Spot Light_test: Component added after REDO: True",
-            "Spot Light_test: Entered game mode: True",
-            "Spot Light_test: Exit game mode: True",
-            "Spot Light_test: Entity is hidden: True",
-            "Spot Light_test: Entity is shown: True",
-            "Spot Light_test: Entity deleted: True",
-            "Spot Light_test: UNDO entity deletion works: True",
-            "Spot Light_test: REDO entity deletion works: True",
+            "spot_light Entity successfully created",
+            "spot_light_test: Component added to the entity: True",
+            "spot_light_test: Entered game mode: True",
+            "spot_light_test: Exit game mode: True",
+            f"spot_light_test: Property value is {spot_disk_light_type} which matches {spot_disk_light_type}",
             "Component tests completed",
         ]
         unexpected_lines = [
             "Trace::Assert",
             "Trace::Error",
             "Traceback (most recent call last):",
+            "screenshot failed",
         ]
 
         hydra.launch_and_validate_results(
@@ -158,12 +135,97 @@ class TestAllComponentsIndepthTests(TestAutomationBase):
             TEST_DIRECTORY,
             editor,
             "AllComponentsIndepthTests_test_case.py",
-            timeout=EDITOR_TIMEOUT,
-            expected_lines=component_test_expected_lines,
+            timeout=120,
+            expected_lines=expected_lines,
             unexpected_lines=unexpected_lines,
             halt_on_unexpected=True,
             cfg_args=[level],
         )
 
-        for test_screenshot, golden_screenshot in zip(self.cache_images, self.golden_images):
+        for test_screenshot, golden_screenshot in zip(cache_images, golden_images):
+            self.compare_screenshots(test_screenshot, golden_screenshot)
+
+    def test_DecalGridComponentsInBasicLevel_ScreenshotsMatchGoldenImages(
+            self, request, editor, workspace, project, launcher_platform, level, golden_images_directory):
+        """
+        Please review the hydra script run by this test for more specific test info.
+        Tests that the Decale & Grid components gives the output we expect when used in a level.
+        """
+        screenshot_names = [
+            "Grid_1.ppm",
+            "Grid_2.ppm",
+            "Grid_3.ppm",
+            "Grid_4.ppm",
+            "Grid_5.ppm",
+            "Grid_6.ppm",
+            "Decal_1.ppm",
+            "Decal_2.ppm",
+            "Decal_3.ppm",
+            "Decal_4.ppm",
+            "Decal_5.ppm",
+            "Decal_6.ppm",
+        ]
+
+        cache_images = []
+        for cache_image in screenshot_names:
+            screenshot_path = os.path.join(workspace.paths.project(), DEFAULT_SUBFOLDER_PATH, cache_image)
+            cache_images.append(screenshot_path)
+        self.remove_artifacts(cache_images)
+
+        golden_images = []
+        for golden_image in screenshot_names:
+            golden_image_path = os.path.join(
+                golden_images_directory, "Windows", "AllComponentsIndepthTests", golden_image)
+            golden_images.append(golden_image_path)
+
+        grid_entity = "grid_entity"
+        decal_1 = "decal_1"
+        decal_2 = "decal_2"
+        expected_lines = [
+            f"{grid_entity}_test: Entered game mode: True",
+            f"{grid_entity}_test: Exit game mode: True",
+            f"SUCCESS: Retrieved property Value for {grid_entity}",
+            f"{grid_entity} Controller|Configuration|Grid Size: SUCCESS",
+            f"{grid_entity} Controller|Configuration|Axis Color: SUCCESS",
+            f"{grid_entity} Controller|Configuration|Primary Grid Spacing: SUCCESS",
+            f"{grid_entity} Controller|Configuration|Primary Color: SUCCESS",
+            f"{grid_entity} Controller|Configuration|Secondary Color: SUCCESS",
+            f"{grid_entity} Controller|Configuration|Secondary Grid Spacing: SUCCESS",
+            f"{decal_1} Entity successfully created",
+            "Decal (Atom) component was added to entity",
+            f"{decal_1}_test: Entered game mode: True",
+            f"{decal_1}_test: Exit game mode: True",
+            f"SUCCESS: Retrieved new property Value for {decal_1}",
+            f"{decal_1} Controller|Configuration|Opacity: SUCCESS",
+            f"{decal_1} Controller|Configuration|Attenuation Angle: SUCCESS",
+            f"{decal_2}_test: Entered game mode: True",
+            f"{decal_2}_test: Exit game mode: True",
+            f"SUCCESS: Retrieved new property Value for {decal_2}",
+            f"{decal_2} Controller|Configuration|Material: SUCCESS",
+            f"{decal_2} Controller|Configuration|Sort Key: SUCCESS",
+            "Component tests completed",
+        ]
+        unexpected_lines = [
+            "Trace::Assert",
+            "Trace::Error",
+            "Traceback (most recent call last):",
+            "screenshot failed",
+            f"FAILURE: Failed to find value in {grid_entity}",
+            f"FAILURE: Failed to find value in {decal_1}",
+            f"FAILURE: Failed to find value in {decal_2}"
+        ]
+
+        hydra.launch_and_validate_results(
+            request,
+            TEST_DIRECTORY,
+            editor,
+            "AllComponentsIndepthDecalGridTests_test_case.py",
+            timeout=120,
+            expected_lines=expected_lines,
+            unexpected_lines=unexpected_lines,
+            halt_on_unexpected=True,
+            cfg_args=[level],
+        )
+
+        for test_screenshot, golden_screenshot in zip(cache_images, golden_images):
             self.compare_screenshots(test_screenshot, golden_screenshot)

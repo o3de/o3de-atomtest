@@ -1,5 +1,6 @@
 """
-Copyright (c) Contributors to the Open 3D Engine Project. For complete copyright and license terms please see the LICENSE at the root of this distribution.
+Copyright (c) Contributors to the Open 3D Engine Project.
+For complete copyright and license terms please see the LICENSE at the root of this distribution.
 
 SPDX-License-Identifier: Apache-2.0 OR MIT
 
@@ -18,7 +19,7 @@ import azlmbr.legacy.general as general
 import azlmbr.math as math
 import azlmbr.editor
 
-sys.path.append(os.path.join(azlmbr.paths.devroot, "AtomTest", "Gem", "PythonTests"))
+sys.path.append(os.path.join(azlmbr.paths.devassets, "Gem", "PythonTests"))
 
 from Automated.atom_utils.automated_test_utils import TestHelper as helper
 from Automated.atom_utils.hydra_editor_utils import helper_create_entity_with_mesh

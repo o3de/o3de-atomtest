@@ -1,8 +1,9 @@
 # coding:utf-8
 #!/usr/bin/python
 #
-# Copyright (c) Contributors to the Open 3D Engine Project. For complete copyright and license terms please see the LICENSE at the root of this distribution.
-# 
+# Copyright (c) Contributors to the Open 3D Engine Project.
+# For complete copyright and license terms please see the LICENSE at the root of this distribution.
+#
 # SPDX-License-Identifier: Apache-2.0 OR MIT
 #
 #
@@ -61,7 +62,6 @@ while 0:  # bootstraps the DCCsi
     _LOGGER.debug(f'MODULE Path: {_MODULE_PATH}')
 
     # standard lumberyard paths if you need to check them
-    _LOGGER.debug(f'Dev root:{azlmbr.paths.devroot}')  # same as @devroot@
     _LOGGER.debug(f'Eng root:{azlmbr.paths.engroot}')  # same as @engroot@
 
     # from DCCsi

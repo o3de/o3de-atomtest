@@ -22,7 +22,7 @@
             ],
             "intensity": 1.0,
             "useTexture": false,
-            "textureMap": "EngineAssets/TextureMsg/DefaultNoUVs.tif"
+            "textureMap": ""
         },
         "metallic": {
             "factor": 0.0,
