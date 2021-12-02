@@ -1,5 +1,6 @@
 """
-Copyright (c) Contributors to the Open 3D Engine Project. For complete copyright and license terms please see the LICENSE at the root of this distribution.
+Copyright (c) Contributors to the Open 3D Engine Project.
+For complete copyright and license terms please see the LICENSE at the root of this distribution.
 
 SPDX-License-Identifier: Apache-2.0 OR MIT
 """
@@ -7,13 +8,15 @@ import time
 import azlmbr.legacy.general as general
 import azlmbr.atom
 
+
 class FailFast(BaseException):
     """
     Raise to stop proceeding through test steps.
     """
 
     pass
-    
+
+
 class TestHelper:
     @staticmethod
     def init_idle():

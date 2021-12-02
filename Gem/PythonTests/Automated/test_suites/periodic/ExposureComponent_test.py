@@ -1,5 +1,6 @@
 """
-Copyright (c) Contributors to the Open 3D Engine Project. For complete copyright and license terms please see the LICENSE at the root of this distribution.
+Copyright (c) Contributors to the Open 3D Engine Project.
+For complete copyright and license terms please see the LICENSE at the root of this distribution.
 
 SPDX-License-Identifier: Apache-2.0 OR MIT
 
@@ -34,9 +35,9 @@ class TestAutomation(TestAutomationBase):
         ]
 
         test_screenshots = [
-            os.path.join(workspace.paths.engine_root(), project, DEFAULT_SUBFOLDER_PATH,
+            os.path.join(workspace.paths.project(), DEFAULT_SUBFOLDER_PATH,
                          'screenshot_atom_ExposureComponent_Manual.ppm'),
-            os.path.join(workspace.paths.engine_root(), project, DEFAULT_SUBFOLDER_PATH,
+            os.path.join(workspace.paths.project(), DEFAULT_SUBFOLDER_PATH,
                          'screenshot_atom_ExposureComponent_EyeAdaptation.ppm')
         ]
 

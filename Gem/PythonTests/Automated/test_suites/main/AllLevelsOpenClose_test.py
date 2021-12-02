@@ -1,5 +1,6 @@
 """
-Copyright (c) Contributors to the Open 3D Engine Project. For complete copyright and license terms please see the LICENSE at the root of this distribution.
+Copyright (c) Contributors to the Open 3D Engine Project.
+For complete copyright and license terms please see the LICENSE at the root of this distribution.
 
 SPDX-License-Identifier: Apache-2.0 OR MIT
 
@@ -33,11 +34,11 @@ class TestAllLevels(object):
     @pytest.fixture(autouse=True)
     def setup_teardown(self, request, workspace, project, level):
         # Cleanup our temp level
-        file_system.delete([os.path.join(workspace.paths.engine_root(), project, "Levels", level)], True, True)
+        file_system.delete([os.path.join(workspace.paths.project(), "Levels", level)], True, True)
 
         def teardown():
             # Cleanup our temp level
-            file_system.delete([os.path.join(workspace.paths.engine_root(), project, "Levels", level)], True, True)
+            file_system.delete([os.path.join(workspace.paths.project(), "Levels", level)], True, True)
 
         request.addfinalizer(teardown)
 

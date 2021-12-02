@@ -1,5 +1,6 @@
 """
-Copyright (c) Contributors to the Open 3D Engine Project. For complete copyright and license terms please see the LICENSE at the root of this distribution.
+Copyright (c) Contributors to the Open 3D Engine Project.
+For complete copyright and license terms please see the LICENSE at the root of this distribution.
 
 SPDX-License-Identifier: Apache-2.0 OR MIT
 
@@ -30,7 +31,7 @@ class TestAutomation(TestAutomationBase):
         """
         golden_screenshot = os.path.join(golden_images_directory, 'Windows', 'MeshComponent.ppm')
         test_screenshot = os.path.join(
-            workspace.paths.engine_root(), project, DEFAULT_SUBFOLDER_PATH, 'screenshot_atom_MeshComponent.ppm')
+            workspace.paths.project(), DEFAULT_SUBFOLDER_PATH, 'screenshot_atom_MeshComponent.ppm')
         self.remove_artifacts([test_screenshot])
 
         expected_lines = [

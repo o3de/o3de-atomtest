@@ -1,5 +1,6 @@
 """
-Copyright (c) Contributors to the Open 3D Engine Project. For complete copyright and license terms please see the LICENSE at the root of this distribution.
+Copyright (c) Contributors to the Open 3D Engine Project.
+For complete copyright and license terms please see the LICENSE at the root of this distribution.
 
 SPDX-License-Identifier: Apache-2.0 OR MIT
 
@@ -16,7 +17,7 @@ import azlmbr.materialeditor
 import azlmbr.paths
 import azlmbr.atom
 
-sys.path.append(os.path.join(azlmbr.paths.devroot, "AtomTest", "Gem", "PythonTests"))
+sys.path.append(os.path.join(azlmbr.paths.devassets, "Gem", "PythonTests"))
 
 import Automated.atom_utils.material_editor_utils as material_editor
 from Automated.atom_utils.material_editor_utils import MaterialEditorHelper, capture_screenshot
