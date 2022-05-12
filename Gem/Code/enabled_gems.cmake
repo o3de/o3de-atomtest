@@ -27,4 +27,5 @@ set(ENABLED_GEMS
     EditorPythonBindings
     QtForPython
     DccScriptingInterface
+    GameStateSamples
 )
